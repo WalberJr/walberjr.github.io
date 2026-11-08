@@ -1,0 +1,71 @@
+name: Release do KStudio
+
+# Roda sozinho sempre que um executável novo é enviado para este branch.
+on:
+  push:
+    branches: [kstudio-builds]
+    paths: ["*.exe", "*.AppImage", "VERSION"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Descobrir versão e preparar arquivos
+        id: prep
+        run: |
+          set -euo pipefail
+          APPIMAGE=$(ls *.AppImage | sort -V | tail -n1)
+          EXE=$(ls *.exe | sort -V | tail -n1)
+          # Versão: arquivo VERSION, se existir; senão o número no nome do AppImage
+          if [ -f VERSION ]; then
+            VER=$(tr -d ' \n' < VERSION)
+          else
+            VER=$(echo "$APPIMAGE" | grep -oE '[0-9]+(\.[0-9]+)+' | head -n1)
+          fi
+          [ -n "$VER" ] || { echo "Não encontrei a versão. Crie um arquivo VERSION (ex.: 1.3.0)."; exit 1; }
+
+          # Nomes fixos -> o link .../releases/latest/download/<nome> sempre baixa a versão mais nova
+          mkdir dist
+          cp "$EXE"      dist/KStudio-Windows-x64.exe
+          cp "$APPIMAGE" dist/KStudio-Linux-x86_64.AppImage
+          (cd dist && sha256sum * > SHA256SUMS.txt)
+
+          echo "version=$VER" >> "$GITHUB_OUTPUT"
+          echo "tag=kstudio-v$VER" >> "$GITHUB_OUTPUT"
+
+      - name: Criar ou atualizar o release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.prep.outputs.tag }}
+          VER: ${{ steps.prep.outputs.version }}
+        run: |
+          set -euo pipefail
+          cat > notes.md <<NOTES
+          ## KStudio $VER
+
+          Plataforma para construir inputs e analisar resultados do ORCA e do Quantum ESPRESSO.
+
+          | Sistema | Arquivo |
+          |---|---|
+          | Windows 64-bit | \`KStudio-Windows-x64.exe\` |
+          | Linux 64-bit | \`KStudio-Linux-x86_64.AppImage\` |
+
+          **Linux:** depois de baixar, dê permissão de execução:
+          \`chmod +x KStudio-Linux-x86_64.AppImage && ./KStudio-Linux-x86_64.AppImage\`
+
+          Site: https://walberjr.github.io
+          NOTES
+
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" dist/* --clobber
+            gh release edit "$TAG" --notes-file notes.md --latest
+          else
+            gh release create "$TAG" dist/* --target "$GITHUB_SHA" \
+              --title "KStudio $VER" --notes-file notes.md --latest
+          fi
