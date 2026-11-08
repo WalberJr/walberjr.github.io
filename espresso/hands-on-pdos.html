@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PDOS · Tutorial Quantum ESPRESSO</title>
+  <link rel="icon" href="../assets/img/favicon.png">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+</head>
+<body data-root="../" data-section="espresso">
+<div class="docs">
+  <aside class="sidebar" data-docs="espresso"></aside>
+  <main class="content">
+<h1>PDOS</h1>
+<p>Here we continue with our Aluminum example.
+Often it is needed to know the contribution from each individual atoms and/or
+each of their orbital contributions. We can achieve that using <strong>projwfc.x</strong>
+code. First, we must perform the self consistent field calculation followed by
+the non-self consistent field calculation with denser k-points.</p>
+<div class="codeblock"><pre><code>pw.x &lt; al_scf.in &gt; al_scf.out
+pw.x &lt; al_nscf.in &gt; al_nscf.out</code></pre></div>
+<p>Then we prepare the input file for <strong>projwfc.x</strong>:</p>
+
+<div class="codeblock"><div class="code-title">src/al/al_projwfc.in</div><pre><code>&amp;PROJWFC
+  prefix= 'al',
+  outdir= '/tmp/',
+  filpdos= 'al_pdos.dat'
+/</code></pre></div>
+<p>Perform the calculation:</p>
+<div class="codeblock"><pre><code>projwfc.x &lt; al_projwfc.in &gt; al_projwfc.out</code></pre></div>
+<p><strong>Output data format:</strong> the DOS values are written in the file
+<code>{filpdos}.pdos_atm#N(X)_wfc#M(l)</code>, where <code>N</code> is atom number, <code>X</code> is atom
+symbol, <code>M</code> is wfc number, and <code>l=s,p,d,f</code> one file for each atomic wavefunction
+read from pseudopotential file. The header of file looks like (for spin
+polarized calculations, we have separate up and down columns):</p>
+<div class="codeblock"><pre><code>E  LDOS(E) PDOS_1(E) ... PDOS_{2l+1}(E)</code></pre></div>
+<p>\(LDOS = \sum\limits_{m=1}^{2l+1} PDOS_m (E)\)</p>
+<p>\(PDOS_m (E) \rightarrow\) projected DOS on atomic wfc with component \(m\).</p>
+<p><strong>Orbital order:</strong></p>
+<ul>
+<li>
+<p>for \(l=1\):</p>
+<ul>
+<li>\(p_z~(m=0)\)</li>
+<li>\(p_x\) (real combination of \(m=\pm 1\) with cosine)</li>
+<li>\(p_y\) (real combination of \(m=\pm 1\) with sine)</li>
+</ul>
+</li>
+<li>
+<p>for \(l=2\):</p>
+<ul>
+<li>\(d_{z^2}~(m=0)\)</li>
+<li>\(d_{zx}\) (real combination of \(m=\pm 1\) with cosine)</li>
+<li>\(d_{zy}\) (real combination of \(m=\pm 1\) with sine)</li>
+<li>\(d_{x^2-y^2}\) (real combination of \(m=\pm 2\) with cosine)</li>
+<li>\(d_{xy}\) (real combination of \(m=\pm 2\) with sine)</li>
+</ul>
+</li>
+</ul>
+<p>For more details and PROJWFC output format, please consult the documentation
+<a href="https://www.quantum-espresso.org/Doc/INPUT_PROJWFC.html#idm96" rel="noopener" target="_blank">here</a>. Let's
+create our plots:</p>
+<div class="codeblock"><div class="code-title">src/notebooks/al-pdos.ipynb</div><pre><code>import matplotlib.pyplot as plt
+from matplotlib import rcParamsDefault
+import numpy as np
+%matplotlib inline
+
+# load data
+def data_loader(fname):
+    import numpy as np
+
+    data = np.loadtxt(fname)
+    energy = data[:, 0]
+    pdos = data[:, 1]  # ldos col, total contribution for a given orbital
+
+    return energy, pdos
+
+energy, pdos_s = data_loader('../src/al/al_pdos.dat.pdos_atm#1(Al)_wfc#1(s)')
+_, pdos_p = data_loader('../src/al/al_pdos.dat.pdos_atm#1(Al)_wfc#2(p)')
+_, pdos_tot = data_loader('../src/al/al_pdos.dat.pdos_tot')
+
+# make plots
+plt.figure(figsize = (8, 4))
+plt.plot(energy, pdos_s, linewidth=0.75, color='#006699', label='s-orbital')
+plt.plot(energy, pdos_p, linewidth=0.75, color='r', label='p-orbital')
+plt.plot(energy, pdos_tot, linewidth=0.75, color='k', label='total')
+plt.yticks([])
+plt.xlabel('Energy (eV)')
+plt.ylabel('DOS')
+plt.axvline(x= 7.9421, linewidth=0.5, color='k', linestyle=(0, (8, 10)))
+plt.xlim(-5, 27)
+plt.ylim(0, )
+plt.fill_between(energy, 0, pdos_s, where=(energy &lt; 7.9421), facecolor='#006699', alpha=0.25)
+plt.fill_between(energy, 0, pdos_p, where=(energy &lt; 7.9421), facecolor='r', alpha=0.25)
+plt.fill_between(energy, 0, pdos_tot, where=(energy &lt; 7.9421), facecolor='k', alpha=0.25)
+# plt.text(6.5, 0.52, 'Fermi energy', fontsize= small, rotation=90)
+plt.legend(frameon=False)
+plt.show()</code></pre></div>
+<p>Here is how our projected density of states plot looks like:</p>
+<img alt="al-pdos" loading="lazy" src="img/al-pdos.webp"/>
+<p>We can perform sums of specific atom or orbital contributions using
+<strong>sumpdos.x</strong> code if there are multiple \(s\) or \(p\) orbitals:</p>
+<div class="codeblock"><pre><code>sumpdos.x *\(Al\)* &gt; atom_Al_tot.dat
+sumpdos.x *\(Al\)*\(s\) &gt; atom_Al_s.dat
+sumpdos.x *\(Al\)*\(p\) &gt; atom_Al_p.dat</code></pre></div>
+<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/pdos" target="_blank" rel="noopener">Projected Density of States</a>,
+do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
+<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY 4.0</a>.
+Alterações: layout, título e navegação traduzidos para o português.</p>
+    <nav class="pager"></nav>
+  </main>
+</div>
+<script src="../assets/js/site.js"></script>
+<script defer src="../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../assets/vendor/katex/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})"></script>
+</body>
+</html>

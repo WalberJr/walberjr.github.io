@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Otimização de estrutura · Tutorial Quantum ESPRESSO</title>
+  <link rel="icon" href="../assets/img/favicon.png">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+</head>
+<body data-root="../" data-section="espresso">
+<div class="docs">
+  <aside class="sidebar" data-docs="espresso"></aside>
+  <main class="content">
+<h1>Otimização de estrutura</h1>
+<p>There are two types of structural optimization calculations in Quantum espresso:
+(1) <strong>relax</strong>: where only the atomic positions are allowed to vary, and (2)
+<strong>vc-relax</strong>: which allows to vary both the atomic positions and lattice
+constants.</p>
+
+<div class="codeblock"><div class="code-title">src/silicon/si_relax.in</div><pre><code>&amp;control
+    calculation = 'vc-relax'
+    prefix = 'silicon'
+    outdir = './tmp/'
+    pseudo_dir = './pseudos/'
+    etot_conv_thr = 1e-5
+    forc_conv_thr = 1e-4
+/
+
+&amp;system
+    ibrav=2, celldm(1) =14,
+    nat=2, ntyp=1,
+    ecutwfc=30
+/
+
+&amp;electrons
+    conv_thr=1e-8
+/
+
+&amp;ions
+/
+
+&amp;cell
+    cell_dofree='ibrav'
+/
+
+ATOMIC_SPECIES
+  Si  28.0855  Si.pz-vbc.UPF
+
+ATOMIC_POSITIONS (alat)
+  Si 0.00 0.00 0.00 0 0 0
+  Si 0.25 0.25 0.25 0 0 0
+
+K_POINTS (automatic)
+  6 6 6 1 1 1</code></pre></div>
+<p>Perform the plane wave calculation:</p>
+<div class="codeblock"><pre><code>pw.x -inp si_relax.in &gt; si_relax.out</code></pre></div>
+<p>This produces following output (see the <code>si_relax.out</code> for more details, look
+for "Final enthalpy"):</p>
+<div class="codeblock"><pre><code>     Final enthalpy =     -15.8536258868 Ry
+Begin final coordinates
+     new unit-cell volume =    265.89380 a.u.^3 (    39.40140 Ang^3 )
+     density =      2.36728 g/cm^3
+
+CELL_PARAMETERS (alat= 14.00000000)
+  -0.364556379   0.000000000   0.364556379
+   0.000000000   0.364556379   0.364556379
+  -0.364556379   0.364556379   0.000000000
+
+ATOMIC_POSITIONS (alat)
+Si            0.0000000000        0.0000000000        0.0000000000    0   0   0
+Si            0.1822781896        0.1822781896        0.1822781896    0   0   0
+End final coordinates</code></pre></div>
+<p>Lattice constant = 0.364556379 * 14 / 0.5 = 10.2076 Bohr.</p>
+<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/structure-optimization" target="_blank" rel="noopener">Structure optimization</a>,
+do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
+<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY 4.0</a>.
+Alterações: layout, título e navegação traduzidos para o português.</p>
+    <nav class="pager"></nav>
+  </main>
+</div>
+<script src="../assets/js/site.js"></script>
+<script defer src="../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../assets/vendor/katex/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})"></script>
+</body>
+</html>

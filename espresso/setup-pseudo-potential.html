@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pseudopotenciais · Tutorial Quantum ESPRESSO</title>
+  <link rel="icon" href="../assets/img/favicon.png">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+</head>
+<body data-root="../" data-section="espresso">
+<div class="docs">
+  <aside class="sidebar" data-docs="espresso"></aside>
+  <main class="content">
+<h1>Pseudopotenciais</h1>
+<p>In Quantum Espresso, pseudopotential replaces the actual electron-ion
+interaction. The pseudopotential describes the atomic nucleus and all the
+electrons except the outermost valence shell. The rapidly changing potential
+field near the atomic core is replaced by a smoother function that simulates the
+potential field far from the core very well. By doing so, it requires less
+number plane wave basis for wavefunction expansion.</p>
+<div class="admonition tip"><b>💡 Dica</b><p>You may try my <a href="https://pseudos.netlify.app/" rel="noopener" target="_blank">Pseudos Web-App</a>, where you can
+look for pseudopotentials by element name, and download them. Currently,
+Standard Solid State Pseudopotentials (SSSP) and GBRV pseudopotentials are
+included.</p></div>
+<p>We can choose form various pseudopotential libraries. Choice of pseudopotential
+depends on the problem we are investigating, e.g., if there is a heavy element
+present in our system and we are interested in the spin-orbit coupling effects,
+we should choose a full relativistic pseudopotential. We need to be careful
+whether our chosen pseudopotential correctly reproduces physical properties.
+Various pseudopotential libraries:</p>
+<ul>
+<li><a href="https://www.quantum-espresso.org/pseudopotentials" rel="noopener" target="_blank">https://www.quantum-espresso.org/pseudopotentials</a></li>
+<li><a href="https://www.materialscloud.org/discover/sssp/table/efficiency" rel="noopener" target="_blank">https://www.materialscloud.org/discover/sssp/table/efficiency</a></li>
+<li><a href="http://www.pseudo-dojo.org" rel="noopener" target="_blank">http://www.pseudo-dojo.org</a></li>
+<li><a href="https://www.physics.rutgers.edu/gbrv/" rel="noopener" target="_blank">https://www.physics.rutgers.edu/gbrv/</a></li>
+<li><a href="https://nninc.cnf.cornell.edu" rel="noopener" target="_blank">https://nninc.cnf.cornell.edu</a></li>
+<li><a href="http://www.quantum-simulation.org/potentials/" rel="noopener" target="_blank">http://www.quantum-simulation.org/potentials/</a></li>
+<li><a href="http://pseudopotentials.quantum-espresso.org/legacy_tables/hartwigesen-goedecker-hutter-pp" rel="noopener" target="_blank">BLYP pseudopotentials</a></li>
+<li><a href="https://yaoyi92.github.io/scan-tm-pseudopotentials.html" rel="noopener" target="_blank">SCAN pseudopotentials</a></li>
+</ul>
+<p>Pseudopotential naming conventions in PSLibrary: an example pseudopotential
+filename is <code>O.rel-pbe-n-rrkjus_psl.1.0.0.UPF</code>.</p>
+<p><code>O</code> → denotes the atomic species
+<code>rel</code> → full relativistic (optional)
+<code>pbe</code> → exchange correlation functional
+<code>n</code> → non-linear core correction (optional)
+<code>rrkjus</code> → pseudopotential type</p>
+<p>Exchange correlation functionals:</p>
+<table><thead><tr><th>Identifier<th>Functional<tbody><tr><td>pz<td>Perdew-Zunger (LDA)<tr><td>pbe<td>Perdew-Burke-Ernzerhof (GGA)<tr><td>pw91<td>Perdew-Wang 91 (GGA)<tr><td>blyp<td>Becke-Lee-Yang-Parr (GGA)</td></td></tr></td></td></tr></td></td></tr></td></td></tr></tbody></th></th></tr></thead></table>
+<p>Pseudopotential types:</p>
+<table><thead><tr><th>Identifier<th>PP types<tbody><tr><td>ae<td>all-electron<tr><td>rrkj<td>Rappe-Rabe-Kaxiras-Joannopoulos (Norm conserving)<tr><td>rrkjus<td>Rappe-Rabe-Kaxiras-Joannopoulos (Ultrasoft)<tr><td>kjpaw<td>Kresse-Joubert (PAW)</td></td></tr></td></td></tr></td></td></tr></td></td></tr></tbody></th></th></tr></thead></table>
+<p>Ultra soft pseudopotentials are computationally efficient than the norm
+conserving pseudopotentials. You will find the recommended <code>ecutwfc</code> in the
+header of each pseudopotential file. If you choose an ultra-soft
+pseudopotential, you will need <code>ecutrho</code> about 8 times the value of <code>ecutwfc</code>.
+The default <code>ecutrho</code> is 4 times <code>ecutwfc</code> in Quantum Espresso code, which is a
+good choice for norm conserving pseudopotentials. You should check energy
+convergence against <code>ecutwfc</code> for your system.</p>
+<p>By using pseudopotential, we want to get rid of the core electrons that do not
+participate in the chemical properties of material. This is known also as rigid
+core approximation. Instead of accounting the nucleus and core electrons
+separately, we want to have a pseudopotential that interacts in a similar way
+with the valence electrons.</p>
+<div class="admonition"><b>ℹ️ Info</b><ol>
+<li>
+<p>We can mix different types of pseudo potentials (e.g., norm conserving,
+ultra-soft, or PAW), but we cannot mix different exchange correlation functional
+(e.g., PBE and LDA). Exchange correlation functional can be read from the
+pseudopotential file or be provided via <code>input_dft</code> parameter in Quantum
+Espresso.</p>
+</li>
+<li>
+<p>"sol" in PBE-sol stands for solid. For bulk systems PBE-sol should be used,
+while PBE is appropriate for molecules. In case of 2D materials generally PBE is
+chosen, but one can check PBE-sol.</p>
+</li>
+</ol></div>
+<div class="admonition warn"><b>Common error</b><p>If you mix PBE with PBE-sol type, it results in Error: conflicting values for
+igcx. However, it is allowed to mix those two types of pseudo. We can set
+desired exchange correlation functional via <code>input_dft</code> instead of reading from
+the pseudopotential file.</p></div>
+<h2 id="resources">Resources</h2>
+<ul>
+<li><a href="https://www.quantum-espresso.org/pseudopotentials/naming-convention" rel="noopener" target="_blank">Naming convention for PP files</a></li>
+</ul>
+<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/setup/pseudo-potential" target="_blank" rel="noopener">Pseudo potentials</a>,
+do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
+<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY 4.0</a>.
+Alterações: layout, título e navegação traduzidos para o português.</p>
+    <nav class="pager"></nav>
+  </main>
+</div>
+<script src="../assets/js/site.js"></script>
+<script defer src="../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../assets/vendor/katex/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})"></script>
+</body>
+</html>

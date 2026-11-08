@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Estrutura de bandas · Tutorial Quantum ESPRESSO</title>
+  <link rel="icon" href="../assets/img/favicon.png">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+</head>
+<body data-root="../" data-section="espresso">
+<div class="docs">
+  <aside class="sidebar" data-docs="espresso"></aside>
+  <main class="content">
+<h1>Estrutura de bandas</h1>
+<p>Before we can run <code>bands</code> calculation, we need to perform single-point <a href="hands-on-scf.html">self
+consistent field calculation</a>. We have our input <code>scf</code> file with some new
+parameters:</p>
+
+<div class="codeblock"><div class="code-title">src/silicon/pw.scf.silicon_bands.in</div><pre><code>&amp;CONTROL
+  calculation = 'scf',
+  restart_mode = 'from_scratch',
+  prefix = 'silicon',
+  outdir = './tmp/'
+  pseudo_dir = '../pseudos/'
+  verbosity = 'high'
+/
+
+&amp;SYSTEM
+  ibrav = 2,
+  celldm(1) = 10.2076,
+  nat = 2,
+  ntyp = 1,
+  ecutwfc = 50,
+  ecutrho = 400,
+  nbnd = 8,
+!  occupations = 'smearing',
+!  smearing = 'gaussian',
+!  degauss = 0.005
+/
+
+&amp;ELECTRONS
+  conv_thr = 1e-8,
+  mixing_beta = 0.6
+/
+
+ATOMIC_SPECIES
+  Si 28.086 Si.pz-vbc.UPF
+
+ATOMIC_POSITIONS (alat)
+  Si 0.0 0.0 0.0
+  Si 0.25 0.25 0.25
+
+K_POINTS (automatic)
+  8 8 8 0 0 0</code></pre></div>
+<p>Run the <code>scf</code> calculation:</p>
+<div class="codeblock"><pre><code>pw.x &lt; pw.scf.silicon_bands.in &gt; pw.scf.silicon_bands.out</code></pre></div>
+<p>Next step is our band calculation (non-self consistent field) calculation. The
+<code>bands</code> calculation is <em>non self-consistent</em> and reads/uses the ground state
+electron density, Hartree, exchange and correlation potentials obtained in the
+previous step (scf calculation). In case of non self-consistent calculation, the
+<strong>pw.x</strong> program determines the Kohn-Sham eigenfunction and eigenvalues without
+updating Kohn-Sham Hamiltonian at every iteration. We need to specify the
+k-points for which we want to calculate the eigenvalues. You may use the
+<a href="https://www.materialscloud.org/work/tools/seekpath" rel="noopener" target="_blank">See-K-path tool by materials cloud</a> to visualize the K-path. We
+can specify <code>nbnd</code>, by default it calculates half the number of valence
+electrons, i.e., only the occupied ground state bands. Usually we are interested
+also in the unoccupied bands above the Fermi energy. Number of occupied bands
+can be found in the <code>scf</code> output as number of Kohn-Sham states. Below is a
+sample input file for the band calculation:</p>
+
+<div class="codeblock"><div class="code-title">src/silicon/pw.bands.silicon.in</div><pre><code>&amp;control
+  calculation = 'bands',
+  restart_mode = 'from_scratch',
+  prefix = 'silicon',
+  outdir = './tmp/'
+  pseudo_dir = '../pseudos/'
+  verbosity = 'high'
+/
+
+&amp;system
+  ibrav = 2,
+  celldm(1) = 10.2076,
+  nat = 2,
+  ntyp = 1,
+  ecutwfc = 50,
+  ecutrho = 400,
+  nbnd = 8
+ /
+
+&amp;electrons
+  conv_thr = 1e-8,
+  mixing_beta = 0.6
+ /
+
+ATOMIC_SPECIES
+  Si 28.086  Si.pz-vbc.UPF
+
+ATOMIC_POSITIONS (alat)
+  Si 0.00 0.00 0.00
+  Si 0.25 0.25 0.25
+
+K_POINTS {crystal_b}
+5
+  0.0000 0.5000 0.0000 20  !L
+  0.0000 0.0000 0.0000 30  !G
+  -0.500 0.0000 -0.500 10  !X
+  -0.375 0.2500 -0.375 30  !U
+  0.0000 0.0000 0.0000 20  !G</code></pre></div>
+<p>Run <code>pw.x</code> with <code>bands</code> calculation input file:</p>
+<div class="codeblock"><pre><code>pw.x &lt; pw.bands.silicon.in &gt; pw.bands.silicon.out</code></pre></div>
+<p>After the bands calculation is performed, we need some postprocessing using
+<code>bands.x</code> utility in order to obtain the data in more usable format. Input file
+for <code>bands.x</code> postprocessing:</p>
+
+<div class="codeblock"><div class="code-title">src/silicon/pp.bands.silicon.in</div><pre><code>&amp;BANDS
+  prefix = 'silicon'
+  outdir = './tmp/'
+  filband = 'si_bands.dat'
+/</code></pre></div>
+<p>Run <code>bands.x</code> from post processing (PP) module:</p>
+<div class="codeblock"><pre><code>bands.x &lt; pp.bands.silicon.in &gt; pp.bands.silicon.out</code></pre></div>
+<p>Finally, we run <code>plotband.x</code> to visualize bandstructure. We can either run it
+interactively (as described below) or provide an input file. In order to run
+interactively, type <code>plotband.x</code> in your terminal.</p>
+<div class="codeblock"><pre><code>     Input file &gt; si_bands.dat
+Reading    8 bands at     91 k-points
+Range:   -5.8300   16.3420eV  Emin, Emax &gt; -6, 16
+high-symmetry point:  0.5000 0.5000 0.5000   x coordinate   0.0000
+high-symmetry point:  0.0000 0.0000 0.0000   x coordinate   0.8660
+high-symmetry point:  1.0000 0.0000 0.0000   x coordinate   1.8660
+high-symmetry point:  1.0000 0.2500 0.2500   x coordinate   2.2196
+high-symmetry point:  0.0000 0.0000 0.0000   x coordinate   3.2802
+output file (gnuplot/xmgr) &gt; si_bands.gnuplot
+bands in gnuplot/xmgr format written to file si_bands.gnuplot
+
+
+output file (ps) &gt; si_bands.ps
+Efermi &gt; 6.6416
+deltaE, reference E (for tics) 4, 0
+bands in PostScript format written to file si_bands.ps</code></pre></div>
+<p>You will have <code>si_bands.ps</code> with band diagram. Alternatively, you can use your
+favorite plotting program to make the plots. Below is an example of using Python
+matplotlib.</p>
+<div class="codeblock"><div class="code-title">notebooks/si-bands.ipynb</div><pre><code>import matplotlib.pyplot as plt
+from matplotlib import rcParamsDefault
+import numpy as np
+%matplotlib inline
+
+plt.rcParams["figure.dpi"]=150
+plt.rcParams["figure.facecolor"]="white"
+plt.rcParams["figure.figsize"]=(8, 6)
+
+# load data
+data = np.loadtxt('../src/silicon/si_bands.dat.gnu')
+
+k = np.unique(data[:, 0])
+bands = np.reshape(data[:, 1], (-1, len(k)))
+
+for band in range(len(bands)):
+    plt.plot(k, bands[band, :], linewidth=1, alpha=0.5, color='k')
+plt.xlim(min(k), max(k))
+
+# Fermi energy
+plt.axhline(6.6416, linestyle=(0, (5, 5)), linewidth=0.75, color='k', alpha=0.5)
+# High symmetry k-points (check bands_pp.out)
+plt.axvline(0.8660, linewidth=0.75, color='k', alpha=0.5)
+plt.axvline(1.8660, linewidth=0.75, color='k', alpha=0.5)
+plt.axvline(2.2196, linewidth=0.75, color='k', alpha=0.5)
+# text labels
+plt.xticks(ticks= [0, 0.8660, 1.8660, 2.2196, 3.2802], \
+           labels=['L', '$\Gamma$', 'X', 'U', '$\Gamma$'])
+plt.ylabel("Energy (eV)")
+plt.text(2.3, 5.6, 'Fermi energy', fontsize= small)
+plt.show()</code></pre></div>
+<img alt="silicon-bands" loading="lazy" src="img/silicon-bands.webp"/>
+<div class="admonition"><b>ℹ️ Info</b><p>The <code>k</code> values corresponding to high symmetry points (such as \(\Gamma\), X, U, L)
+which we need to label in our band diagram, can be found in the post-processing
+output file (<code>si_bands_pp.out</code>).<p>Bandgap value can be determined from the highest occupied, lowest unoccupied
+level values printed in <code>scf</code> calculation output.</p></p></div>
+<h2 id="note-on-bandgap">Note on bandgap</h2>
+<p>Usually, band gaps computed using common exchange-correction functionals such as
+LDA or GGA are severely underestimated compared to actual experimental values.
+This discrepancy is mainly due to (1) approximations used in the exchange
+correction functional and (2) a derivative discontinuity term, originating from
+the density functional being discontinuous with the total number of electrons in
+the system. The second contribution is larger contributor to the error. It can
+be partly addressed by a variety of techniques such as the GW approximation.</p>
+<p>Strategies to improve band gap prediction at moderate to low computational cost
+now been developed by several groups, including Chan and Ceder (delta-sol)<sup><a href="#user-content-fn-1" id="user-content-fnref-1">1</a></sup>,
+Heyd et al. (hybrid functionals)<sup><a href="#user-content-fn-2" id="user-content-fnref-2">2</a></sup>, and Setyawan et al. (empirical fits)<sup><a href="#user-content-fn-3" id="user-content-fnref-3">3</a></sup>.</p>
+<h2 id="resources">Resources</h2>
+<ul>
+<li><a href="https://docs.materialsproject.org/methodology/materials-methodology/electronic-structure#accuracy-of-band-structures" rel="noopener" target="_blank">https://docs.materialsproject.org/methodology/materials-methodology/electronic-structure#accuracy-of-band-structures</a></li>
+<li><a href="https://seekpath.materialscloud.io/" rel="noopener" target="_blank">See K-pat online tool</a></li>
+</ul>
+
+<section><h2 id="footnote-label">Footnotes</h2>
+<ol>
+<li id="user-content-fn-1">
+<p>M. Chan, G. Ceder, Efficient Band Gap Predictions for Solids, Physical
+Review Letters 19 (2010) <a href="https://doi.org/10.1103/PhysRevLett.105.196403" rel="noopener" target="_blank">https://doi.org/10.1103/PhysRevLett.105.196403</a> <a href="#user-content-fnref-1">↩</a></p>
+</li>
+<li id="user-content-fn-2">
+<p>J. Heyd, J.E. Peralta, G.E. Scuseria, R.L. Martin, Energy band gaps and
+lattice parameters evaluated with the Heyd-Scuseria-Ernzerhof screened hybrid
+functional, Journal of Chemical Physics 123 (2005)
+<a href="https://doi.org/10.1063/1.2085170" rel="noopener" target="_blank">https://doi.org/10.1063/1.2085170</a> <a href="#user-content-fnref-2">↩</a></p>
+</li>
+<li id="user-content-fn-3">
+<p>W. Setyawan, R.M. Gaume, S. Lam, R. Feigelson, S. Curtarolo,
+High-throughput combinatorial database of electronic band structures for
+inorganic scintillator materials., ACS Combinatorial Science. (2011)
+<a href="https://doi.org/10.1021/co200012w" rel="noopener" target="_blank">https://doi.org/10.1021/co200012w</a>. <a href="#user-content-fnref-3">↩</a></p>
+</li>
+</ol>
+</section>
+<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/bands" target="_blank" rel="noopener">Bandstructure Calculation</a>,
+do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
+<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY 4.0</a>.
+Alterações: layout, título e navegação traduzidos para o português.</p>
+    <nav class="pager"></nav>
+  </main>
+</div>
+<script src="../assets/js/site.js"></script>
+<script defer src="../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../assets/vendor/katex/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})"></script>
+</body>
+</html>

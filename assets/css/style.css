@@ -212,3 +212,21 @@ footer {
   font-size: .78rem; font-weight: 700; padding: .2rem .7rem; border-radius: 999px; white-space: nowrap;
 }
 .dl-hint { margin-top: .8rem; font-size: .88rem; }
+
+/* Tutorial completo de QE */
+.codeblock { margin: 1rem 0; }
+.code-title {
+  font-family: var(--mono); font-size: .8rem; color: var(--muted);
+  background: var(--card); border: 1px solid var(--border); border-bottom: 0;
+  border-radius: 10px 10px 0 0; padding: .4rem 1rem;
+}
+.code-title + pre { margin-top: 0; border-radius: 0 0 10px 10px; }
+.content img { display: block; margin: 1.2rem auto; border-radius: 10px; background: #fff; padding: .4rem; max-height: 560px; object-fit: contain; }
+.content .katex-display { overflow-x: auto; overflow-y: hidden; padding: .3rem 0; }
+.credit { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--border); font-size: .82rem; color: var(--muted); }
+.sidebar h4:first-child { margin-top: 0; }
+
+/* Programas */
+.programs { display: grid; gap: 1.1rem; }
+.project > img { width: 150px; border-radius: 26px; }
+.tag.inpi { color: var(--yellow); border-color: #fece4e66; font-weight: 600; }

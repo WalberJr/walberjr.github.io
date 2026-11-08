@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Instalação · Tutorial Quantum ESPRESSO</title>
+  <link rel="icon" href="../assets/img/favicon.png">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+</head>
+<body data-root="../" data-section="espresso">
+<div class="docs">
+  <aside class="sidebar" data-docs="espresso"></aside>
+  <main class="content">
+<h1>Instalação</h1>
+<p>We can install Quantum Espresso on our personal laptops or desktops to run
+relatively less computationally intensive calculations. If we intend to perform
+computationally heavy tasks, we would need access to better computing resources
+with large number of CPU (or GPU) cores, memory, bandwidth, and disc IO.</p>
+<p>Throughout this tutorial, I will be using a Ubuntu system for smaller
+calculations while other computationally intensive calculations will be done in
+HPC clusters.</p>
+<p>Perhaps the easiest way to install Quantum Espresso is from the package manager
+of respective Linux distribution. This should work fine for us and this is
+recommended option. Following commands are for Ubuntu/Debian. First make sure
+your system is up-to-date.</p>
+<div class="codeblock"><pre><code>sudo apt update &amp;&amp; sudo apt upgrade</code></pre></div>
+<p>Install Quantum Espresso from apt repository:</p>
+<div class="codeblock"><pre><code>sudo apt install --no-install-recommends \
+    libfftw3-dev \
+    quantum-espresso</code></pre></div>
+<div class="admonition tip"><b>💡 Dica</b><p>Pre-built binaries of Quantum ESPRESSO for Ubuntu is included in my GitHub
+repository <a href="https://github.com/pranabdas/espresso/releases" rel="noopener" target="_blank">releases</a> for easy
+installation. Please refer to the release notes for more details on how to
+install.</p></div>
+<p>If you want to compile from the source yourself, here are the installation steps
+for the Quantum Espresso version 7.2 in a Ubuntu (LTS 22.04) system. I will be
+compiling for single processor. First install the recommended libraries and
+dependencies:</p>
+<div class="codeblock"><pre><code>sudo apt install --no-install-recommends \
+    autoconf \
+    build-essential \
+    ca-certificates \
+    gfortran \
+    libblas3 \
+    libc6 \
+    libfftw3-dev \
+    libgcc-s1 \
+    liblapack-dev \
+    wget</code></pre></div>
+<p>If you want to compile for parallel processing, you also need to install:</p>
+<div class="codeblock"><pre><code>sudo apt install --no-install-recommends \
+    libopenmpi-dev \
+    libscalapack-openmpi-dev \
+    libelpa17  #  use libelpa4 on Ubuntu 20.04</code></pre></div>
+<p><a href="https://gitlab.com/QEF/q-e/-/releases" rel="noopener" target="_blank">Download</a> Quantum Espresso (latest
+version 7.2 at the time of writing):</p>
+<div class="codeblock"><pre><code>wget https://gitlab.com/QEF/q-e/-/archive/qe-7.2/q-e-qe-7.2.tar.gz</code></pre></div>
+<p>Un-tar the source files:</p>
+<div class="codeblock"><pre><code>tar -zxvf q-e-qe-7.2.tar.gz</code></pre></div>
+<p>Go to the qe directory and issue configure:</p>
+<div class="codeblock"><pre><code>cd q-e-qe-7.2
+./configure</code></pre></div>
+<p>Here we can provide various configuration options. Read the manual in oder to
+properly understand. But in most cases we will be just fine with the defaults,
+it should detect the system configuration automatically, in case you don't get
+what you want, try the various configuration <code>flags</code> with configure.</p>
+<div class="admonition warn"><b>⚠️ Cuidado</b><p>Note that certain programs/utilities bundled with Quantum Espresso might not
+work correctly in parallel compilation, so we may need serial compilation for
+those by <code>./configure --disable-parallel</code> option in case parallel option is
+automatically detected.</p></div>
+<p>Finally, compile the source files and create the binary executables:</p>
+<div class="codeblock"><pre><code># compile individual packages
+make pw
+# or compile everything
+make all
+# we can parallelize e.g., below command uses 4 CPUs
+make -j4 all</code></pre></div>
+<p>Now, the binary files or their symbolic links (shortcuts) would be placed in the
+<code>bin</code> directory. It would be good idea to include the executable path to your
+<code>.bashrc</code> (or <code>.zshrc</code> or whatever shell you use) file:</p>
+<div class="codeblock"><pre><code># use the correct path if it differs from mine
+echo 'export PATH="/root/q-e-qe-7.2/bin:$PATH"' &gt;&gt; ~/.bashrc</code></pre></div>
+<p>Finally, you may need to restart your terminal or <code>source .bashrc</code>.</p>
+<div class="codeblock"><pre><code>source ~/.bashrc</code></pre></div>
+<p>You can compile the documentation by going to particular directory (e.g., PW or
+PP) and execute (you need to have LaTeX installed in your system):</p>
+<div class="codeblock"><pre><code>make doc</code></pre></div>
+<p>If you want docs in PDF format, you can use <code>latex</code> commands to create them as
+well:</p>
+<div class="codeblock"><pre><code>pdflatex filename.tex</code></pre></div>
+<p>We are now ready to run Quantum Espresso <code>pw.x</code> (or any other program) using
+<code>mpirun</code> by following command:</p>
+<div class="codeblock"><pre><code>pw.x -inp inputfile &gt; outputfile
+# For parallel version
+mpirun -np 12 pw.x -inp inputfile &gt; outputfile</code></pre></div>
+<p>Where <code>-np 12</code> specifies the number of processors. <code>-inp</code> stands for input file.
+Alternatively, we can use <code>-i</code>, or <code>-in</code>, or <code>-input</code>, or even standard input
+redirect <code>&lt;</code>. But beware some systems may not interpret all the different
+options, I think safe option is to use <code>-i</code>.</p>
+<p>Once installation is completed, optionally we can run tests if everything went
+OK. Go to the <code>test-suite</code> directory and run</p>
+<div class="codeblock"><pre><code>make run-tests</code></pre></div>
+<p>If all is well, we will see <strong>Passed</strong> messages and we are good to go.</p>
+<div class="admonition warn"><b>⚠️ Cuidado</b><p>Note that the above installation steps may not be the most optimal way to run
+Quantum Espresso in your computer. There are multiple implementations of same
+library. For example, you can replace openmpi libraries with Intel MKL or MPICH
+implementations. Please do research yourself or ask help from someone who has
+knowledge about high performance computing.</p></div>
+<h2 id="installing-pwtk">Installing PWTK</h2>
+<p>We will install a very hand scripting package PWscf Toolkit (PWTK). First we
+need to install following dependencies:</p>
+<div class="codeblock"><pre><code>sudo apt install tcl tcllib</code></pre></div>
+<p>Download the file from - <a href="http://pwtk.ijs.si/download/pwtk-2.0.tar.gz" rel="noopener" target="_blank">http://pwtk.ijs.si/download/pwtk-2.0.tar.gz</a></p>
+<div class="codeblock"><pre><code>wget "http://pwtk.ijs.si/download/pwtk-2.0.tar.gz"</code></pre></div>
+<p>Above command will download and save the file to your current directory. Next we
+need to just un-tar (no need to compile):</p>
+<div class="codeblock"><pre><code>tar -zxvf pwtk-2.0.tar.gz</code></pre></div>
+<p>Add the path (modify below as appropriate) to <code>.bashrc</code>:</p>
+<div class="codeblock"><pre><code>echo 'export PATH="/root/pwtk-2.0:$PATH"' &gt;&gt; ~/.bashrc
+source ~/.bashrc</code></pre></div>
+<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/setup/install" target="_blank" rel="noopener">Quantum Espresso installation</a>,
+do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
+<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY 4.0</a>.
+Alterações: layout, título e navegação traduzidos para o português.</p>
+    <nav class="pager"></nav>
+  </main>
+</div>
+<script src="../assets/js/site.js"></script>
+<script defer src="../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../assets/vendor/katex/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})"></script>
+</body>
+</html>
