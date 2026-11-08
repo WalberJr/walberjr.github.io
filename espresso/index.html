@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Introdução · Tutorial Quantum ESPRESSO</title>
+  <link rel="icon" href="../assets/img/favicon.png">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body data-root="../" data-section="espresso">
+<div class="docs">
+  <aside class="sidebar" data-docs="espresso"></aside>
+  <main class="content">
+<h1>Introdução</h1>
+<p>Bem-vindo ao tutorial de <b>Quantum ESPRESSO</b> (QE) em português! Aqui você vai aprender,
+passo a passo, a fazer cálculos de estrutura eletrônica baseados na Teoria do Funcional da
+Densidade (DFT) usando ondas planas e pseudopotenciais.</p>
+
+<h2>O que é o Quantum ESPRESSO?</h2>
+<p>É um pacote de código aberto (licença GPL) para simulações de materiais em escala atômica.
+O nome vem de <i>opEn-Source Package for Research in Electronic Structure, Simulation, and Optimization</i>.
+Ele reúne vários programas; os principais que usaremos são:</p>
+<table>
+<tr><th>Programa</th><th>Para que serve</th></tr>
+<tr><td><code>pw.x</code></td><td>Cálculos SCF, NSCF, bandas, otimização de estrutura e dinâmica molecular</td></tr>
+<tr><td><code>bands.x</code></td><td>Organiza os autovalores para o gráfico de bandas</td></tr>
+<tr><td><code>dos.x</code></td><td>Densidade de estados (DOS) total</td></tr>
+<tr><td><code>projwfc.x</code></td><td>DOS projetada (PDOS) em orbitais atômicos</td></tr>
+<tr><td><code>pp.x</code></td><td>Pós-processamento: densidade de carga, potencial etc.</td></tr>
+<tr><td><code>ph.x</code></td><td>Fônons via teoria de perturbação do funcional da densidade (DFPT)</td></tr>
+</table>
+
+<h2>Fluxo de trabalho típico</h2>
+<ol>
+  <li><b>SCF</b> — resolver as equações de Kohn-Sham até a autoconsistência.</li>
+  <li><b>Convergência</b> — escolher energia de corte e malha de pontos k.</li>
+  <li><b>Otimização</b> — relaxar posições atômicas e/ou a célula.</li>
+  <li><b>NSCF / bandas</b> — calcular autovalores em mais pontos k a partir da densidade do SCF.</li>
+  <li><b>Pós-processamento</b> — bandas, DOS, PDOS, densidade de carga…</li>
+</ol>
+
+<div class="admonition tip"><b>💡 Dica</b>
+Todos os exemplos usam o <b>silício</b> (estrutura do diamante), um sistema pequeno que roda em
+segundos num notebook. Depois de entender o fluxo, basta trocar a estrutura pelo seu material.</div>
+
+<div class="admonition"><b>📊 Analise com o KStudio</b>
+Os arquivos de saída deste tutorial podem ser abertos no <a href="../index.html#kstudio">KStudio</a>
+para visualizar convergência, bandas, DOS e PDOS sem escrever scripts.</div>
+    <nav class="pager"></nav>
+  </main>
+</div>
+<script src="../assets/js/site.js"></script>
+</body>
+</html>
