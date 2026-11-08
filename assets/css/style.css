@@ -191,3 +191,14 @@ footer {
   .sidebar { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--border); }
   .content { padding: 1.5rem 1.1rem 3rem; }
 }
+
+/* Publicações: autores */
+.pub .a { font-size: .9rem; margin: .15rem 0; }
+.pub .a b { color: var(--cyan); font-weight: 600; }
+
+/* Linha do tempo (formação) */
+.timeline { border-left: 2px solid var(--border); margin-left: .4rem; }
+.tl { position: relative; padding: 0 0 1.2rem 1.4rem; }
+.tl::before { content: ""; position: absolute; left: -7px; top: .45rem; width: 12px; height: 12px;
+  border-radius: 50%; background: var(--grad); }
+.tl .yr { display: block; font-size: .85rem; color: var(--cyan); font-weight: 600; }

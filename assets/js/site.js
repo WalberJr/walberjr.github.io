@@ -8,6 +8,7 @@
   const NAV = [
     ["Início", "index.html", "home"],
     ["Pesquisa", "index.html#pesquisa", "pesquisa"],
+    ["Formação", "index.html#formacao", "formacao"],
     ["Publicações", "index.html#publicacoes", "pub"],
     ["KStudio", "index.html#kstudio", "kstudio"],
     ["Quantum ESPRESSO", "espresso/index.html", "espresso"],
@@ -19,7 +20,7 @@
   header.className = "topbar";
   header.innerHTML = `
     <div class="inner">
-      <a class="brand" href="${root}index.html"><span>W</span>alber Jr.</a>
+      <a class="brand" href="${root}index.html"><span>W</span>alber Guimarães Jr.</a>
       <button class="menu-btn" aria-label="Abrir menu">☰</button>
       <nav class="nav">
         ${NAV.map(([t, h, k]) =>
@@ -85,6 +86,6 @@
 
   // ---- Rodapé ----
   const f = document.createElement("footer");
-  f.innerHTML = `© ${new Date().getFullYear()} Walber Jr. · Hospedado no GitHub Pages`;
+  f.innerHTML = `© ${new Date().getFullYear()} Walber Gonçalves Guimarães Júnior · Hospedado no GitHub Pages`;
   document.body.appendChild(f);
 })();
