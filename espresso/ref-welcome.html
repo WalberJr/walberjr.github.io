@@ -1,59 +1,46 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Boas-vindas · Tutorial Quantum ESPRESSO</title>
-  <link rel="icon" href="../assets/img/favicon.png">
-  <link rel="stylesheet" href="../assets/css/style.css">
-  <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Boas-vindas · Tutorial Quantum ESPRESSO</title>
+<link href="../assets/img/favicon.png" rel="icon"/>
+<link href="../assets/css/style.css" rel="stylesheet"/>
+<link href="../assets/vendor/katex/katex.min.css" rel="stylesheet"/>
 </head>
 <body data-root="../" data-section="espresso">
 <div class="docs">
-  <aside class="sidebar" data-docs="espresso"></aside>
-  <main class="content">
+<aside class="sidebar" data-docs="espresso"></aside>
+<main class="content">
 <h1>Boas-vindas</h1>
-<p>This tutorial is result of my personal notes while trying (which I still do) to
-learn Density Functional Theory calculations myself. I am no expert in this
-subject. I am sharing this notes here, just in case it helps you getting
-started. I will cite numerous other resources that I am following. Hope you will
-find this tutorial helpful.</p>
-<p>The quantum espresso input files, jupyter notebooks (containing python code for
-visualizations), and other source files related to this tutorial can be found on
-GitHub: <a href="https://github.com/pranabdas/espresso/" rel="noopener" target="_blank">pranabdas/espresso</a>. You may
-clone the repository to your local machine:</p>
+<p>Este tutorial é resultado das minhas anotações pessoais enquanto tentava (e ainda tento) aprender cálculos de Teoria do Funcional da Densidade. Não sou especialista no assunto. Compartilho estas notas aqui caso ajudem você a começar. Vou citar vários outros materiais que estou seguindo. Espero que este tutorial seja útil.</p>
+<p>Os arquivos de entrada do Quantum ESPRESSO, os Jupyter notebooks (com código Python para as visualizações) e outros arquivos relacionados a este tutorial estão no GitHub: <a href="https://github.com/pranabdas/espresso/" rel="noopener" target="_blank">pranabdas/espresso</a>. Você pode clonar o repositório na sua máquina:</p>
 <div class="codeblock"><pre><code>git clone https://github.com/pranabdas/espresso.git</code></pre></div>
-<p>Or, if you do not have git installed, download zipped copy of the repository
-<a href="https://github.com/pranabdas/espresso/archive/refs/heads/main.zip" rel="noopener" target="_blank">here</a>.</p>
-<h2 id="filename-conventions">Filename conventions</h2>
-<p>Lately, I decided to follow specific pattern for the filenames, but you can
-choose whatever works best for you. Note that all example files in this
-tutorial does not follow this convention yet.</p>
+<p>Ou, se não tiver o git instalado, baixe uma cópia compactada do repositório <a href="https://github.com/pranabdas/espresso/archive/refs/heads/main.zip" rel="noopener" target="_blank">aqui</a>.</p>
+<h2 id="filename-conventions">Convenção de nomes de arquivos</h2>
+<p>Recentemente decidi seguir um padrão específico para os nomes dos arquivos, mas você pode escolher o que funcionar melhor para você. Note que nem todos os arquivos de exemplo deste tutorial seguem essa convenção ainda.</p>
 <div class="codeblock"><pre><code>{program}.{calculation}.{system}.{in, out}
 {program}.{calculation}.{system_description}.{in, out}
 {pw, pp, ...}.{scf, bands, ...}.{silicon, al_slab}.{in, out}</code></pre></div>
-<p>Example: <em>pw.bands.silicon.in</em> → <em>input</em> file for the <em>bands</em> calculation using
-<em>PWscf</em> program for <em>silicon</em>.</p>
-<p>For PWTK scripts, we will use <code>.pwtk</code> extension (e.g., <em>silicon_vc_relax.pwtk</em>).</p>
-<h2 id="unit-conversions">Unit conversions</h2>
+<p>Exemplo: <em>pw.bands.silicon.in</em> → arquivo de <em>entrada</em> do cálculo de <em>bandas</em> com o programa <em>PWscf</em> para o <em>silício</em>.</p>
+<p>Para scripts do PWTK, usaremos a extensão <code>.pwtk</code> (por exemplo, <em>silicon_vc_relax.pwtk</em>).</p>
+<h2 id="unit-conversions">Conversão de unidades</h2>
 <ul>
-<li>1 Bohr = 0.529177249 Å</li>
-<li>1 Rydberg (Ry) = 13.6056981 eV.</li>
+<li>1 Bohr = 0,529177249 Å</li>
+<li>1 Rydberg (Ry) = 13,6056981 eV.</li>
 </ul>
-<p><strong>Angstrom to Bohr converter:</strong> lattice constants are often provided in
-angstrom, you can use following utility to convert to Bohr.</p>
-
-<p><input/> Å = <span>1.8897259886</span> Bohr. <button>Copy</button></p>
-<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/" target="_blank" rel="noopener">Density Functional Theory using Quantum Espresso</a>,
+<p><strong>Conversor de Ångström para Bohr:</strong> constantes de rede costumam ser dadas em ångström; use a relação abaixo para converter para Bohr.</p>
+<p>1 Å = <span>1,8897259886</span> Bohr.</p>
+<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/" rel="noopener" target="_blank">Density Functional Theory using Quantum Espresso</a>,
 do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
-<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY 4.0</a>.
-Alterações: layout, título e navegação traduzidos para o português.</p>
-    <nav class="pager"></nav>
-  </main>
+<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" rel="noopener" target="_blank">CC BY 4.0</a>.
+Alterações: texto traduzido para o português; layout e navegação adaptados.</p>
+<nav class="pager"></nav>
+</main>
 </div>
 <script src="../assets/js/site.js"></script>
-<script defer src="../assets/vendor/katex/katex.min.js"></script>
-<script defer src="../assets/vendor/katex/contrib/auto-render.min.js"
-  onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})"></script>
+<script defer="" src="../assets/vendor/katex/katex.min.js"></script>
+<script defer="" onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})" src="../assets/vendor/katex/contrib/auto-render.min.js"></script>
 </body>
 </html>

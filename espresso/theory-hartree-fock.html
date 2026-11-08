@@ -1,42 +1,33 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Hartree-Fock · Tutorial Quantum ESPRESSO</title>
-  <link rel="icon" href="../assets/img/favicon.png">
-  <link rel="stylesheet" href="../assets/css/style.css">
-  <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Hartree-Fock · Tutorial Quantum ESPRESSO</title>
+<link href="../assets/img/favicon.png" rel="icon"/>
+<link href="../assets/css/style.css" rel="stylesheet"/>
+<link href="../assets/vendor/katex/katex.min.css" rel="stylesheet"/>
 </head>
 <body data-root="../" data-section="espresso">
 <div class="docs">
-  <aside class="sidebar" data-docs="espresso"></aside>
-  <main class="content">
+<aside class="sidebar" data-docs="espresso"></aside>
+<main class="content">
 <h1>Hartree-Fock</h1>
-<p>Hatree-Fock theory is foundational to many subsequent electronic structure
-theories. It is an independent particle model or mean filed theory. Consider we
-have two non-interacting electrons. In that case, the Hamiltonian would be
-separable, and the total wavefunction \(\Psi(\textbf{r}_1, \textbf{r}_2)\) would
-be product of the individual wave function. Now if we consider two electrons are
-forming a single system, then there are two issues. (1) We can no longer ignore
-the electron-electron interaction. (2) The wavefunction describing fermions must
-be antisymmetric with respect to the interchange of any set of space-spin
-coordinates. A simple <strong>Hartree product</strong> fails to satisfy that condition:</p>
+<p>A teoria de Hartree-Fock é a base de muitas teorias de estrutura eletrônica posteriores. É um modelo de partículas independentes, ou teoria de campo médio. Considere dois elétrons que não interagem. Nesse caso, o hamiltoniano seria separável e a função de onda total \(\Psi(\textbf{r}_1, \textbf{r}_2)\) seria o produto das funções de onda individuais. Agora, se considerarmos que os dois elétrons formam um único sistema, surgem dois problemas. (1) Não podemos mais ignorar a interação elétron-elétron. (2) A função de onda que descreve férmions deve ser antissimétrica em relação à troca de qualquer par de coordenadas de espaço e spin. Um simples <strong>produto de Hartree</strong> não satisfaz essa condição:</p>
 \[\Psi_{HP}(\textbf{r}_1, \textbf{r}_2, \cdots, \textbf{r}_N) =
 \phi_1(\textbf{r}_1) \phi_2(\textbf{r}_2) \cdots \phi_N(\textbf{r}_N)\]
-<p>In order to satisfy the antisymmetry condition, for our two electron system we
-can formulate a total wavefunction of the form:</p>
+<p>Para satisfazer a condição de antissimetria no nosso sistema de dois elétrons, podemos escrever uma função de onda total da forma:</p>
 \[\Psi(\textbf{r}_1, \textbf{r}_2) = \frac{1}{\sqrt{2}} [\chi_1(\textbf{r}_1)
 \chi_2(\textbf{r}_2) - \chi_1(\textbf{r}_2)\chi_2(\textbf{r}_1)]\]
-<h2 id="slater-determinant">Slater determinant</h2>
-<p>The above equation can be written as:</p>
+<h2 id="slater-determinant">Determinante de Slater</h2>
+<p>A equação acima pode ser escrita como:</p>
 \[\Psi(\textbf{r}_1, \textbf{r}_2) = \frac{1}{\sqrt{2}}
 \begin{vmatrix}
 \chi_1(\textbf{r}_1) &amp; \chi_2(\textbf{r}_1) \\
 \chi_1(\textbf{r}_2) &amp; \chi_2(\textbf{r}_2)
 \end{vmatrix}\]
-<p>Now what happens if we have more than two electrons? We can generalize the above
-determinant form to \(N\) electrons:</p>
+<p>E se tivermos mais de dois elétrons? Podemos generalizar a forma de determinante acima para \(N\) elétrons:</p>
 \[\Psi = \frac{1}{\sqrt{N!}}
 \begin{vmatrix}
 \chi_1(\textbf{r}_1) &amp; \chi_2(\textbf{r}_1) &amp; \cdots &amp; \chi_N(\textbf{r}_1) \\
@@ -44,22 +35,20 @@ determinant form to \(N\) electrons:</p>
 \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
 \chi_1(\textbf{r}_N) &amp; \chi_2(\textbf{r}_N) &amp; \cdots &amp; \chi_N(\textbf{r}_N)
 \end{vmatrix}\]
-<p>The above antisymmetrized product can describe electrons that move independently
-of each other while they experience an average (mean-field) Coulomb force.</p>
-<h2 id="resources">Resources</h2>
+<p>O produto antissimetrizado acima descreve elétrons que se movem independentemente uns dos outros, sentindo uma força coulombiana média (campo médio).</p>
+<h2 id="resources">Recursos</h2>
 <ul>
 <li><a href="http://vergil.chemistry.gatech.edu/notes/hf-intro/hf-intro.html" rel="noopener" target="_blank">http://vergil.chemistry.gatech.edu/notes/hf-intro/hf-intro.html</a></li>
 </ul>
-<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/theory/hartree-fock" target="_blank" rel="noopener">Hartree-Fock Theory</a>,
+<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/theory/hartree-fock" rel="noopener" target="_blank">Hartree-Fock Theory</a>,
 do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
-<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY 4.0</a>.
-Alterações: layout, título e navegação traduzidos para o português.</p>
-    <nav class="pager"></nav>
-  </main>
+<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" rel="noopener" target="_blank">CC BY 4.0</a>.
+Alterações: texto traduzido para o português; layout e navegação adaptados.</p>
+<nav class="pager"></nav>
+</main>
 </div>
 <script src="../assets/js/site.js"></script>
-<script defer src="../assets/vendor/katex/katex.min.js"></script>
-<script defer src="../assets/vendor/katex/contrib/auto-render.min.js"
-  onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})"></script>
+<script defer="" src="../assets/vendor/katex/katex.min.js"></script>
+<script defer="" onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})" src="../assets/vendor/katex/contrib/auto-render.min.js"></script>
 </body>
 </html>

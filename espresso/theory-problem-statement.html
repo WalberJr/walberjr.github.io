@@ -1,67 +1,47 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>O problema de muitos corpos · Tutorial Quantum ESPRESSO</title>
-  <link rel="icon" href="../assets/img/favicon.png">
-  <link rel="stylesheet" href="../assets/css/style.css">
-  <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>O problema de muitos corpos · Tutorial Quantum ESPRESSO</title>
+<link href="../assets/img/favicon.png" rel="icon"/>
+<link href="../assets/css/style.css" rel="stylesheet"/>
+<link href="../assets/vendor/katex/katex.min.css" rel="stylesheet"/>
 </head>
 <body data-root="../" data-section="espresso">
 <div class="docs">
-  <aside class="sidebar" data-docs="espresso"></aside>
-  <main class="content">
+<aside class="sidebar" data-docs="espresso"></aside>
+<main class="content">
 <h1>O problema de muitos corpos</h1>
-<p>We want to calculate the electronic structure of real materials and their
-physical properties by <em>ab-initio</em> method. A material is composed of atoms,
-while atoms themselves consist of electrons, protons, and neutrons. The dynamics
-of macroscopic particles such as electrons are governed by the laws of quantum
-mechanics. Quantum particles are described by the wave function.</p>
+<p>Queremos calcular a estrutura eletrônica de materiais reais e suas propriedades físicas por métodos <em>ab initio</em>. Um material é composto de átomos, e os átomos, por sua vez, de elétrons, prótons e nêutrons. A dinâmica de partículas microscópicas como os elétrons é governada pelas leis da mecânica quântica. Partículas quânticas são descritas pela função de onda.</p>
 \[\lambda \cdot p = h\]
-<p>where \(h\) is the Plank constant. There are four fundamental forces of nature:
-electromagnetic, strong nuclear, weak nuclear, and gravitational influencing the
-influencing the dynamics of any particle. However, when it comes to
-understanding the behavior of materials, we only need to consider the
-electromagnetic force. The Wavefunction of an electron in a potential filed
-\((V)\) is calculated by solving the Schrödinger equation:</p>
+<p>onde \(h\) é a constante de Planck. Há quatro forças fundamentais na natureza que influenciam a dinâmica de qualquer partícula: eletromagnética, nuclear forte, nuclear fraca e gravitacional. No entanto, para entender o comportamento dos materiais, basta considerar a força eletromagnética. A função de onda de um elétron em um campo de potencial \((V)\) é obtida resolvendo a equação de Schrödinger:</p>
 \[-\frac{\hbar^2}{2m} \nabla^2 \Psi(\textbf{r}, t) + V(\textbf{r}, t) = i\hbar
 \frac{\partial\Psi(\textbf{r}, t)}{\partial t}\]
-<p>Fortunately, in most practical purposes, the potential field is not a function
-of time \((t)\), or even if it is a function of time, they changes relatively
-slowly compared to the dynamics we are interested in. For example, the electrons
-inside a material are subjected to the Coulomb field of the nucleus. The nucleus
-is heavy and their motion is much slower than the motion of the electrons. In
-such situation, we can separate out the spatial and temporal parts of the wave
-function:</p>
+<p>Felizmente, na maioria das situações práticas, o campo de potencial não depende do tempo \((t)\) ou, se depende, varia lentamente em comparação com a dinâmica que nos interessa. Por exemplo, os elétrons de um material estão sujeitos ao campo coulombiano dos núcleos. Os núcleos são pesados e se movem muito mais devagar que os elétrons. Nesse caso, podemos separar as partes espacial e temporal da função de onda:</p>
 \[\Psi(\textbf{r}, t) = \psi(\textbf{r}) f(t)\]
-<p>That reduces our task to solving only time independent Schrödinger equation:</p>
+<p>Isso reduz nossa tarefa a resolver apenas a equação de Schrödinger independente do tempo:</p>
 \[\left[-\frac{\hbar^2 \nabla^2}{2m} + v(\textbf{r})\right] \psi(\textbf{r}) =
 \epsilon \psi(\textbf{r})\]
-<p>Once we have the wavefunction, we can calculate the observables by taking the
-expectation values.</p>
+<p>Uma vez obtida a função de onda, podemos calcular os observáveis tomando os valores esperados.</p>
 \[\braket{\psi_i | \psi_j} = \delta_{ij}\]
 \[\braket{\psi_i | \hat{\mathcal{H}} | \psi_i} = \epsilon_i\]
-<p>However, the challenge is to solve the Schrödinger equation as a real physical
-system is consists of a large number of atoms. The Schrödinger equation becomes
-coupled many-body equation.</p>
+<p>O desafio, porém, é resolver a equação de Schrödinger, pois um sistema físico real é composto de um grande número de átomos. A equação de Schrödinger se torna uma equação de muitos corpos acoplada.</p>
 \[\left[-\frac{\hbar}{2m} \sum_{i=1}^N \nabla_i^2 + \sum_{i=1}^NV(\textbf{r}_i)
 + \sum_{i=1}^N \sum_{j&lt;i}U(\textbf{r}_i, \textbf{r}_j)\right]\psi(\textbf{r}_1,
 \textbf{r}_2, ..., \textbf{r}_N) = E\psi(\textbf{r}_1, \textbf{r}_2, ...,
 \textbf{r}_N)\]
-<p>With today's available computing power, it is far from feasible to solve the
-actual electronic wavefunction of a condensed matter system, where \(N\) is of the
-order of \(10^{23}\).</p>
-<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/theory/problem-statement" target="_blank" rel="noopener">What problem are we trying to solve?</a>,
+<p>Com o poder computacional disponível hoje, está longe de ser viável resolver a função de onda eletrônica real de um sistema de matéria condensada, em que \(N\) é da ordem de \(10^{23}\).</p>
+<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/theory/problem-statement" rel="noopener" target="_blank">What problem are we trying to solve?</a>,
 do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
-<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY 4.0</a>.
-Alterações: layout, título e navegação traduzidos para o português.</p>
-    <nav class="pager"></nav>
-  </main>
+<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" rel="noopener" target="_blank">CC BY 4.0</a>.
+Alterações: texto traduzido para o português; layout e navegação adaptados.</p>
+<nav class="pager"></nav>
+</main>
 </div>
 <script src="../assets/js/site.js"></script>
-<script defer src="../assets/vendor/katex/katex.min.js"></script>
-<script defer src="../assets/vendor/katex/contrib/auto-render.min.js"
-  onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})"></script>
+<script defer="" src="../assets/vendor/katex/katex.min.js"></script>
+<script defer="" onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})" src="../assets/vendor/katex/contrib/auto-render.min.js"></script>
 </body>
 </html>

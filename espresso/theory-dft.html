@@ -1,132 +1,65 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Visão geral da DFT · Tutorial Quantum ESPRESSO</title>
-  <link rel="icon" href="../assets/img/favicon.png">
-  <link rel="stylesheet" href="../assets/css/style.css">
-  <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Visão geral da DFT · Tutorial Quantum ESPRESSO</title>
+<link href="../assets/img/favicon.png" rel="icon"/>
+<link href="../assets/css/style.css" rel="stylesheet"/>
+<link href="../assets/vendor/katex/katex.min.css" rel="stylesheet"/>
 </head>
 <body data-root="../" data-section="espresso">
 <div class="docs">
-  <aside class="sidebar" data-docs="espresso"></aside>
-  <main class="content">
+<aside class="sidebar" data-docs="espresso"></aside>
+<main class="content">
 <h1>Visão geral da DFT</h1>
-<p>Density functional theory (DFT) approaches the many-body problem by focusing on
-the electronic density which is a function of three spatial coordinates instead
-of finding the wave functions. DFT tries to minimize the energy of a system
-(ground state) in a self consistent way, and it is very successful in
-calculating the electronic structure of solid state systems.</p>
-<div class="admonition"><b>ℹ️ Info</b><p>A functional is a function whose argument is itself a function. \(f(x)\) is a
-function of the variable \(x\) while \(\mathcal{F}[f]\) is a functional of the
-function \(f\).</p>\[y = f(x)\]<p>\(f\) is a function, it takes a number \(x\) as input and output \(y\) is also a
-number.</p>\[y = \mathcal{F}[f(x)]\]<p>\(\mathcal{F}\) is a functional it takes function \(f(x)\) as input and output \(y\) is a
-number.</p></div>
-<h2 id="hohenberg-kohn-theorem-1">Hohenberg-Kohn Theorem 1</h2>
+<p>A teoria do funcional da densidade (DFT) aborda o problema de muitos corpos focando na densidade eletrônica, que é uma função de apenas três coordenadas espaciais, em vez de buscar as funções de onda. A DFT procura minimizar a energia do sistema (estado fundamental) de forma autoconsistente e tem muito sucesso no cálculo da estrutura eletrônica de sistemas do estado sólido.</p>
+<div class="admonition"><b>ℹ️ Info</b><p>Um funcional é uma função cujo argumento é ele próprio uma função. \(f(x)\) é uma função da variável \(x\), enquanto \(\mathcal{F}[f]\) é um funcional da função \(f\).</p>\[y = f(x)\]<p>\(f\) é uma função: recebe um número \(x\) como entrada e a saída \(y\) também é um número.</p>\[y = \mathcal{F}[f(x)]\]<p>\(\mathcal{F}\) é um funcional: recebe uma função \(f(x)\) como entrada e a saída \(y\) é um número.</p></div>
+<h2 id="hohenberg-kohn-theorem-1">Teorema 1 de Hohenberg-Kohn</h2>
 <blockquote>
-<p>The ground state density \(n(\textbf{r})\) determines the external potential
-energy \(v(\textbf{r})\) to within a trivial additive constant.</p>
+<p>A densidade do estado fundamental \(n(\textbf{r})\) determina o potencial externo \(v(\textbf{r})\) a menos de uma constante aditiva trivial.</p>
 </blockquote>
-<p>So what Hohenberg-Kohn theorem says, may not sound very trivial. Schrödinger
-equation says how we can get the wavefunction from a given potential. Once
-solved the wavefunction (which could be difficult), we can determine the density
-or any other properties. Now Hohenberg and Kohn theorem says the opposite is
-also true. For a given density, the potential can be uniquely determined. For
-non-degenerate ground states, two different Hamiltonian cannot have the same
-ground-state electron density. It is possible to define the ground-state energy
-as a function of electronic density.</p>
-<h2 id="hohenberg-kohn-theorem-2">Hohenberg-Kohn Theorem 2</h2>
+<p>O que o teorema de Hohenberg-Kohn afirma pode não parecer trivial. A equação de Schrödinger diz como obter a função de onda a partir de um dado potencial. Resolvida a função de onda (o que pode ser difícil), podemos determinar a densidade ou qualquer outra propriedade. O teorema de Hohenberg e Kohn diz que o inverso também vale: para uma dada densidade, o potencial é determinado de forma única. Para estados fundamentais não degenerados, dois hamiltonianos diferentes não podem ter a mesma densidade eletrônica do estado fundamental. Assim, é possível definir a energia do estado fundamental como função da densidade eletrônica.</p>
+<h2 id="hohenberg-kohn-theorem-2">Teorema 2 de Hohenberg-Kohn</h2>
 <blockquote>
-<p>Total energy of the system \(E(n)\) is minimal when \(n(\textbf{r})\) is the
-actual ground-state density, among all possible electron densities.</p>
+<p>Entre todas as densidades eletrônicas possíveis, a energia total do sistema \(E(n)\) é mínima quando \(n(\textbf{r})\) é a densidade real do estado fundamental.</p>
 </blockquote>
-<p>The ground state energy can therefore be found by minimizing \(E(n)\) instead of
-solving for the many-electron wavefunction. However, note that HK theorems do
-not tell us how the energy depends on the electron density. In reality, apart
-from some special cases, the exact \(E(n)\) is unknown and only approximate
-functionals are used.</p>
-<p>The essence of the HK theorem is that the non-degenerate ground-state wave
-function is a unique functional of the ground-state density:</p>
+<p>Portanto, a energia do estado fundamental pode ser encontrada minimizando \(E(n)\), em vez de resolver a função de onda de muitos elétrons. Note, porém, que os teoremas de HK não dizem como a energia depende da densidade eletrônica. Na prática, exceto em alguns casos especiais, o \(E(n)\) exato é desconhecido e usam-se apenas funcionais aproximados.</p>
+<p>A essência do teorema de HK é que a função de onda do estado fundamental não degenerado é um funcional único da densidade do estado fundamental:</p>
 \[\Psi_0(\textbf{r}_1, \textbf{r}_2, \dots, \textbf{r}_N) = \Psi[n_0(\textbf{r})]\]
-<h2 id="kohn-sham-hypothesis">Kohn-Sham hypothesis</h2>
+<h2 id="kohn-sham-hypothesis">Hipótese de Kohn-Sham</h2>
 <blockquote>
-<p>For any system of \(N\) interacting electrons in a given external potential
-\(v_{ext} (\textbf{r})\), there is a virtual system of \(N\) non-interacting
-electrons with exactly the same density as the interacting one. The
-non-interacting electrons subjected to a different external (single particle)
-potential.</p>
+<p>Para qualquer sistema de \(N\) elétrons interagentes em um dado potencial externo \(v_{ext} (\textbf{r})\), existe um sistema fictício de \(N\) elétrons não interagentes com exatamente a mesma densidade do sistema interagente. Os elétrons não interagentes estão sujeitos a um potencial externo (de partícula única) diferente.</p>
 </blockquote>
 \[\left[-\frac{\hbar^2 \nabla^2}{2m} + v_s(\textbf{r}) \right] \psi_i(\textbf{r})
 = \epsilon_i \psi_i(\textbf{r})\]
 \[v_s(\textbf{r}) = v_{ext}(\textbf{r}) + e^2 \int d^3r'
 \frac{n(\textbf{r})}{|\textbf{r} - \textbf{r}'|} + v_{xc}(\textbf{r}; [n])\]
 \[n(\textbf{r}) = \sum_i f_i |\psi_i (\textbf{r})|^2\]
-<p>where \(f_i\) is the occupation factor of electrons (\(0 \le f_i \le 2\)). The
-KS equation looks like single particle Schrödinger equation, however \(e^2 \int
-d^3r' \frac{n(\textbf{r})}{|\textbf{r} - \textbf{r}'|}\) (the Hartree energy due
-to electrostatic interaction of electronic cloud) and \(v_{xc} (\textbf{r}; [n])\)
-(<em>exchange-correlation</em> potential, reminiscence from Hartree-Fock theory, it
-includes all the remaining/unknown energy corrections) terms depend on
-\(n(\textbf{r})\) i.e., on \(\psi_i\) which in turn depends on \(v_{ext}\). Therefore
-the problem is non-linear. It is usually solved computationally by starting from
-a trial potential and iterate to self-consistency. Also note that we have not
-included the kinetic energy term for the nucleus. This is because the nuclear
-mass is about three orders of magnitude heavier than the electronic mass
-(\(M \gg m\)), so essentially electronic dynamics is much faster than the nuclear
-dynamics (see Born-Oppenheimer approximation). Now we are left with the task of
-solving a non-interacting Hamiltonian.</p>
-<div class="admonition"><b>ℹ️ Info</b><p>\(v_{ext}(\textbf{r})\) includes the potential energy due to nuclear field, and
-external electric and magnetic fields if present.</p></div>
-<h2 id="exchange-correlation-functional">Exchange-correlation functional</h2>
-<h3 id="local-density-approximation-lda">Local Density Approximation (LDA)</h3>
-<p>Energy functional is a function of the local charge density:</p>
+<p>onde \(f_i\) é o fator de ocupação dos elétrons (\(0 \le f_i \le 2\)). A equação de KS se parece com a equação de Schrödinger de partícula única, mas os termos \(e^2 \int d^3r' \frac{n(\textbf{r})}{|\textbf{r} - \textbf{r}'|}\) (a energia de Hartree, devida à interação eletrostática da nuvem eletrônica) e \(v_{xc} (\textbf{r}; [n])\) (o potencial de <em>troca e correlação</em>, herança da teoria de Hartree-Fock, que inclui todas as correções de energia restantes ou desconhecidas) dependem de \(n(\textbf{r})\), isto é, de \(\psi_i\), que por sua vez depende de \(v_{ext}\). Portanto o problema é não linear. Em geral ele é resolvido numericamente partindo de um potencial tentativo e iterando até a autoconsistência. Note também que não incluímos o termo de energia cinética dos núcleos. Isso porque a massa nuclear é cerca de três ordens de grandeza maior que a massa eletrônica (\(M \gg m\)), de modo que a dinâmica eletrônica é muito mais rápida que a nuclear (veja a aproximação de Born-Oppenheimer). Resta então resolver um hamiltoniano não interagente.</p>
+<div class="admonition"><b>ℹ️ Info</b><p>\(v_{ext}(\textbf{r})\) inclui a energia potencial devida ao campo dos núcleos e a campos elétricos e magnéticos externos, se houver.</p></div>
+<h2 id="exchange-correlation-functional">Funcional de troca e correlação</h2>
+<h3 id="local-density-approximation-lda">Aproximação da Densidade Local (LDA)</h3>
+<p>O funcional de energia depende da densidade de carga local:</p>
 \[E_{xc} = \int n(\textbf{r}) \epsilon_{xc}(n(\textbf{r})) d\textbf{r}\]
 \[v_{xc}(\textbf{r}) = \epsilon_{xc}(n(\textbf{r})) + n(\textbf{r})\frac{d\epsilon_{xc}(n)}{dn}\bigg\rvert_{n=n(\textbf{r})}\]
-<p>where \(\epsilon_{xc}(n)\) is obtained for the homogeneous electron gas of density
-\(n\) (using Quantum Monte Carlo techniques) and fitted to some analytic form.</p>
-<h3 id="generalized-gradient-approximation-gga">Generalized Gradient Approximation (GGA)</h3>
-<p>These are a family of functionals that depends on the local density and the
-local gradient of the density:</p>
+<p>onde \(\epsilon_{xc}(n)\) é obtido para o gás homogêneo de elétrons de densidade \(n\) (com técnicas de Monte Carlo quântico) e ajustado a alguma forma analítica.</p>
+<h3 id="generalized-gradient-approximation-gga">Aproximação do Gradiente Generalizado (GGA)</h3>
+<p>É uma família de funcionais que dependem da densidade local e do gradiente local da densidade:</p>
 \[E_{xc} = \int n(\textbf{r}) \epsilon_{GGA}(n(\textbf{r}), |\nabla n(\textbf{r})|) d\textbf{r}\]
-<p>There are many flavor of this functional. There are also more advanced
-functionals: Meta-GGA (e.g., SCAN), hybrids (e.g., B3LYP), nonlocal functionals
-for van der Waals forces, Grimme's DFT+D (a semi-empirical correction to GGA).
-They usually produces more accurate result, but computationally more expensive
-and sometimes numerically unstable.</p>
-<h2 id="algorithmic-implementation">Algorithmic implementation</h2>
-<p>We can write our Schrödinger in Dirac Bra-Ket notation:</p>
+<p>Há muitas variantes desse funcional. Há também funcionais mais avançados: meta-GGA (por exemplo, SCAN), híbridos (por exemplo, B3LYP), funcionais não locais para forças de van der Waals e o DFT+D de Grimme (uma correção semiempírica ao GGA). Eles costumam dar resultados mais precisos, mas são computacionalmente mais caros e às vezes numericamente instáveis.</p>
+<h2 id="algorithmic-implementation">Implementação algorítmica</h2>
+<p>Podemos escrever a equação de Schrödinger na notação bra-ket de Dirac:</p>
 \[\hat{\mathcal{H}} \ket{\psi} = E\ket{\psi}\]
-<p>we are going to solve non-interacting single particle Hamiltonian in terms of
-known basis functions (plane waves) with unknown coefficients. We start with an
-initial guess for the electron density \(n(\textbf{r})\), and construct a pseudo
-potential for the nuclear potential. In turn, we have the Hamiltonian. Solve for
-\(\psi_i(\textbf{r})\), subsequently \(n(\textbf{r})\), and iterate until self
-consistency is achieved.</p>
-<p><img alt="self-consistent-solution" loading="lazy" src="img/self-consistent-solution.webp"/>
-<span>Self consistency loop in DFT calculation. The above screenshot was taken from lecture slide of Professor Ralph Gevauer from <a href="http://indico.ictp.it/event/9616/other-view?view=ictptimetable" rel="noopener" target="_blank"> ICTP MAX School 2021</a>.</span></p>
-<p>The potential due to the ions is replaced by the pseudo potentials which removes
-the oscillations near the atomic core (reducing number of required plane wave
-basis vectors) and simulates the exact behavior elsewhere. The pseudo potential
-is also different for different exchange correlation functional, and it is
-specified in the pseudo potential file. If a system had more than one type of
-atom, always choose the pseudo potentials with same exchange correlation (e.g.,
-PBE).</p>
-<p>It is important to note that DFT is calculations are not exact solution to the
-real systems because exact functional (\(v_{xc}\)) we need to solve the Kohn-Sham
-equation is not known. Therefore, we have to compare the results with
-experimental observations. The Kohn-Sham wavefunction of orbitals is not an
-approximation to the exact wavefunction. Rather it is precisely defined property
-of any electronic system, which is uniquely determined by the density. The
-in-exactness of DFT results come from the fact that we do not know the exact
-correlation functional that truly describes real systems.</p>
-<h2 id="plane-wave-expansion">Plane-wave expansion</h2>
-<p>The wavefunctions are expanded in terms of a basis set. In quantum espresso, the
-the basis function is plane waves. There exists other DFT codes that use
-localized basis function as well. Plane waves are simpler but generally requires
-much large number of them compared to other localized basis sets.</p>
+<p>Vamos resolver o hamiltoniano não interagente de partícula única em termos de funções de base conhecidas (ondas planas) com coeficientes desconhecidos. Partimos de uma estimativa inicial da densidade eletrônica \(n(\textbf{r})\) e construímos um pseudopotencial para o potencial dos núcleos. Com isso temos o hamiltoniano. Resolvemos para \(\psi_i(\textbf{r})\), em seguida \(n(\textbf{r})\), e iteramos até atingir a autoconsistência.</p>
+<p><img alt="self-consistent-solution" loading="lazy" src="img/self-consistent-solution.webp"/> <span>Ciclo de autoconsistência em um cálculo DFT. A imagem acima foi tirada de um slide de aula do Professor Ralph Gebauer na <a href="http://indico.ictp.it/event/9616/other-view?view=ictptimetable" rel="noopener" target="_blank"> ICTP MAX School 2021</a>.</span></p>
+<p>O potencial dos íons é substituído por pseudopotenciais, que removem as oscilações perto do caroço atômico (reduzindo o número de ondas planas necessárias na base) e reproduzem o comportamento exato no restante do espaço. O pseudopotencial também é diferente para cada funcional de troca e correlação, e isso vem especificado no arquivo do pseudopotencial. Se o sistema tiver mais de um tipo de átomo, sempre escolha pseudopotenciais com o mesmo funcional de troca e correlação (por exemplo, PBE).</p>
+<p>É importante notar que os cálculos DFT não são uma solução exata para sistemas reais, porque o funcional exato (\(v_{xc}\)) necessário para resolver a equação de Kohn-Sham não é conhecido. Por isso, precisamos comparar os resultados com observações experimentais. A função de onda dos orbitais de Kohn-Sham não é uma aproximação da função de onda exata. É, na verdade, uma propriedade bem definida de qualquer sistema eletrônico, determinada de forma única pela densidade. A inexatidão dos resultados de DFT vem do fato de não conhecermos o funcional de correlação exato que descreve os sistemas reais.</p>
+<h2 id="plane-wave-expansion">Expansão em ondas planas</h2>
+<p>As funções de onda são expandidas em um conjunto de base. No Quantum ESPRESSO, as funções de base são ondas planas. Há outros códigos DFT que usam funções de base localizadas. Ondas planas são mais simples, mas em geral são necessárias em número muito maior do que bases localizadas.</p>
 \[\psi_i(\textbf{r}) = \sum_{\alpha = 1} ^{N_b} c_{i\alpha} f_{\alpha}(\textbf{r})\]
-<p>Where \(N_b\) is the size basis set. Then the eigenvalue equation becomes:</p>
+<p>onde \(N_b\) é o tamanho do conjunto de base. A equação de autovalores fica:</p>
 \[\sum_{\beta} \mathcal{H}_{\alpha\beta} c_{i\beta} = \epsilon_i c_{i\alpha}\]
 \[\Rightarrow
 \begin{pmatrix}
@@ -145,71 +78,47 @@ c_1 \\
 ... \\
 c_b
 \end{pmatrix}\]
-<p>This is a linear algebra problem, solving the above involves diagonalization of
-(\(N_b \times N_b\)) matrix which gives us corresponding eigenvalue and
-eigenfunction.</p>
-<p>Apart from plane waves, various localized basis set could be used, e.g., Linear
-Combination of Atomic Orbitals (LCAO), Gaussian-type Orbitals (GTO), Linearized
-Muffin-Tin Orbitals (LMTO). Once could also consider mixed basis sets, such as
-the Linearized Augmented Plane Waves (LAPW). Localized sets are smaller in size,
-they can be used for both finite and periodic systems, however they are
-difficult to use/calculate.</p>
-<p>In case of plane waves, we need larger basis set, and requires periodicity. Need
-to construct supercell for finite systems. Use of <a href="setup-pseudo-potential.html">pseudopotential</a> reduces the number of required plane waves.</p>
-<h2 id="variational-principle">Variational Principle</h2>
-<p>Finding the ground state:</p>
+<p>Este é um problema de álgebra linear: resolvê-lo envolve diagonalizar uma matriz (\(N_b \times N_b\)), o que fornece os autovalores e as autofunções correspondentes.</p>
+<p>Além de ondas planas, podem ser usadas várias bases localizadas, por exemplo Combinação Linear de Orbitais Atômicos (LCAO), Orbitais do Tipo Gaussiana (GTO) e Orbitais Muffin-Tin Linearizados (LMTO). Também se podem usar bases mistas, como as Ondas Planas Aumentadas Linearizadas (LAPW). Bases localizadas são menores e servem tanto para sistemas finitos quanto periódicos, mas são mais difíceis de usar e calcular.</p>
+<p>No caso de ondas planas, precisamos de uma base maior e de periodicidade. Para sistemas finitos é preciso construir uma supercélula. O uso de <a href="setup-pseudo-potential.html">pseudopotenciais</a> reduz o número de ondas planas necessárias.</p>
+<h2 id="variational-principle">Princípio variacional</h2>
+<p>Encontrando o estado fundamental:</p>
 \[E[\Phi] = \frac{\braket{\Phi | \hat{\mathcal{H}} | \Phi}}{\braket{\Phi|\Phi}}\]
 \[E[\Phi] \ge E_0\]
-<h2 id="bloch-theorem">Bloch theorem</h2>
+<h2 id="bloch-theorem">Teorema de Bloch</h2>
 \[\psi_k(r) = e^{i \textbf{k} \cdot \textbf{r}} u_k(\textbf{r})\]
 \[u_k(\textbf{r}) = u_k(\textbf{r} + \textbf{R})\]
-<p>\(\textbf{R}\) is lattice vector.</p>
-<p>Fourier expansion:</p>
+<p>\(\textbf{R}\) é um vetor da rede.</p>
+<p>Expansão de Fourier:</p>
 \[u_k(\textbf{r}) = \frac{1}{\Omega} \sum_G c_{\textbf{k,G}} e^{i \textbf{G} \cdot
 \textbf{r}}\]
-<p>\(\textbf{G}\) is reciprocal lattice vector.</p>
+<p>\(\textbf{G}\) é um vetor da rede recíproca.</p>
 \[\psi_k(\textbf{r}) = \frac{1}{\Omega} \sum_G c_{\textbf{k,G}}
 e^{i (\textbf{k + G}) \cdot \textbf{r}}\]
-<p>Contribution from higher Fourier components are small, we can limit the sum at
-finite \(|\textbf{k + G}|\)</p>
+<p>A contribuição das componentes de Fourier mais altas é pequena, então podemos truncar a soma em um \(|\textbf{k + G}|\) finito</p>
 \[\frac{\hbar^2 |\textbf{k + G}|}{2m} \le E_{\text{cutoff}}\]
-<p>The charge density can be obtained from:</p>
+<p>A densidade de carga é obtida de:</p>
 \[n(\textbf{r}) = \sum_k \psi_k^*(\textbf{r}) \psi_k(\textbf{r})\]
-<p>We need two sets of basis vectors: one to store the wavefunctions, and another
-for the charge density.</p>
-<div class="admonition"><b>ℹ️ Info</b><p>We need about 4 times the cutoff for the charge density compared to the cutoff
-for the wavefunction. In case of ultrasoft pseudo potentials, we require a lower
-cutoff for energy, therefore <code>ecutrho</code> might require 8 or 12 times higher than
-the <code>ecutwfc</code>.</p></div>
-<h2 id="flavors-of-dft">Flavors of DFT</h2>
-<p>Depending on the properties of material we are interested and accuracy we need
-to achieve, there are several different flavors of DFT appropriate for a
-specific scenario. For example, in case of calculation of ground state
-properties such as total energy, structure, magnetization and vibrational
-properties plain DFT (with GGA) or DFPT is good enough. While for calculation
-spectroscopic (excited state) properties, there are more advanced and
-computationally expensive methods. For single particle excitation
-(<em>N+1</em> problem), such as photoemission, bandgap, tunneling, we may choose <em>GW</em>
-method. While in case of two particle excitation (<em>N+2</em> problem), such as
-optical responses and excitons, <em>GW+BSE</em> formalism is better suited. For van der
-Waals systems, <em>SCAN+rVV10</em> functional is more appropriate.</p>
-<h2 id="resources">Resources</h2>
+<p>Precisamos de dois conjuntos de vetores de base: um para armazenar as funções de onda e outro para a densidade de carga.</p>
+<div class="admonition"><b>ℹ️ Info</b><p>O corte para a densidade de carga precisa ser cerca de 4 vezes o corte das funções de onda. No caso de pseudopotenciais ultrasoft, o corte de energia exigido é menor, por isso o <code>ecutrho</code> pode precisar ser 8 ou 12 vezes maior que o <code>ecutwfc</code>.</p></div>
+<h2 id="flavors-of-dft">Variantes da DFT</h2>
+<p>Dependendo das propriedades do material que nos interessam e da precisão desejada, há diferentes variantes da DFT adequadas a cada cenário. Por exemplo, para propriedades do estado fundamental, como energia total, estrutura, magnetização e propriedades vibracionais, a DFT simples (com GGA) ou a DFPT é suficiente. Para propriedades espectroscópicas (de estados excitados), há métodos mais avançados e mais caros. Para excitações de uma partícula (problema <em>N+1</em>), como fotoemissão, gap e tunelamento, podemos escolher o método <em>GW</em>. Já para excitações de duas partículas (problema <em>N+2</em>), como respostas ópticas e éxcitons, o formalismo <em>GW+BSE</em> é mais adequado. Para sistemas com van der Waals, o funcional <em>SCAN+rVV10</em> é mais apropriado.</p>
+<h2 id="resources">Recursos</h2>
 <ul>
-<li><a href="https://ocw.mit.edu/courses/materials-science-and-engineering/3-320-atomistic-computer-modeling-of-materials-sma-5107-spring-2005/video-lectures/" rel="noopener" target="_blank">MIT Course</a></li>
-<li><a href="https://www.quantum-espresso.org/resources/tutorials" rel="noopener" target="_blank">Quantum Espresso Tutorials</a></li>
-<li><a href="https://www.youtube.com/watch?v=1AH2pkijDPg&amp;list=PLYc-eBoIpXTIboem6dKTYD1-1m0sMYnYz&amp;index=1" rel="noopener" target="_blank">Introduction to DFT by Paolo Giannozzi</a></li>
+<li><a href="https://ocw.mit.edu/courses/materials-science-and-engineering/3-320-atomistic-computer-modeling-of-materials-sma-5107-spring-2005/video-lectures/" rel="noopener" target="_blank">Curso do MIT</a></li>
+<li><a href="https://www.quantum-espresso.org/resources/tutorials" rel="noopener" target="_blank">Tutoriais do Quantum ESPRESSO</a></li>
+<li><a href="https://www.youtube.com/watch?v=1AH2pkijDPg&amp;list=PLYc-eBoIpXTIboem6dKTYD1-1m0sMYnYz&amp;index=1" rel="noopener" target="_blank">Introdução à DFT, por Paolo Giannozzi</a></li>
 <li><a href="http://compmatphys.epotentia.com/" rel="noopener" target="_blank">http://compmatphys.epotentia.com</a></li>
 </ul>
-<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/theory/dft" target="_blank" rel="noopener">Introduction to Density Functional Theory</a>,
+<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/theory/dft" rel="noopener" target="_blank">Introduction to Density Functional Theory</a>,
 do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
-<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY 4.0</a>.
-Alterações: layout, título e navegação traduzidos para o português.</p>
-    <nav class="pager"></nav>
-  </main>
+<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" rel="noopener" target="_blank">CC BY 4.0</a>.
+Alterações: texto traduzido para o português; layout e navegação adaptados.</p>
+<nav class="pager"></nav>
+</main>
 </div>
 <script src="../assets/js/site.js"></script>
-<script defer src="../assets/vendor/katex/katex.min.js"></script>
-<script defer src="../assets/vendor/katex/contrib/auto-render.min.js"
-  onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})"></script>
+<script defer="" src="../assets/vendor/katex/katex.min.js"></script>
+<script defer="" onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})" src="../assets/vendor/katex/contrib/auto-render.min.js"></script>
 </body>
 </html>
