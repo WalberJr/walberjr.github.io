@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Otimização de estrutura · Tutorial Quantum ESPRESSO</title>
+  <link rel="icon" href="../assets/img/favicon.png">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body data-root="../" data-section="espresso">
+<div class="docs">
+  <aside class="sidebar" data-docs="espresso"></aside>
+  <main class="content">
+<h1>Otimização de estrutura</h1>
+<p>O <code>pw.x</code> pode otimizar só as posições atômicas (<code>relax</code>) ou as posições
+e a célula (<code>vc-relax</code>), usando o algoritmo BFGS.</p>
+
+<h2>relax — posições atômicas</h2>
+<p>Exige a namelist <code>&amp;IONS</code> (pode ficar vazia):</p>
+<pre><code>&amp;CONTROL
+  calculation   = &#x27;relax&#x27;
+  prefix        = &#x27;si&#x27;
+  outdir        = &#x27;./tmp&#x27;
+  pseudo_dir    = &#x27;./pseudo&#x27;
+  etot_conv_thr = 1.0d-5
+  forc_conv_thr = 1.0d-4
+/
+&amp;SYSTEM
+  ...
+/
+&amp;ELECTRONS
+  conv_thr = 1.0d-8
+/
+&amp;IONS
+  ion_dynamics = &#x27;bfgs&#x27;
+/</code></pre>
+
+<h2>vc-relax — posições e célula</h2>
+<p>Adicione também <code>&amp;CELL</code>:</p>
+<pre><code>&amp;CONTROL
+  calculation = &#x27;vc-relax&#x27;
+  ...
+/
+&amp;SYSTEM
+  ...
+/
+&amp;ELECTRONS
+  conv_thr = 1.0d-8
+/
+&amp;IONS
+  ion_dynamics = &#x27;bfgs&#x27;
+/
+&amp;CELL
+  cell_dynamics = &#x27;bfgs&#x27;
+  press         = 0.0
+  press_conv_thr = 0.5
+/</code></pre>
+
+<h2>Acompanhando a otimização</h2>
+<pre><code>grep &#x27;^!&#x27; si.vcrelax.out                 # energia a cada passo
+grep &quot;Total force&quot; si.vcrelax.out         # força total
+grep -A3 &quot;CELL_PARAMETERS&quot; si.vcrelax.out  # célula a cada passo
+grep &quot;bfgs converged&quot; si.vcrelax.out</code></pre>
+<p>A estrutura final fica entre <code>Begin final coordinates</code> e <code>End final coordinates</code>.</p>
+
+<div class="admonition warn"><b>⚠️ Atenção</b>
+No <code>vc-relax</code> a base de ondas planas é fixada na célula inicial. Depois de convergir,
+rode um novo SCF com a estrutura final (ou repita o <code>vc-relax</code>) para obter a energia correta.
+Use também um <code>ecutwfc</code> mais alto que o necessário para a energia.</div>
+    <nav class="pager"></nav>
+  </main>
+</div>
+<script src="../assets/js/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Testes de convergência · Tutorial Quantum ESPRESSO</title>
+  <link rel="icon" href="../assets/img/favicon.png">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body data-root="../" data-section="espresso">
+<div class="docs">
+  <aside class="sidebar" data-docs="espresso"></aside>
+  <main class="content">
+<h1>Testes de convergência</h1>
+<p>Antes de qualquer cálculo de produção, verifique se a <b>energia de corte</b> e a <b>malha de pontos k</b>
+são suficientes. Um critério comum é variação de energia menor que <b>1 mRy/átomo</b>.</p>
+
+<h2>Energia de corte (<code>ecutwfc</code>)</h2>
+<p>Copie o <code>si.scf.in</code> para <code>template.in</code> e troque os valores por marcadores:</p>
+<pre><code>  ecutwfc   = ECUT
+  ecutrho   = ERHO</code></pre>
+<p>Depois rode o laço:</p>
+<pre><code>#!/bin/bash
+rm -f ecut.dat
+for ecut in 20 25 30 35 40 45 50 60; do
+  sed &quot;s/ECUT/$ecut/; s/ERHO/$((ecut*8))/&quot; template.in &gt; scf_$ecut.in
+  pw.x -in scf_$ecut.in &gt; scf_$ecut.out
+  E=$(grep &#x27;^!&#x27; scf_$ecut.out | awk &#x27;{print $5}&#x27;)
+  echo &quot;$ecut $E&quot; &gt;&gt; ecut.dat
+done
+cat ecut.dat</code></pre>
+
+<h2>Malha de pontos k</h2>
+<p>Com o corte fixado, varie a malha (marcador <code>NK</code> no card <code>K_POINTS</code>):</p>
+<pre><code>K_POINTS automatic
+  NK NK NK 0 0 0</code></pre>
+<pre><code>#!/bin/bash
+rm -f kpts.dat
+for k in 2 4 6 8 10 12; do
+  sed &quot;s/NK/$k/g&quot; template_k.in &gt; scf_k$k.in
+  pw.x -in scf_k$k.in &gt; scf_k$k.out
+  E=$(grep &#x27;^!&#x27; scf_k$k.out | awk &#x27;{print $5}&#x27;)
+  echo &quot;$k $E&quot; &gt;&gt; kpts.dat
+done
+cat kpts.dat</code></pre>
+
+<h2>Gráfico (Python)</h2>
+<pre><code>import numpy as np
+import matplotlib.pyplot as plt
+
+x, E = np.loadtxt(&quot;ecut.dat&quot;, unpack=True)
+nat = 2
+plt.plot(x, (E - E[-1]) * 1000 / nat, &quot;o-&quot;)
+plt.axhline(1, ls=&quot;--&quot;, c=&quot;gray&quot;)
+plt.xlabel(&quot;ecutwfc (Ry)&quot;)
+plt.ylabel(&quot;E - E_ref (mRy/átomo)&quot;)
+plt.savefig(&quot;ecut.png&quot;, dpi=200)</code></pre>
+<div class="admonition tip"><b>💡 Dica</b>
+Para tensões e forças a convergência com o corte costuma ser mais lenta que para a energia.
+Se for fazer <code>vc-relax</code>, teste também a tensão (<code>tstress = .true.</code>).</div>
+    <nav class="pager"></nav>
+  </main>
+</div>
+<script src="../assets/js/site.js"></script>
+</body>
+</html>

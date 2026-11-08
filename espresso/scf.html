@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Primeiro cálculo SCF · Tutorial Quantum ESPRESSO</title>
+  <link rel="icon" href="../assets/img/favicon.png">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body data-root="../" data-section="espresso">
+<div class="docs">
+  <aside class="sidebar" data-docs="espresso"></aside>
+  <main class="content">
+<h1>Primeiro cálculo SCF</h1>
+<p>Vamos calcular a energia total do silício cristalino. Crie a pasta de trabalho:</p>
+<pre><code>mkdir -p ~/qe/si &amp;&amp; cd ~/qe/si
+mkdir -p pseudo tmp
+wget -P pseudo https://pseudopotentials.quantum-espresso.org/upf_files/Si.pbe-n-rrkjus_psl.1.0.0.UPF</code></pre>
+
+<h2>Arquivo de entrada <code>si.scf.in</code></h2>
+<pre><code>&amp;CONTROL
+  calculation = &#x27;scf&#x27;
+  prefix      = &#x27;si&#x27;
+  outdir      = &#x27;./tmp&#x27;
+  pseudo_dir  = &#x27;./pseudo&#x27;
+/
+&amp;SYSTEM
+  ibrav     = 2
+  celldm(1) = 10.26
+  nat       = 2
+  ntyp      = 1
+  ecutwfc   = 30.0
+  ecutrho   = 240.0
+/
+&amp;ELECTRONS
+  conv_thr = 1.0d-8
+/
+ATOMIC_SPECIES
+  Si  28.086  Si.pbe-n-rrkjus_psl.1.0.0.UPF
+ATOMIC_POSITIONS crystal
+  Si  0.00  0.00  0.00
+  Si  0.25  0.25  0.25
+K_POINTS automatic
+  8 8 8 0 0 0</code></pre>
+
+<h2>Executando</h2>
+<pre><code>pw.x -in si.scf.in &gt; si.scf.out
+# ou em paralelo:
+mpirun -np 4 pw.x -in si.scf.in &gt; si.scf.out</code></pre>
+
+<h2>Lendo a saída</h2>
+<p>A energia total final é marcada com <code>!</code>:</p>
+<pre><code>grep &#x27;^!&#x27; si.scf.out</code></pre>
+<pre><code>!    total energy              =        -XX.XXXXXXXX Ry</code></pre>
+<p>Outras linhas úteis:</p>
+<pre><code>grep &quot;convergence has been achieved&quot; si.scf.out   # quantas iterações
+grep &quot;highest occupied&quot; si.scf.out              # topo da banda de valência (isolantes)
+grep &quot;the Fermi energy&quot; si.scf.out              # energia de Fermi (metais)
+grep &quot;total   stress&quot; -A3 si.scf.out            # tensão (com tstress = .true.)</code></pre>
+
+<div class="admonition warn"><b>⚠️ Metais</b>
+Para metais, adicione em <code>&amp;SYSTEM</code>:
+<code>occupations = 'smearing'</code>, <code>smearing = 'mv'</code> e <code>degauss = 0.02</code>.</div>
+    <nav class="pager"></nav>
+  </main>
+</div>
+<script src="../assets/js/site.js"></script>
+</body>
+</html>

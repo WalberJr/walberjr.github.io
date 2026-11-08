@@ -3,10 +3,191 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Meu primeiro site</title>
+  <title>Walber G. Guimarães Jr. · Química Computacional</title>
+  <meta name="description" content="Página pessoal de Walber Gonçalves Guimarães Júnior, pós-doutorando FAPESP na UFSCar: química computacional, KStudio, tutoriais de Quantum ESPRESSO e ORCA.">
+  <link rel="icon" href="assets/img/favicon.png">
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
-<body>
-  <h1>Bem-vindo ao meu site!</h1>
-  <p>Este é meu espaço para compartilhar meus projetos.</p>
+<body data-root="./" data-section="home">
+
+<main class="container">
+
+  <!-- ============ SOBRE ============ -->
+  <section class="hero" id="sobre">
+    <img class="avatar" src="assets/img/walber.webp" alt="Foto de Walber Guimarães Jr.">
+    <div>
+      <h1>Olá, eu sou <span class="k">Walber Guimarães Jr.</span></h1>
+      <p class="role">Pós-doutorando · Bolsista FAPESP · Departamento de Química, UFSCar<br>📍 São Carlos, SP</p>
+      <p>
+        Químico computacional com experiência em química do estado sólido e de interfaces.
+        Meu principal interesse é a simulação e modelagem de óxidos de metais de transição a partir de
+        cálculos de primeiros princípios (DFT, DFT+U, DFTB). Desenvolvo o <a href="#kstudio">KStudio</a>
+        e mantenho aqui tutoriais em português de <b>Quantum ESPRESSO</b> e <b>ORCA</b>.
+      </p>
+      <div class="links">
+        <a class="btn primary" href="espresso/index.html">⚛️ Tutorial Quantum ESPRESSO</a>
+        <a class="btn" href="orca/index.html">🧪 Tutorial ORCA</a>
+        <a class="btn" href="https://github.com/WalberJr" target="_blank" rel="noopener">GitHub</a>
+        <a class="btn" href="http://lattes.cnpq.br/9351326755109855" target="_blank" rel="noopener">Lattes</a>
+        <a class="btn" href="https://orcid.org/0000-0003-0892-8631" target="_blank" rel="noopener">ORCID</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PESQUISA ============ -->
+  <section id="pesquisa">
+    <h2 class="title">Áreas de pesquisa</h2>
+    <div class="grid">
+      <div class="card"><div class="icon">⚙️</div><h3>Projeto atual · FAPESP</h3>
+        <p>Estimativa da atividade catalítica de nanopartículas com algoritmos de <i>Active Learning</i> guiados por DFT e DFTB.</p></div>
+      <div class="card"><div class="icon">🧲</div><h3>Óxidos de metais de transição</h3>
+        <p>Óxidos e oxi-hidróxidos de ferro e alumínio (ferridrita, goethita, hematita), sistemas fortemente correlacionados e DFT+U.</p></div>
+      <div class="card"><div class="icon">🌊</div><h3>Superfícies e adsorção</h3>
+        <p>Energias de superfície, adsorção de água, arsenato e fosfato, e materiais para remediação ambiental.</p></div>
+      <div class="card"><div class="icon">⚡</div><h3>Catálise e materiais funcionais</h3>
+        <p>Reação de evolução de hidrogênio, fotocatálise em nitretos de carbono, MOFs e complexos biomiméticos.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ FORMAÇÃO ============ -->
+  <section id="formacao">
+    <h2 class="title">Formação</h2>
+    <div class="timeline">
+      <div class="tl"><span class="yr">2022 – atual</span><b>Pós-doutorado</b> · Departamento de Química, Universidade Federal de São Carlos (UFSCar) · Bolsista FAPESP</div>
+      <div class="tl"><span class="yr">2017 – 2021</span><b>Doutorado em Química</b> · Universidade Federal de Minas Gerais (UFMG)</div>
+      <div class="tl"><span class="yr">2015 – 2017</span><b>Mestrado em Química</b> · Universidade Federal de Itajubá (UNIFEI)</div>
+      <div class="tl"><span class="yr">2009 – 2014</span><b>Graduação em Química</b> · Universidade Estadual de Montes Claros (UNIMONTES)</div>
+    </div>
+  </section>
+
+  <!-- ============ KSTUDIO ============ -->
+  <section id="kstudio">
+    <h2 class="title">Projeto em destaque</h2>
+    <div class="card project">
+      <!-- LINK DE DOWNLOAD DO KSTUDIO: troque o href abaixo pelo link do executável -->
+      <a class="dl-logo" href="https://github.com/WalberJr/walberjr.github.io/releases/latest"
+         target="_blank" rel="noopener" title="Baixar o KStudio">
+        <img src="assets/img/kstudio.png" alt="Baixar o KStudio">
+        <span class="dl-badge">⬇ Baixar</span>
+      </a>
+      <div>
+        <h3><b>K</b>Studio</h3>
+        <p>Plataforma para construir inputs e analisar resultados do ORCA e do Quantum ESPRESSO:
+          estruturas 3D, convergência de SCF e otimização, orbitais, espectros IR/Raman/UV-Vis, RMN,
+          termoquímica, bandas, DOS e PDOS.</p>
+        <span class="tag">ORCA</span><span class="tag">Quantum ESPRESSO</span>
+        <span class="tag">Visualização 3D</span><span class="tag">Espectros</span>
+        <p class="muted" style="margin-top:.8rem;font-size:.88rem">Clique no logo para baixar o executável.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TUTORIAIS ============ -->
+  <section id="tutoriais">
+    <h2 class="title">Tutoriais</h2>
+    <div class="grid">
+      <a class="card" href="espresso/index.html"><div class="icon">⚛️</div><h3>Quantum ESPRESSO</h3>
+        <p>Do zero ao cálculo de bandas e DOS: instalação, SCF, convergência, otimização e pós-processamento.</p>
+        <span class="tag">Disponível</span></a>
+      <a class="card" href="orca/index.html"><div class="icon">🧪</div><h3>ORCA</h3>
+        <p>Cálculos moleculares: otimização, frequências, TD-DFT, RMN e termoquímica.</p>
+        <span class="tag wip">🚧 Em construção</span></a>
+    </div>
+  </section>
+
+  <!-- ============ PUBLICAÇÕES ============ -->
+  <section id="publicacoes">
+    <h2 class="title">Publicações</h2>
+    <p class="muted">14 artigos · lista completa e atualizada no <a href="https://orcid.org/0000-0003-0892-8631" target="_blank" rel="noopener">ORCID</a>.</p>
+    <div class="card">
+      <!-- Para adicionar: copie um bloco .pub (o mais recente fica no topo) -->
+      <div class="pub">
+        <div class="t">Intrinsic Activity of Face-Dependent Hydrogen Evolution Reaction Induced by Cu, Cu2O, and CuO Surfaces</div>
+        <div class="a"><b>Walber Gonçalves Guimarães</b>, Felipe Benedito Soares, Ernesto C. Pereira</div>
+        <div class="m"><i>ACS Omega</i> (2026) · <a href="https://doi.org/10.1021/acsomega.6c06336" target="_blank" rel="noopener">doi:10.1021/acsomega.6c06336</a></div>
+      </div>
+      <div class="pub">
+        <div class="t">Enhancing the Photocatalytic Performance of Carbon Nitrides Through Controlled Local Structure Modification</div>
+        <div class="a">Diana V. Piankova, Hannes Zschiesche, Alexander P. Tyutyunnik, Erik Svensson Grape, Caio Vinícius C. R. da Silva, <b>Walber G. Guimarães Junior</b>, Andre. F. de Moura, Izadora F. Reis, Gabriel Ali A. Diab, José Balena G. Filho, Ivo F. Teixeira, Nadezda V. Tarakina</div>
+        <div class="m"><i>Advanced Functional Materials</i>, 35, e11389 (2025) · <a href="https://doi.org/10.1002/adfm.202511389" target="_blank" rel="noopener">doi:10.1002/adfm.202511389</a></div>
+      </div>
+      <div class="pub">
+        <div class="t">Chiroferromagnetic Quantum Dots for Chiroptical Synapse (ChiropS)</div>
+        <div class="a">Junyoung Kwon, Jae Bum Jeon, <b>Walber Gonçalves Guimarães Júnior</b>, Min Gu Lee, Changhyeon Lee, Geunyoung Kim, Hanchan Song, Woon Hyung Cheong, Sung Gap Im, André F. de Moura, Kyung Min Kim, Jihyeon Yeom</div>
+        <div class="m"><i>Advanced Materials</i>, 37, 2415366 (2025) · <a href="https://doi.org/10.1002/adma.202415366" target="_blank" rel="noopener">doi:10.1002/adma.202415366</a></div>
+      </div>
+      <div class="pub">
+        <div class="t">Aluminum substitution effects on arsenate adsorption: Thermodynamic and spectroscopic analysis of ferrihydrite, goethite, and hematite</div>
+        <div class="a"><b>Walber Gonçalves Guimarães</b>, Guilherme Ferreira de Lima, Hélio Anderson Duarte</div>
+        <div class="m"><i>Journal of Environmental Chemical Engineering</i>, 13, 118968 (2025) · <a href="https://doi.org/10.1016/j.jece.2025.118968" target="_blank" rel="noopener">doi:10.1016/j.jece.2025.118968</a></div>
+      </div>
+      <div class="pub">
+        <div class="t">Surface Energies, Al-Substitution Effects, and Water Adsorption on Ferrihydrite: Insights from Density Functional Theory Calculations</div>
+        <div class="a"><b>Walber Gonçalves Guimarães</b>, Guilherme Ferreira de Lima, Hélio Anderson Duarte</div>
+        <div class="m"><i>The Journal of Physical Chemistry C</i>, 128, 17723-17730 (2024) · <a href="https://doi.org/10.1021/acs.jpcc.4c05016" target="_blank" rel="noopener">doi:10.1021/acs.jpcc.4c05016</a></div>
+      </div>
+      <div class="pub">
+        <div class="t">Calcium ferrites for phosphate adsorption and recovery from wastewater</div>
+        <div class="a">Matheus Henrique Pimentel Araújo, José Domingos Ardisson, Alisson Carlos Krohling, Rochel Montero Lago, <b>Walber Guimarães Júnior</b>, Juliana Cristina Tristão</div>
+        <div class="m"><i>RSC Advances</i>, 14, 1612-1624 (2024) · <a href="https://doi.org/10.1039/d3ra05871a" target="_blank" rel="noopener">doi:10.1039/d3ra05871a</a></div>
+      </div>
+      <div class="pub">
+        <div class="t">Exploring the effect of isomorphically Al-substituted on the thermodynamical and structural properties of hematite and goethite – A DFT investigation</div>
+        <div class="a"><b>Walber Gonçalves Guimarães</b>, Guilherme Ferreira de Lima, Hélio Anderson Duarte</div>
+        <div class="m"><i>Hydrometallurgy</i>, 221, 106125 (2023) · <a href="https://doi.org/10.1016/j.hydromet.2023.106125" target="_blank" rel="noopener">doi:10.1016/j.hydromet.2023.106125</a></div>
+      </div>
+      <div class="pub">
+        <div class="t">Probing the Local Environment of Al-Substitution into Ferrihydrite Using DFT + U Calculations</div>
+        <div class="a"><b>Walber Gonçalves Guimarães</b>, Guilherme Ferreira de Lima, Hélio Anderson Duarte</div>
+        <div class="m"><i>The Journal of Physical Chemistry C</i>, 127, 3285-3294 (2023) · <a href="https://doi.org/10.1021/acs.jpcc.2c08276" target="_blank" rel="noopener">doi:10.1021/acs.jpcc.2c08276</a></div>
+      </div>
+      <div class="pub">
+        <div class="t">Structural and electronic properties of the Metal-Organic Frameworks M-URJC-1 (M = Cu, Fe, Co or Zn): an in-silico approach aiming the application in the separation of alcohols</div>
+        <div class="a">Gustavo Henrique Cassemiro de Souza, Sabrina Grigoletto, <b>Walber Gonçalves Guimarães Júnior</b>, Aline de Oliveira, Heitor Avelino De Abreu</div>
+        <div class="m"><i>Polyhedron</i>, 233, 116324 (2023) · <a href="https://doi.org/10.1016/j.poly.2023.116324" target="_blank" rel="noopener">doi:10.1016/j.poly.2023.116324</a></div>
+      </div>
+      <div class="pub">
+        <div class="t">Biomimetic catalysis of nitrite reductase enzyme using copper complexes in chemical and electrochemical reduction of nitrite</div>
+        <div class="a">Millena P. Ferreira, Caio B. Castro, João Honorato, Sheng He, <b>Walber Gonçalves Guimarães Júnior</b>, Charlene Esmieu, Eduardo E. Castellano, André F. de Moura, Daniela R. Truzzi, Otaciro R. Nascimento, Antoine Simonneau, Caterina G. C. Marques Netto</div>
+        <div class="m"><i>Dalton Transactions</i>, 52, 11254-11264 (2023) · <a href="https://doi.org/10.1039/d3dt01091k" target="_blank" rel="noopener">doi:10.1039/d3dt01091k</a></div>
+      </div>
+      <div class="pub">
+        <div class="t">Comparative DFT study of the oxy(hydr)oxides of iron and aluminum – structural, electronic and surface properties.</div>
+        <div class="a"><b>Walber Gonçalves Guimarães</b>, Guilherme Ferreira de Lima, Hélio Anderson Duarte</div>
+        <div class="m"><i>Surface Science</i>, 708, 121821 (2021) · <a href="https://doi.org/10.1016/j.susc.2021.121821" target="_blank" rel="noopener">doi:10.1016/j.susc.2021.121821</a></div>
+      </div>
+      <div class="pub">
+        <div class="t">Experimental and theoretical studies of the adsorption of Cu and Ni ions from wastewater by hydroxyapatite derived from eggshells</div>
+        <div class="a">O. Ayodele, Sunday J. Olusegun, Olugbenga O. Oluwasina, Elvis A. Okoronkwo, Edward O. Olanipekun, Nelcy D.S. Mohallem, <b>Walber G. Guimarães</b>, Beatriz L.F. de M. Gomes, Guilhermina de O. Souza, Hélio A. Duarte</div>
+        <div class="m"><i>Environmental Nanotechnology, Monitoring &amp; Management</i>, 15, 100439 (2021) · <a href="https://doi.org/10.1016/j.enmm.2021.100439" target="_blank" rel="noopener">doi:10.1016/j.enmm.2021.100439</a></div>
+      </div>
+      <div class="pub">
+        <div class="t">Investigating greenhouse gas adsorption in MOFs SIFSIX-2-Cu, SIFSIX-2-Cu-i, and SIFSIX-3-Cu through computational studies</div>
+        <div class="a"><b>Walber Gonçalves Guimarães</b>, Guilherme Ferreira de Lima</div>
+        <div class="m"><i>Journal of Molecular Modeling</i>, 26, 188 (2020) · <a href="https://doi.org/10.1007/s00894-020-04437-x" target="_blank" rel="noopener">doi:10.1007/s00894-020-04437-x</a></div>
+      </div>
+      <div class="pub">
+        <div class="t">Determination of an adequate bornite model for computational simulations – Cu5FeS4 or Cu8Fe4S8</div>
+        <div class="a">Antônio L. Soares, <b>Walber G. Guimarães</b>, Hélio A. Duarte, Heitor A. De Abreu</div>
+        <div class="m"><i>Journal of Molecular Structure</i>, 1184, 72-78 (2019) · <a href="https://doi.org/10.1016/j.molstruc.2019.02.026" target="_blank" rel="noopener">doi:10.1016/j.molstruc.2019.02.026</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTATO ============ -->
+  <section id="contato">
+    <h2 class="title">Contato</h2>
+    <p class="muted">Quer conversar sobre pesquisa, colaborações ou o KStudio? Fale comigo:</p>
+    <div class="links">
+      <a class="btn" href="https://github.com/WalberJr" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn" href="http://lattes.cnpq.br/9351326755109855" target="_blank" rel="noopener">Lattes</a>
+      <a class="btn" href="https://orcid.org/0000-0003-0892-8631" target="_blank" rel="noopener">ORCID</a>
+      <!-- Para adicionar e-mail: <a class="btn" href="mailto:SEU-EMAIL">✉️ E-mail</a> -->
+    </div>
+  </section>
+
+</main>
+
+<script src="assets/js/site.js"></script>
 </body>
 </html>
