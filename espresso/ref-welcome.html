@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Boas-vindas · Tutorial Quantum ESPRESSO</title>
+  <link rel="icon" href="../assets/img/favicon.png">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+</head>
+<body data-root="../" data-section="espresso">
+<div class="docs">
+  <aside class="sidebar" data-docs="espresso"></aside>
+  <main class="content">
+<h1>Boas-vindas</h1>
+<p>This tutorial is result of my personal notes while trying (which I still do) to
+learn Density Functional Theory calculations myself. I am no expert in this
+subject. I am sharing this notes here, just in case it helps you getting
+started. I will cite numerous other resources that I am following. Hope you will
+find this tutorial helpful.</p>
+<p>The quantum espresso input files, jupyter notebooks (containing python code for
+visualizations), and other source files related to this tutorial can be found on
+GitHub: <a href="https://github.com/pranabdas/espresso/" rel="noopener" target="_blank">pranabdas/espresso</a>. You may
+clone the repository to your local machine:</p>
+<div class="codeblock"><pre><code>git clone https://github.com/pranabdas/espresso.git</code></pre></div>
+<p>Or, if you do not have git installed, download zipped copy of the repository
+<a href="https://github.com/pranabdas/espresso/archive/refs/heads/main.zip" rel="noopener" target="_blank">here</a>.</p>
+<h2 id="filename-conventions">Filename conventions</h2>
+<p>Lately, I decided to follow specific pattern for the filenames, but you can
+choose whatever works best for you. Note that all example files in this
+tutorial does not follow this convention yet.</p>
+<div class="codeblock"><pre><code>{program}.{calculation}.{system}.{in, out}
+{program}.{calculation}.{system_description}.{in, out}
+{pw, pp, ...}.{scf, bands, ...}.{silicon, al_slab}.{in, out}</code></pre></div>
+<p>Example: <em>pw.bands.silicon.in</em> → <em>input</em> file for the <em>bands</em> calculation using
+<em>PWscf</em> program for <em>silicon</em>.</p>
+<p>For PWTK scripts, we will use <code>.pwtk</code> extension (e.g., <em>silicon_vc_relax.pwtk</em>).</p>
+<h2 id="unit-conversions">Unit conversions</h2>
+<ul>
+<li>1 Bohr = 0.529177249 Å</li>
+<li>1 Rydberg (Ry) = 13.6056981 eV.</li>
+</ul>
+<p><strong>Angstrom to Bohr converter:</strong> lattice constants are often provided in
+angstrom, you can use following utility to convert to Bohr.</p>
+
+<p><input/> Å = <span>1.8897259886</span> Bohr. <button>Copy</button></p>
+<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/" target="_blank" rel="noopener">Density Functional Theory using Quantum Espresso</a>,
+do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
+<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY 4.0</a>.
+Alterações: layout, título e navegação traduzidos para o português.</p>
+    <nav class="pager"></nav>
+  </main>
+</div>
+<script src="../assets/js/site.js"></script>
+<script defer src="../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../assets/vendor/katex/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})"></script>
+</body>
+</html>

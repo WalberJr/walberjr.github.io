@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Complexidade computacional · Tutorial Quantum ESPRESSO</title>
+  <link rel="icon" href="../assets/img/favicon.png">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+</head>
+<body data-root="../" data-section="espresso">
+<div class="docs">
+  <aside class="sidebar" data-docs="espresso"></aside>
+  <main class="content">
+<h1>Complexidade computacional</h1>
+<p>Theoretical time scaling of DFT calculation</p>
+<ul>
+<li><strong>Number of atoms:</strong> CPU time increases as \(\mathcal{O}(N^3)\), where \(N\) is
+number of atoms in the system</li>
+<li><strong>Number of k-points:</strong> CPU time is proportional to the number if inequivalent
+k-points, \(\mathcal{O}(N)\)</li>
+<li><strong>Number of plane waves:</strong> CPU time is scales as \(\mathcal{O}(N \log N)\) with
+the number of plane waves, while number of plane wave is proportional to the
+(ecutwfc)<sup>3/2</sup></li>
+<li><strong>Subspace diagonalization:</strong> Scales as \(\mathcal{O}(N^3)\) with the number of
+bands. Different diagonalization algorithms are available; faster methods may be
+less stable, so switching to a slower but more robust method is sometimes
+necessary for convergence.</li>
+</ul>
+<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/theory/complexity" target="_blank" rel="noopener">Computational complexity</a>,
+do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
+<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY 4.0</a>.
+Alterações: layout, título e navegação traduzidos para o português.</p>
+    <nav class="pager"></nav>
+  </main>
+</div>
+<script src="../assets/js/site.js"></script>
+<script defer src="../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../assets/vendor/katex/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})"></script>
+</body>
+</html>

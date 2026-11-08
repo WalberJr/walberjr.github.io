@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DOS resolvida em k · Tutorial Quantum ESPRESSO</title>
+  <link rel="icon" href="../assets/img/favicon.png">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+</head>
+<body data-root="../" data-section="espresso">
+<div class="docs">
+  <aside class="sidebar" data-docs="espresso"></aside>
+  <main class="content">
+<h1>DOS resolvida em k</h1>
+<p>Here we will calculate k-resolved density of states for silicon. First we begin
+with self consistent field calculation. Here is the input:</p>
+<div class="codeblock"><pre><code>pw.x -inp si_scf.in &gt; si_scf.out</code></pre></div>
+<p>Followed by the bands calculation. Note that for bands calculation I have
+doubled the number of k-points compared to our previous bands calculation.</p>
+<div class="codeblock"><pre><code>pw.x -inp si_bands.in &gt; si_bands.out</code></pre></div>
+<p>Calculate the orbital projections with k-resolved information:</p>
+
+<div class="codeblock"><div class="code-title">src/silicon/si_projwfc.in</div><pre><code>&amp;projwfc
+    outdir       = './tmp/'
+    prefix       = 'silicon'
+    ngauss       = 0
+    degauss      = 0.036748
+    DeltaE       = 0.005
+    kresolveddos = .true.
+    filpdos      = 'silicon.k'
+/</code></pre></div>
+<div class="codeblock"><pre><code>projwfc.x -inp si_projwfc.in &gt; si_projwfc.out</code></pre></div>
+<p>This will give separate orbital projections, as well as total sum for k-resolved
+DOS. Make plots:</p>
+<div class="codeblock"><div class="code-title">notebooks/silicon-kpdos.ipynb</div><pre><code>import matplotlib.pyplot as plt
+from matplotlib import rcParamsDefault
+import numpy as np
+import zipfile
+%matplotlib inline
+
+# data file was compressed to reduce file size
+zipobj = zipfile.ZipFile('../src/silicon/silicon.k.pdos_tot.zip', 'r')
+zipdata = zipobj.open('silicon.k.pdos_tot')
+data = np.loadtxt(zipdata)
+
+k = np.unique(data[:, 0])  # k values
+e = np.unique(data[:, 1])  # dos energy values
+
+dos = np.zeros([len(k), len(e)])
+
+for i in range(len(data)):
+    e_index = int(i % len(e))
+    k_index = int(data[i][0] - 1)
+    dos[k_index, e_index] = data[i][2]
+
+plt.pcolormesh(k, e, dos.T, cmap='magma', shading='auto')
+# plt.ylim(-2, 10)
+plt.xticks([])
+plt.ylabel('Energy (eV)')
+plt.xticks([])
+plt.gcf().text(0.12, 0.06, 'L', fontsize=16, fontweight='normal')
+plt.gcf().text(0.29, 0.06, '$\Gamma$', fontsize=16, fontweight='normal')
+plt.gcf().text(0.55, 0.06, 'X', fontsize=16, fontweight='normal')
+plt.gcf().text(0.63, 0.06, 'U', fontsize=16, fontweight='normal')
+plt.gcf().text(0.892, 0.06, '$\Gamma$', fontsize=16, fontweight='normal')
+plt.axvline(21, c='yellow', lw=1, alpha=0.5)
+plt.axvline(51, c='yellow', lw=1, alpha=0.5)
+plt.axvline(61, c='yellow', lw=1, alpha=0.5)
+plt.show()</code></pre></div>
+<p><img alt="silicon-kpdos" loading="lazy" src="img/silicon-kpdos.webp"/></p>
+<div class="admonition"><b>ℹ️ Info</b><p>If you are using <code>ibrav=0</code>, you can calculate <code>projwfc</code> with <code>lsym=.false.</code>
+option.</p></div>
+<p>If we have contribution from multiple orbitals, we can sum desired projections
+using <code>sumpdos.x</code> program. For example:</p>
+<div class="codeblock"><pre><code>sumpdos.x *\(Cl\)*\(p\) &gt; Cl_2p_tot.dat</code></pre></div>
+<p>This way we can plot different orbital projections along with energy and
+k-resolution.</p>
+<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/kpdos" target="_blank" rel="noopener">k-resolved DOS</a>,
+do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
+<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY 4.0</a>.
+Alterações: layout, título e navegação traduzidos para o português.</p>
+    <nav class="pager"></nav>
+  </main>
+</div>
+<script src="../assets/js/site.js"></script>
+<script defer src="../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../assets/vendor/katex/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})"></script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Constante dielétrica · Tutorial Quantum ESPRESSO</title>
+  <link rel="icon" href="../assets/img/favicon.png">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+</head>
+<body data-root="../" data-section="espresso">
+<div class="docs">
+  <aside class="sidebar" data-docs="espresso"></aside>
+  <main class="content">
+<h1>Constante dielétrica</h1>
+<p>First we perform self consistent field calculation:</p>
+<div class="codeblock"><pre><code>mpirun -np 4 pw.x -i pw.scf.silicon_epsilon.in &gt; pw.scf.silicon_epsilon.out</code></pre></div>
+
+<div class="codeblock"><div class="code-title">src/silicon/pw.scf.silicon_epsilon.in</div><pre><code>&amp;CONTROL
+  calculation = 'scf',
+  prefix = 'silicon',
+  outdir = './tmp/'
+  pseudo_dir = '../pseudos/'
+  verbosity = 'high'
+/
+
+&amp;SYSTEM
+  ibrav = 2,
+  celldm(1) = 10.26,
+  nat = 2,
+  ntyp = 1,
+  ecutwfc = 40
+  nbnd = 20
+  nosym = .TRUE.
+  noinv = .TRUE.
+/
+
+&amp;ELECTRONS
+  mixing_beta = 0.6
+  conv_thr = 1.0d-10
+/
+
+ATOMIC_SPECIES
+  Si 28.086 Si.pz-vbc.UPF
+
+ATOMIC_POSITIONS (alat)
+  Si 0.0 0.0 0.0
+  Si 0.25 0.25 0.25
+
+K_POINTS automatic
+6 6 6 0 0 0</code></pre></div>
+<p>Especially, notice following changes:</p>
+<div class="codeblock"><pre><code>  nbnd = 20
+  nosym = .true.
+  noinv = .true.</code></pre></div>
+<p>We turn off the automatic reduction of k-points that <code>pw.x</code> does by using
+crystal symmetries (<code>nosym = .true.</code> and <code>noinv = .true.</code>). This is because
+<code>epsilon.x</code> does not recognize crystal symmetries, therefore the entire list of
+k-points in the grid is needed. Secondly, we calculate a larger number of bands
+(20), since we are interested in interband transitions. Also, note that
+<code>epsilon.x</code> doesn't support the reduction of the k-points grid into the
+irreducible Brillouin zone, so the PW runs must be performed with a uniform
+k-points grid and all k-points weights must be equal to each other, i.e. in the
+k-points card the k-points coordinates must be given manually in <code>crystal</code> or
+<code>alat</code> or <code>bohr</code>, but not with the <code>automatic</code> option. However, the automatic
+k-points option seems to work with <code>nosym = .true.</code> and <code>noinv = .true.</code>. If
+required, we can perform <code>nscf</code> calculation with finer k-grid.</p>
+<p>Next step is to prepare the input file for <code>epsilon.x</code>:</p>
+
+<div class="codeblock"><div class="code-title">src/silicon/epsilon.si.in</div><pre><code>&amp;inputpp
+  outdir = "./tmp/"
+  prefix = "silicon"
+  calculation = "eps"
+/
+
+&amp;energy_grid
+  smeartype = "gauss"
+  intersmear = 0.15
+  intrasmear = 0.0
+  wmin =  0.0
+  wmax = 30.0
+  nw = 1000
+/</code></pre></div>
+<p>The variables <code>smeartype</code> and <code>intersmear</code> define the numerical approximation
+used to represent the Dirac delta functions in the expression for \(\epsilon_2\)
+given above. For metals, we also need to use <code>intrasmear</code> broadening parameter,
+usually 0.1 - 0.2 eV. The variables <code>wmin</code>, <code>wmax</code> and <code>nw</code> define the energy
+grid for the dielectric function. All the energy variables are in eV.</p>
+<div class="codeblock"><pre><code>mpirun -np 4 epsilon.x -i epsilon.si.in &gt; epsilon.si.out</code></pre></div>
+<p>We will see the results are saved in separate <code>.dat</code> files. We can plot the real
+(\(\epsilon_1\)) and imaginary (\(\epsilon_2\)) parts of dielectric constants:</p>
+<div class="codeblock"><pre><code>import matplotlib.pyplot as plt
+from matplotlib import rcParamsDefault
+import numpy as np
+%matplotlib inline
+plt.rcParams["figure.dpi"]=150
+plt.rcParams["figure.facecolor"]="white"
+
+data_r = np.loadtxt('../src/silicon/epsr_silicon.dat')
+data_i = np.loadtxt('../src/silicon/epsi_silicon.dat')
+energy_r, epsilon_r = data_r[:, 0], data_r[:, 1]
+energy_i, epsilon_i = data_i[:, 0], data_i[:, 1]
+
+plt.plot(energy_r, epsilon_r, lw=1, label="$\\epsilon_1$")
+plt.plot(energy_i, epsilon_i, lw=1, label="$\\epsilon_2$")
+plt.xlim(0, 15)
+plt.xlabel("Energy (eV)")
+plt.ylabel("$\\epsilon_1~/~\\epsilon_2$")
+plt.legend(frameon=False)
+plt.show()</code></pre></div>
+<img alt="silicon-epsilon" loading="lazy" src="img/silicon-epsilon.webp"/>
+<div class="admonition warn"><b>⚠️ Atenção</b><p>Ultra-soft pseudopotentials do not work with <code>epsilon.x</code>. Use norm-conserving
+pseudopotentials. Also note that the above example is not tested against the
+k-mesh. We usually need finer k-mesh for \(\epsilon\) to converge. By default the
+maximum number of k-points is set to 40000 in Quantum Espresso, if we need more
+k-points, we can change <a href="https://gitlab.com/QEF/q-e/-/blob/develop/Modules/parameters.f90" rel="noopener" target="_blank">Modules/parameters.f90</a> and recompile
+Quantum Espresso.</p></div>
+<h2 id="joint-density-of-states">Joint Density of States</h2>
+<p>JDOS gives the number of states for a pair of initial and final states as a
+function of frequency (in eV). A larger intensity indicates a larger absorption
+in the absorption spectra. Input file for JDOS calculation:</p>
+
+<div class="codeblock"><div class="code-title">src/silicon/epsilon.jdossi.in</div><pre><code>&amp;INPUTPP
+  outdir      = "./tmp/"
+  prefix      = "silicon"
+  calculation = "jdos"
+/
+
+&amp;ENERGY_GRID
+  smeartype  = "gauss"
+  intersmear = 0.15
+  intrasmear = 0.0
+  wmin       = 0.0
+  wmax       = 10.0
+  nw         = 1000
+  shift      = 0.0
+/</code></pre></div>
+<p>Sequence of steps to run:</p>
+<div class="codeblock"><pre><code>mpirun -np 16 pw.x -in pw.scf.silicon_epsilon.in &gt; pw.scf.silicon_epsilon.out
+mpirun -np 16 pw.x -in pw.nscf.silicon_epsilon.in &gt; pw.nscf.silicon_epsilon.out
+mpirun -np 16 epsilon.x -in epsilon.jdos.si.in &gt; epsilon.jdos.si.out</code></pre></div>
+<img alt="silicon-epsilon-jdos" loading="lazy" src="img/silicon-epsilon-jdos.webp"/>
+<h2 id="resources">Resources</h2>
+<ul>
+<li>
+<a href="https://pranabdas.github.io/espresso/assets/files/eps_man-ab3fac19eb366509dd129c37fbf94ac0.pdf" rel="noopener" target="_blank">Epsilon.x Manual</a>
+</li>
+</ul>
+<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/epsilon" target="_blank" rel="noopener">Dielectric constant</a>,
+do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
+<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY 4.0</a>.
+Alterações: layout, título e navegação traduzidos para o português.</p>
+    <nav class="pager"></nav>
+  </main>
+</div>
+<script src="../assets/js/site.js"></script>
+<script defer src="../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../assets/vendor/katex/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})"></script>
+</body>
+</html>

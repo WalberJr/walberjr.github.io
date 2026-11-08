@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cálculo de DOS · Tutorial Quantum ESPRESSO</title>
+  <link rel="icon" href="../assets/img/favicon.png">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+</head>
+<body data-root="../" data-section="espresso">
+<div class="docs">
+  <aside class="sidebar" data-docs="espresso"></aside>
+  <main class="content">
+<h1>Cálculo de DOS</h1>
+<p>Electronic density of states is an important property of a material.</p>
+<p>\(\rho(E)dE\) = number of electronic states in the energy interval \((E, E + dE)\)</p>
+<p>Before we can run the Density of States (DOS) calculation, we need</p>
+<ol>
+<li>
+<p>Perform fixed-ion self consistent filed (scf) calculation. In plane-wave
+based DFT calculations the electronic density is expressed by functions of the
+form \(\exp (i \textbf{k} \cdot \textbf{r})\) with energy given by
+\(E = \hbar^2k^2/2m\).</p>
+</li>
+<li>
+<p>Perform non-self consistent field (nscf) calculation with denser k-point
+grid. A large number of \(k\) points are required DOS calculation, as the accuracy
+of DOS depends on the integration in \(k\) space.</p>
+</li>
+<li>
+<p>Finally, the DOS can be determined by integrating the electron density in \(k\)
+space.</p>
+</li>
+</ol>
+<p>I have created a new input file (<code>pw.scf.silicon_dos.in</code>) which is very much the same as
+our previous scf input file except some parameters are modified. You can find
+all the input files in my <a href="https://github.com/pranabdas/espresso/" rel="noopener" target="_blank">GitHub repository</a>. We used the lattice constant value that
+we obtained from the relaxation calculation. We should not directly use the
+experimental/real lattice constant values. Depending on the method and
+pseudo-potential, it might result stress in the system. We have increased the
+<code>ecutwfc</code> to have better precision. We run the scf calculation:</p>
+<div class="codeblock"><pre><code>pw.x &lt; pw.scf.silicon_dos.in &gt; pw.scf.silicon_dos.out</code></pre></div>
+<p>Next, we have prepared the input file for the <code>nscf</code> calculation. Where is have
+added <code>occupations</code> in the <code>&amp;system</code> card as <code>tetrahedra</code> (appropriate for DOS
+calculation). We have increased the number of k-points to 12 × 12 × 12 with
+automatic option. Also specify <code>nosym = .TRUE.</code> to avoid generation of
+additional k-points in low symmetry cases. <code>outdir</code> and <code>prefix</code> must be the
+same as in the <code>scf</code> step, some of the inputs and output are read from previous
+step. Here we can specify a larger number of <code>nbnd</code> to calculate unoccupied
+bands. Number of occupied bands can be found in the <code>scf</code> output as number of
+Kohn-Sham states.</p>
+<div class="codeblock"><pre><code>pw.x &lt; pw.nscf.silicon_dos.in &gt; pw.nscf.silicon_dos.out</code></pre></div>
+<p>Now our final step is to calculate the density of states. The DOS input file as
+follows:</p>
+
+<div class="codeblock"><div class="code-title">src/silicon/pp.dos.silicon.in</div><pre><code>&amp;DOS
+  prefix='silicon',
+  outdir='./tmp/',
+  fildos='si_dos.dat',
+  emin=-9.0,
+  emax=16.0
+/</code></pre></div>
+<p>We run:</p>
+<div class="codeblock"><pre><code>dos.x &lt; pp.dos.silicon.in &gt; pp.dos.silicon.out</code></pre></div>
+<p>The DOS data in the <code>si_dos.dat</code> file that we specified in our input file. We
+can plot the DOS:</p>
+<div class="codeblock"><div class="code-title">notebooks/silicon-dos.ipynb</div><pre><code>import matplotlib.pyplot as plt
+from matplotlib import rcParamsDefault
+import numpy as np
+%matplotlib inline
+
+# load data
+energy, dos, idos = np.loadtxt('../src/silicon/si_dos.dat', unpack=True)
+
+# make plot
+plt.figure(figsize = (12, 6))
+plt.plot(energy, dos, linewidth=0.75, color='red')
+plt.yticks([])
+plt.xlabel('Energy (eV)')
+plt.ylabel('DOS')
+plt.axvline(x=6.642, linewidth=0.5, color='k', linestyle=(0, (8, 10)))
+plt.xlim(-6, 16)
+plt.ylim(0, )
+plt.fill_between(energy, 0, dos, where=(energy &lt; 6.642), facecolor='red', alpha=0.25)
+plt.text(6, 1.7, 'Fermi energy', fontsize= med, rotation=90)
+plt.show()</code></pre></div>
+<img alt="silicon-dos" loading="lazy" src="img/silicon-dos.webp"/>
+<div class="admonition"><b>Important</b><p>For a set of calculation, we must keep the <code>prefix</code> same. For example, the
+<strong>nscf</strong> or <strong>bands</strong> calculation uses the wavefunction calculated by the
+<strong>scf</strong> calculation. When performing different calculations, for example you
+change a parameter and want to see the changes, you must use different output
+folder or unique <code>prefix</code> for different calculations so that the outputs do not
+get mixed.</p></div>
+<div class="admonition tip"><b>💡 Dica</b><p>Sometimes it is important to sample the \(\Gamma\) point for DOS calculation
+(e.g., the conducting bands cross the Fermi surface only at \(\Gamma\) point). In
+such cases, we need to use odd k-grid (e.g., 9✕9✕5).</p></div>
+<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/dos" target="_blank" rel="noopener">Density of States calculation</a>,
+do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
+<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY 4.0</a>.
+Alterações: layout, título e navegação traduzidos para o português.</p>
+    <nav class="pager"></nav>
+  </main>
+</div>
+<script src="../assets/js/site.js"></script>
+<script defer src="../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../assets/vendor/katex/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})"></script>
+</body>
+</html>

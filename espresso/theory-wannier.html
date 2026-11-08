@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Base de Wannier · Tutorial Quantum ESPRESSO</title>
+  <link rel="icon" href="../assets/img/favicon.png">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+</head>
+<body data-root="../" data-section="espresso">
+<div class="docs">
+  <aside class="sidebar" data-docs="espresso"></aside>
+  <main class="content">
+<h1>Base de Wannier</h1>
+<h2 id="introduction">Introduction</h2>
+<p>Wannier functions are an alternative representation of Bloch states in terms of
+a localized basis set. Suppose we have \(N\) atoms each separated by lattice
+constant \(a\) in one dimension. Bloch states are indexed by the wave vector \(k\).</p>
+\[\mathcal{H}\ket{k} = \epsilon_k \ket{k}\]
+\[\braket{x | k} = \psi_k(x)\]
+<p>From the Bloch theorem, we have</p>
+\[\psi_k(x + a) = e^{ika}\psi_k(x)\]
+<p>Now, we want to find an alternative representation in terms of Wannier basis
+\(\ket{n}\), where the states are labeled using site index (n = 1, 2, ..., N)
+instead of quantum number \(k\). Wannier basis set is complete and orthonormal.</p>
+\[\ket{k} = \sum_{n=1}^N a_{nk} \ket{n}\]
+\[\braket{x | k} = \sum_n a_{nk} \braket{x | n}\]
+\[\Rightarrow \psi_k(x) = \sum_n a_{nk} w(x - na)\]
+<p>where \(w\) represents Wannier function. Apply translation operator on both sides:</p>
+\[\begin{aligned}
+&amp;T_a \psi_k(x) = \sum_n a_{nk} T_a w(x - na) \\
+
+\Rightarrow~ &amp; \psi_k(x + a) = \sum_n a_{nk} w\bigl(x - (n-1)a\bigr) \\
+
+\Rightarrow~ &amp; e^{ika} \psi_k(x) = \sum_n a_{(n+1)k} w(x + na) \\
+
+\Rightarrow~ &amp; e^{ika} \sum_n a_{nk} w(x - na) = \sum_n a_{(n+1)k} w(x + na) \\
+
+\Rightarrow~ &amp; e^{ika} \sum_n a_{nk} w(x - na) = \sum_n a_{(n+1)k} w(x + na) \\
+\end{aligned}\]
+\[\begin{aligned}
+\therefore ~ a_{(n+1)k} &amp;= a_{nk} e^{ika} \\
+
+&amp;= a_{(n-1)k}e^{i2ka} \\
+&amp;\qquad\cdots \\
+&amp;= a_{0 k}e^{i(n+1)ka}
+\end{aligned}\]
+<p>Since Bloch states are orthonormal:</p>
+\[\begin{aligned}
+\braket{k | k} &amp;= \braket{k | \sum_n a_{nk} | n} \\
+&amp;= \sum_{mn} \braket{m | a_{mk}^* a_{nk} | n} \\
+&amp;= \sum_{n} | a_{nk} |^2 \\
+&amp;= N a_{0k}^2 \\
+&amp;= 1
+\end{aligned}\]
+\[\Rightarrow a_{0k} = \frac{1}{\sqrt{N}} \qquad\text{(up to a phase factor)}\]
+\[\ket{k} = \frac{1}{\sqrt{N}} \sum_n e^{ikna} \ket{n}\]
+<p>While Bloch states represent the eigenstates of the single-particle Hamiltonian,
+WF (in general) cannot be assigned a single eigen-value, instead WFs are
+obtained as liner combination of Bloch states corresponding to different
+energies.</p>
+<p>The Hamiltonian can now be written as:</p>
+\[\begin{aligned}
+\mathcal{H} &amp;= \sum_m \sum_n \ket{m} \braket{m | \mathcal{H} | n} \bra{n} \\
+&amp;= \sum_n \epsilon_n \ket{n} \bra{n} + \sum_{m\neq n} (-t_{mn}) \ket{m} \bra{n}
+\end{aligned}\]
+<p>where \(\epsilon_n\) is onsite or diagonal term and \(t_{mn}\) (&gt; 0) is hopping or
+off-diagonal term.</p>
+<h2 id="maximally-localized-wannier-function">Maximally Localized Wannier Function</h2>
+<p>The choice of Wannier function is not unique. One such option could be the set
+that maximizes localization. Two different sets of Wannier basis are connected
+via unitary transformation. MLWFs can be considered as a generalization of
+localized molecular orbitals (LMOs) to periodic systems.</p>
+<h2 id="resources">Resources</h2>
+<ul>
+<li><a href="https://youtu.be/_XWIwoE7Pc4" rel="noopener" target="_blank">Introduction to Wannier Basis lecture by Vijay A. Singh</a></li>
+<li><a href="https://doi.org/10.1103/PhysRevB.56.12847" rel="noopener" target="_blank"><em>Maximally localized generalized Wannier functions for composite energy bands</em>, Marzari and Vanderbilt, Phys. Rev. B <strong>56</strong>, 12847 (1997)</a></li>
+<li><a href="https://doi.org/10.1103/PhysRevB.65.035109" rel="noopener" target="_blank"><em>Maximally localized Wannier functions for entangled energy bands</em>, Souza, Marzari and Vanderbilt, Phys. Rev. B <strong>65</strong>, 035109 (2001)</a></li>
+<li><a href="https://doi.org/10.1103/RevModPhys.84.1419" rel="noopener" target="_blank"><em>Maximally localized Wannier functions: Theory and applications</em>, Marzari <em>et. al.</em>, Rev. Mod. Phys. <strong>84</strong>, 1419 (2012)</a></li>
+<li><a href="https://doi.org/10.1002/9781119148739.ch6" rel="noopener" target="_blank"><em>Introduction to Maximally Localized Wannier Functions</em>, Ambrosetti and Silvestrelli, Reviews in Computational Chemistry, Ch. 6, pp. 327 (2016)</a></li>
+</ul>
+<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/theory/wannier" target="_blank" rel="noopener">Wannier basis</a>,
+do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
+<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY 4.0</a>.
+Alterações: layout, título e navegação traduzidos para o português.</p>
+    <nav class="pager"></nav>
+  </main>
+</div>
+<script src="../assets/js/site.js"></script>
+<script defer src="../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../assets/vendor/katex/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})"></script>
+</body>
+</html>

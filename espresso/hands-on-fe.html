@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fe (magnético) · Tutorial Quantum ESPRESSO</title>
+  <link rel="icon" href="../assets/img/favicon.png">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+</head>
+<body data-root="../" data-section="espresso">
+<div class="docs">
+  <aside class="sidebar" data-docs="espresso"></aside>
+  <main class="content">
+<h1>Fe (magnético)</h1>
+<p>I am following this example from the <a href="https://gitlab.com/QEF/materials-for-max-qe2021-online-school" rel="noopener" target="_blank">ICTP online school 2021</a>.</p>
+<p>We will perform the SCF KS orbital calculations on magnetic (<code>nspin=2</code>) iron.
+Since the d-orbitals of Fe atom are localized/<wbr/>hard, we will use ultra-soft
+pseudo potential (USPP).</p>
+<div class="admonition"><b>📝 Nota</b><p>If we have crystal structure with only one atom per unit cell, or only one type
+of atoms, the only possible ordering is ferromagnetic. In such cases, we need to
+form supercell with more number of atoms or label multiple atoms separately, so
+that their magnetic orientation could be different thus having the possibility
+of ferro- or antiferromagnetic final states.</p></div>
+<p>Run the SCF calculations for both ferro- and antiferromagnetic structures.
+Notice that for ferromagnetic, we have BCC structure with only one type of atom,
+while we use simple cubic structure for antiferromagnetic case with two
+different atomic labels. For antiferromagnetic calculation, we need to start
+with opposite initial spins.</p>
+<div class="codeblock"><pre><code>pw.x -i pw.scf.fe_fm.in &gt; pw.scf.fe_fm.out
+pw.x -i pw.scf.fe_afm.in &gt; pw.scf.fe_afm.out</code></pre></div>
+<div class="admonition"><b>📝 Nota</b><p>In case of the AFM calculation, if we have started with FM (say, for both atom
+types <code>starting_magnetization=0.6</code> ), the calculation would still converge to
+AFM state as it is the true ground state for this system, albeit it would take
+more iteration to converge. If a system has complex potential surface with local
+minima, it it possible to get different final state magnetization depending on
+the starting magnetization. In such cases, a stricter convergence criteria might
+help.</p></div>
+<div class="admonition"><b>ℹ️ Info</b><p>In case of ultrasoft pseudo potentials, the Quantum Espresso default of
+<code>ecutrho</code> 4 times of <code>ecutoff</code> is not sufficient. We need to set <code>ecutrho</code> 8 or
+even 12 times that of <code>ecutoff</code>. We must test the convergence for our set
+values.</p></div>
+<h2 id="convergence-test-for-uspp">Convergence test for USPP</h2>
+<p>Below is the PWTK script file:</p>
+
+<div class="codeblock"><div class="code-title">src/fe/fe_ecut.pwtk</div><pre><code># load the pw.x input from file
+load_fromPWI fe_scf_fm.in
+
+# dual is the ratio ecutrho/ecutwfc
+foreach dual { 4 8 12 } {
+
+    set fid [open etot-vs-ecutwfc.dual$dual.dat w]
+
+    foreach ecutwfc [seq 25 5 50] {
+
+        set name pw.Fe.scf.ecutwfc-$ecutwfc.dual-$dual
+
+        SYSTEM "ecutwfc = $ecutwfc
+                ecutrho = $ecutwfc*$dual "
+        runPW $name.in
+
+        set Etot [pwo_totene $name.out]
+        puts $fid "$ecutwfc $Etot"
+    }
+
+    close $fid
+}</code></pre></div>
+<p>Run the script:</p>
+<div class="codeblock"><pre><code>pwtk fe_ecut.pwtk</code></pre></div>
+<img alt="fe-convergence" loading="lazy" src="img/fe-convergence.webp"/>
+<h2 id="density-of-states-calculation">Density of states calculation</h2>
+<p>PWTK script to calculate DOS and p-DOS:</p>
+
+<div class="codeblock"><div class="code-title">src/fe/fe_dos.pwtk</div><pre><code>load_fromPWI fe_scf_fm.in
+
+SYSTEM " ecutwfc = 40
+         ecutrho = 320 "
+
+set name Fe
+
+runPW pw.$name.scf.in
+
+CONTROL { calculation = 'nscf' }
+SYSTEM  { occupations = 'tetrahedra' ,
+          degauss = ,  ! this is how variable is unset in PWTK
+}
+K_POINTS automatic {
+    12 12 12   1 1 1
+}
+runPW pw.$name.nscf.in
+
+DOS "
+    fildos = '$name.dos.dat'
+    Emin = 5.0
+    Emax = 20.0,
+    DeltaE = 0.1
+"
+runDOS dos.$name.in
+
+PROJWFC "
+    filpdos = '$name.pdos.dat'
+    Emin = 5.0
+    Emax = 20.0,
+    DeltaE = 0.1
+"
+runPROJWFC projwfc.$name.in</code></pre></div>
+<p>Below is the plots of total and projected density of states.</p>
+<img alt="fe-dos" loading="lazy" src="img/fe-dos.webp"/>
+<img alt="fe-pdos" loading="lazy" src="img/fe-pdos.webp"/>
+<p>Also see bandstructure of Fe with and without <a href="hands-on-soc.html#bandstructure-of-fe-with-soc">SOC</a>.</p>
+<h2 id="paramagnetism">Paramagnetism</h2>
+<p>Paramagnetic materials have fluctuating magnetic moments that may not be
+properly described DFT. One approach is to model paramagnetic materials in DFT
+calculation by building a large supercell and assign randomly oriented magnetic
+moments.</p>
+<p>Also note that DFT assumes zero temperature, so it makes sense to perform FM or
+AFM calculation for magnetic systems.</p>
+<h2 id="visualizing-magnetic-moments">Visualizing magnetic moments</h2>
+<p>We can use <a href="http://www.xcrysden.org" rel="noopener" target="_blank">XCrySDen</a> to visualize the orientation of
+magnetic moments. XCrySDen cannot directly read the Quantum Espresso output
+files for magnetic moment vectors, instead we need to create the input <code>.xsf</code>
+file with magnetic moments as force vector. You can also change the background
+color from black from the Palette Menu which is located in the left of File
+menu.</p>
+
+<div class="codeblock"><div class="code-title">src/fe/fe.xsf</div><pre><code># this is a specification for crystal structure
+CRYSTAL
+
+# primitive lattice vectors (in Angstroms)
+PRIMVEC
+    2.8681404710    0.0000000000    0.0000000000
+    0.0000000000    2.8681404710    0.0000000000
+    0.0000000000    0.0000000000    2.8681404710
+
+# conventional lattice vectors (in Angstroms)
+CONVVEC
+    2.8681404710    0.0000000000    0.0000000000
+    0.0000000000    2.8681404710    0.0000000000
+    0.0000000000    0.0000000000    2.8681404710
+
+# First number stands for number of atoms in primitive cell
+# the second number is always 1 for PRIMCOORD coordinates
+# followed by atomic coordinates (in Angstroms) and forces:
+# AtNum   X Y Z   Fx Fy Fz
+PRIMCOORD
+ 2  1
+ 26  0.0000000000  0.0000000000  0.0000000000    0.00  0.00  0.01
+ 26  1.4340702350  1.4340702350  1.4340702350    0.00  0.00 -0.01</code></pre></div>
+<p>Open the file from XCrySDen Menu: <strong>File → Open Structure → Open XSF</strong>. Then go
+to <strong>Display</strong> menu and select <strong>Forces</strong>. If you want to adjust scaling for the
+force vectors, go to <strong>Modify → Force Settings</strong> and set suitable Length factor.</p>
+<p><img alt="fe-magnetic-structure" loading="lazy" src="img/fe-magnetic-structure.webp"/></p>
+<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/fe" target="_blank" rel="noopener">Magnetic system: bulk iron</a>,
+do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
+<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY 4.0</a>.
+Alterações: layout, título e navegação traduzidos para o português.</p>
+    <nav class="pager"></nav>
+  </main>
+</div>
+<script src="../assets/js/site.js"></script>
+<script defer src="../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../assets/vendor/katex/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})"></script>
+</body>
+</html>

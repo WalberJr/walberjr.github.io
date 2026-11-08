@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Testes de convergência · Tutorial Quantum ESPRESSO</title>
+  <link rel="icon" href="../assets/img/favicon.png">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+</head>
+<body data-root="../" data-section="espresso">
+<div class="docs">
+  <aside class="sidebar" data-docs="espresso"></aside>
+  <main class="content">
+<h1>Testes de convergência</h1>
+<h2 id="convergence-with-cutoff-energy-using-pwtk">Convergence with cutoff energy using PWTK</h2>
+<p>We can automate the previous self consistent calculation by varying a certain
+parameter. Say we want to check the total energy of the system for various
+values of <code>ecutwfc</code>. We can do that by using <code>pwtk</code> script.</p>
+
+<div class="codeblock"><div class="code-title">src/silicon/si_scf_ecutoff.pwtk</div><pre><code># load the pw.x input from file
+load_fromPWI pw.scf.silicon.in
+
+# open a file for writing resulting total energies
+set fid [open etot_vs_ecutwfc.dat w]
+
+# loop over different "ecut" values
+foreach ecut { 12 16 20 24 28 32 } {
+
+    # name of I/O files: $name.in &amp; $name.out
+    set name si_scf_ecutwfc-$ecut
+
+    # set the pw.x "ecutwfc" variable
+    SYSTEM "ecutwfc = $ecut"
+
+    # run the pw.x calculation
+    runPW $name.in
+
+    # extract the "total energy" and write it to file
+    set Etot [::pwtk::pwo::totene $name.out]
+    puts $fid "$ecut $Etot"
+}
+
+close $fid</code></pre></div>
+<p>To run the above script:</p>
+<div class="codeblock"><pre><code>pwtk si_scf_ecutoff.pwtk</code></pre></div>
+<p>Now we can plot the total energy with respect to ecutwfc. The data is in
+<code>etot-vs-ecutwfc.dat</code></p>
+<p>We will use matplotlib to make the plots. Here is the python code for plotting:</p>
+<div class="codeblock"><div class="code-title">notebooks/silicon-scf.ipynb</div><pre><code>import matplotlib.pyplot as plt
+from matplotlib import rcParamsDefault
+import numpy as np
+%matplotlib inline
+plt.rcParams["figure.dpi"]=150
+plt.rcParams["figure.facecolor"]="white"
+
+x, y = np.loadtxt('../src/silicon/etot-vs-ecutwfc.dat', delimiter=' ', unpack=True)
+plt.plot(x, y, "o-", markersize=5, label='Etot vs ecutwfc')
+plt.xlabel('ecutwfc (Ry)')
+plt.ylabel('Etot (Ry)')
+plt.legend(frameon=False)
+plt.show()</code></pre></div>
+<img alt="etot-vs-ecutwfc" loading="lazy" src="img/etot-vs-ecutwfc.webp"/>
+<h2 id="convergence-test-using-unix-shell-script">Convergence test using UNIX shell script</h2>
+<p>We can do the convergence test with various parameters. We can calculate the
+total energy of the system by varying various parameters. We will use the shell
+script to automate the process with different cutoff energy values.</p>
+
+<div class="codeblock"><div class="code-title">src/silicon/si_script.sh</div><pre><code>#!/bin/sh
+NAME="ecut"
+
+for CUTOFF in  10 15 20 25 30 35 40
+do
+cat &gt; ${NAME}_${CUTOFF}.in &lt;&lt; EOF
+ &amp;control
+    calculation = 'scf',
+    prefix = 'silicon'
+    outdir = './tmp/'
+    pseudo_dir = './pseudos/'
+ /
+ &amp;system
+    ibrav = 2,
+    celldm(1) = 10.0,
+    nat = 2,
+    ntyp = 1,
+    ecutwfc = $CUTOFF
+ /
+ &amp;electrons
+    mixing_beta = 0.6
+ /
+
+ATOMIC_SPECIES
+ Si 28.086  Si.pz-vbc.UPF
+
+ATOMIC_POSITIONS (alat)
+ Si 0.0 0.0 0.0
+ Si 0.25 0.25 0.25
+
+K_POINTS (automatic)
+  6 6 6 1 1 1
+EOF
+
+pw.x &lt; ${NAME}_${CUTOFF}.in &gt; ${NAME}_${CUTOFF}.out
+echo ${NAME}_${CUTOFF}
+grep ! ${NAME}_${CUTOFF}.out
+
+done</code></pre></div>
+<p>Make sure the file has executable permission for the user:</p>
+<div class="codeblock"><pre><code>chmod 700 si_script.sh</code></pre></div>
+<p>Run the script file:</p>
+<div class="codeblock"><pre><code>./si_script.sh
+# or
+sh si_script.sh</code></pre></div>
+<p>We can plot the energy vs cutoff energy, and choose a reasonable value.</p>
+<div class="admonition warn"><b>⚠️ Cuidado</b><p>Initially, I had problem in running the script in macOS. The problem occurred
+because the script file format was set to DOS. The file format can be checked in
+following way:<p>Open the file in <strong>vi</strong> editor. <code>vi si_script.sh</code> Now in <strong>vi</strong> editor command
+mode (ESC key), type <code>:set ff?</code> This would tell you the file format. Now to
+change file format, use the  command <code>:set fileformat=unix</code></p></p></div>
+<h2 id="convergence-test-against-the-number-of-k-points">Convergence test against the number of k-points</h2>
+<p>We can run similar convergence test against another parameter, and choose the
+best value of that particular parameter. Here we will try to calculate the
+number of k-points in the Monkhorst-Pack mesh.</p>
+
+<div class="codeblock"><div class="code-title">src/silicon/si_scf_kpoints.pwtk</div><pre><code>load_fromPWI pw.scf.silicon.in
+
+set fid [open etot-vs-kpoint.dat w]
+
+foreach k { 2 4 6 8 } {
+
+    set name si_scf_kpoints-$k
+
+    K_POINTS automatic "$k $k $k 1 1 1"
+    runPW $name.in
+
+    set Etot [::pwtk::pwo::totene $name.out]
+    puts $fid "$k $Etot"
+}
+
+close $fid</code></pre></div>
+<p>Run pwtk program:</p>
+<div class="codeblock"><pre><code>pwtk si_scf_kpoints.pwtk</code></pre></div>
+<div class="codeblock"><div class="code-title">notebooks/silicon-scf.ipynb</div><pre><code>x, y = np.loadtxt('../src/silicon/etot-vs-kpoint.dat', delimiter=' ', unpack=True)
+plt.plot(x, y, "o-", markersize=5, label='Etot vs kpoints')
+plt.xlabel('# kpoints')
+plt.ylabel('Etot (Ry)')
+plt.legend(frameon=False)
+plt.show()</code></pre></div>
+<img alt="etot-vs-kpoints" loading="lazy" src="img/etot-vs-kpoints.webp"/>
+<h2 id="convergence-against-lattice-constant">Convergence against lattice constant</h2>
+<p>Calculating total energy with respect to varying lattice constant.</p>
+
+<div class="codeblock"><div class="code-title">src/silicon/si_scf_alat.pwtk</div><pre><code>load_fromPWI pw.scf.silicon.in
+
+# please uncomment &amp; insert value as determined in the "ecutwfc" exercise
+SYSTEM { ecutwfc = 30 }
+
+# please uncomment &amp; insert values as determined in the "kpoints" exercise
+K_POINTS automatic { 6 6 6 1 1 1 }
+
+
+set fid [open etot-vs-alat.dat w]
+
+foreach alat { 9.7 9.8 9.9 10.0 10.1 10.2 10.3 10.4 10.5 10.6 10.7 } {
+
+    set name si_scf_alat-$alat
+
+    SYSTEM "celldm(1) = $alat"
+    runPW $name.in
+
+    set Etot [::pwtk::pwo::totene $name.out]
+    puts $fid "$alat $Etot"
+}
+
+close $fid</code></pre></div>
+<p>Run the above code:</p>
+<div class="codeblock"><pre><code>pwtk si_scf_alat.pwtk</code></pre></div>
+<div class="codeblock"><div class="code-title">notebooks/silicon-scf.ipynb</div><pre><code>x, y = np.loadtxt('../src/silicon/etot-vs-alat.dat', delimiter=' ', unpack=True)
+plt.plot(x, y, "o-", markersize=5, label='Etot vs alat')
+plt.xlabel('alat (Bohr)')
+plt.ylabel('Etot (Ry)')
+plt.legend(frameon=False)
+plt.show()</code></pre></div>
+<img alt="etot-vs-alat" loading="lazy" src="img/etot-vs-alat.webp"/>
+<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/convergence" target="_blank" rel="noopener">Convergence testing</a>,
+do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
+<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY 4.0</a>.
+Alterações: layout, título e navegação traduzidos para o português.</p>
+    <nav class="pager"></nav>
+  </main>
+</div>
+<script src="../assets/js/site.js"></script>
+<script defer src="../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../assets/vendor/katex/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})"></script>
+</body>
+</html>
