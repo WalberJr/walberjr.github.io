@@ -1,34 +1,22 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Pseudopotenciais · Tutorial Quantum ESPRESSO</title>
-  <link rel="icon" href="../assets/img/favicon.png">
-  <link rel="stylesheet" href="../assets/css/style.css">
-  <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Pseudopotenciais · Tutorial Quantum ESPRESSO</title>
+<link href="../assets/img/favicon.png" rel="icon"/>
+<link href="../assets/css/style.css" rel="stylesheet"/>
+<link href="../assets/vendor/katex/katex.min.css" rel="stylesheet"/>
 </head>
 <body data-root="../" data-section="espresso">
 <div class="docs">
-  <aside class="sidebar" data-docs="espresso"></aside>
-  <main class="content">
+<aside class="sidebar" data-docs="espresso"></aside>
+<main class="content">
 <h1>Pseudopotenciais</h1>
-<p>In Quantum Espresso, pseudopotential replaces the actual electron-ion
-interaction. The pseudopotential describes the atomic nucleus and all the
-electrons except the outermost valence shell. The rapidly changing potential
-field near the atomic core is replaced by a smoother function that simulates the
-potential field far from the core very well. By doing so, it requires less
-number plane wave basis for wavefunction expansion.</p>
-<div class="admonition tip"><b>💡 Dica</b><p>You may try my <a href="https://pseudos.netlify.app/" rel="noopener" target="_blank">Pseudos Web-App</a>, where you can
-look for pseudopotentials by element name, and download them. Currently,
-Standard Solid State Pseudopotentials (SSSP) and GBRV pseudopotentials are
-included.</p></div>
-<p>We can choose form various pseudopotential libraries. Choice of pseudopotential
-depends on the problem we are investigating, e.g., if there is a heavy element
-present in our system and we are interested in the spin-orbit coupling effects,
-we should choose a full relativistic pseudopotential. We need to be careful
-whether our chosen pseudopotential correctly reproduces physical properties.
-Various pseudopotential libraries:</p>
+<p>No Quantum ESPRESSO, o pseudopotencial substitui a interação elétron-íon real. O pseudopotencial descreve o núcleo atômico e todos os elétrons, exceto os da camada de valência mais externa. O potencial que varia rapidamente perto do caroço atômico é substituído por uma função mais suave, que reproduz muito bem o potencial longe do caroço. Com isso, são necessárias menos ondas planas na base para expandir a função de onda.</p>
+<div class="admonition tip"><b>💡 Dica</b><p>Experimente o meu <a href="https://pseudos.netlify.app/" rel="noopener" target="_blank">aplicativo web Pseudos</a>, onde você pode buscar pseudopotenciais pelo nome do elemento e baixá-los. No momento, estão incluídos os pseudopotenciais SSSP (Standard Solid State Pseudopotentials) e GBRV.</p></div>
+<p>Podemos escolher entre várias bibliotecas de pseudopotenciais. A escolha depende do problema investigado: por exemplo, se houver um elemento pesado no sistema e nos interessarem os efeitos de acoplamento spin-órbita, devemos escolher um pseudopotencial totalmente relativístico. É preciso verificar se o pseudopotencial escolhido reproduz corretamente as propriedades físicas. Algumas bibliotecas de pseudopotenciais:</p>
 <ul>
 <li><a href="https://www.quantum-espresso.org/pseudopotentials" rel="noopener" target="_blank">https://www.quantum-espresso.org/pseudopotentials</a></li>
 <li><a href="https://www.materialscloud.org/discover/sssp/table/efficiency" rel="noopener" target="_blank">https://www.materialscloud.org/discover/sssp/table/efficiency</a></li>
@@ -36,64 +24,39 @@ Various pseudopotential libraries:</p>
 <li><a href="https://www.physics.rutgers.edu/gbrv/" rel="noopener" target="_blank">https://www.physics.rutgers.edu/gbrv/</a></li>
 <li><a href="https://nninc.cnf.cornell.edu" rel="noopener" target="_blank">https://nninc.cnf.cornell.edu</a></li>
 <li><a href="http://www.quantum-simulation.org/potentials/" rel="noopener" target="_blank">http://www.quantum-simulation.org/potentials/</a></li>
-<li><a href="http://pseudopotentials.quantum-espresso.org/legacy_tables/hartwigesen-goedecker-hutter-pp" rel="noopener" target="_blank">BLYP pseudopotentials</a></li>
-<li><a href="https://yaoyi92.github.io/scan-tm-pseudopotentials.html" rel="noopener" target="_blank">SCAN pseudopotentials</a></li>
+<li><a href="http://pseudopotentials.quantum-espresso.org/legacy_tables/hartwigesen-goedecker-hutter-pp" rel="noopener" target="_blank">Pseudopotenciais BLYP</a></li>
+<li><a href="https://yaoyi92.github.io/scan-tm-pseudopotentials.html" rel="noopener" target="_blank">Pseudopotenciais SCAN</a></li>
 </ul>
-<p>Pseudopotential naming conventions in PSLibrary: an example pseudopotential
-filename is <code>O.rel-pbe-n-rrkjus_psl.1.0.0.UPF</code>.</p>
-<p><code>O</code> → denotes the atomic species
-<code>rel</code> → full relativistic (optional)
-<code>pbe</code> → exchange correlation functional
-<code>n</code> → non-linear core correction (optional)
-<code>rrkjus</code> → pseudopotential type</p>
-<p>Exchange correlation functionals:</p>
-<table><thead><tr><th>Identifier<th>Functional<tbody><tr><td>pz<td>Perdew-Zunger (LDA)<tr><td>pbe<td>Perdew-Burke-Ernzerhof (GGA)<tr><td>pw91<td>Perdew-Wang 91 (GGA)<tr><td>blyp<td>Becke-Lee-Yang-Parr (GGA)</td></td></tr></td></td></tr></td></td></tr></td></td></tr></tbody></th></th></tr></thead></table>
-<p>Pseudopotential types:</p>
-<table><thead><tr><th>Identifier<th>PP types<tbody><tr><td>ae<td>all-electron<tr><td>rrkj<td>Rappe-Rabe-Kaxiras-Joannopoulos (Norm conserving)<tr><td>rrkjus<td>Rappe-Rabe-Kaxiras-Joannopoulos (Ultrasoft)<tr><td>kjpaw<td>Kresse-Joubert (PAW)</td></td></tr></td></td></tr></td></td></tr></td></td></tr></tbody></th></th></tr></thead></table>
-<p>Ultra soft pseudopotentials are computationally efficient than the norm
-conserving pseudopotentials. You will find the recommended <code>ecutwfc</code> in the
-header of each pseudopotential file. If you choose an ultra-soft
-pseudopotential, you will need <code>ecutrho</code> about 8 times the value of <code>ecutwfc</code>.
-The default <code>ecutrho</code> is 4 times <code>ecutwfc</code> in Quantum Espresso code, which is a
-good choice for norm conserving pseudopotentials. You should check energy
-convergence against <code>ecutwfc</code> for your system.</p>
-<p>By using pseudopotential, we want to get rid of the core electrons that do not
-participate in the chemical properties of material. This is known also as rigid
-core approximation. Instead of accounting the nucleus and core electrons
-separately, we want to have a pseudopotential that interacts in a similar way
-with the valence electrons.</p>
+<p>Convenção de nomes dos pseudopotenciais da PSLibrary: um exemplo de nome de arquivo é <code>O.rel-pbe-n-rrkjus_psl.1.0.0.UPF</code>.</p>
+<p><code>O</code> → espécie atômica <code>rel</code> → totalmente relativístico (opcional) <code>pbe</code> → funcional de troca e correlação <code>n</code> → correção não linear de caroço (opcional) <code>rrkjus</code> → tipo de pseudopotencial</p>
+<p>Funcionais de troca e correlação:</p>
+<table><thead><tr><th>Identificador</th><th>Funcional</th></tr></thead><tbody><tr><td>pz</td><td>Perdew-Zunger (LDA)</td></tr><tr><td>pbe</td><td>Perdew-Burke-Ernzerhof (GGA)</td></tr><tr><td>pw91</td><td>Perdew-Wang 91 (GGA)</td></tr><tr><td>blyp</td><td>Becke-Lee-Yang-Parr (GGA)</td></tr></tbody></table>
+<p>Tipos de pseudopotencial:</p>
+<table><thead><tr><th>Identificador</th><th>Tipo de PP</th></tr></thead><tbody><tr><td>ae</td><td>todos os elétrons (<em>all-electron</em>)</td></tr><tr><td>rrkj</td><td>Rappe-Rabe-Kaxiras-Joannopoulos (norma conservada)</td></tr><tr><td>rrkjus</td><td>Rappe-Rabe-Kaxiras-Joannopoulos (ultrasoft)</td></tr><tr><td>kjpaw</td><td>Kresse-Joubert (PAW)</td></tr></tbody></table>
+<p>Pseudopotenciais ultrasoft são computacionalmente mais eficientes que os de norma conservada. O <code>ecutwfc</code> recomendado está no cabeçalho de cada arquivo de pseudopotencial. Se escolher um pseudopotencial ultrasoft, você vai precisar de um <code>ecutrho</code> de cerca de 8 vezes o valor do <code>ecutwfc</code>. O <code>ecutrho</code> padrão do Quantum ESPRESSO é 4 vezes o <code>ecutwfc</code>, o que é uma boa escolha para pseudopotenciais de norma conservada. Verifique a convergência da energia em relação ao <code>ecutwfc</code> para o seu sistema.</p>
+<p>Com o pseudopotencial, queremos eliminar os elétrons de caroço, que não participam das propriedades químicas do material. Isso também é conhecido como aproximação de caroço congelado. Em vez de tratar o núcleo e os elétrons de caroço separadamente, queremos um pseudopotencial que interaja de forma semelhante com os elétrons de valência.</p>
 <div class="admonition"><b>ℹ️ Info</b><ol>
 <li>
-<p>We can mix different types of pseudo potentials (e.g., norm conserving,
-ultra-soft, or PAW), but we cannot mix different exchange correlation functional
-(e.g., PBE and LDA). Exchange correlation functional can be read from the
-pseudopotential file or be provided via <code>input_dft</code> parameter in Quantum
-Espresso.</p>
+<p>Podemos misturar tipos diferentes de pseudopotenciais (por exemplo, norma conservada, ultrasoft ou PAW), mas não funcionais de troca e correlação diferentes (por exemplo, PBE e LDA). O funcional de troca e correlação pode ser lido do arquivo do pseudopotencial ou definido pelo parâmetro <code>input_dft</code> do Quantum ESPRESSO.</p>
 </li>
 <li>
-<p>"sol" in PBE-sol stands for solid. For bulk systems PBE-sol should be used,
-while PBE is appropriate for molecules. In case of 2D materials generally PBE is
-chosen, but one can check PBE-sol.</p>
+<p>O "sol" de PBE-sol vem de <em>solid</em> (sólido). Para sistemas <em>bulk</em> deve-se usar PBE-sol, enquanto o PBE é adequado para moléculas. Para materiais 2D geralmente se escolhe o PBE, mas vale testar o PBE-sol.</p>
 </li>
 </ol></div>
-<div class="admonition warn"><b>Common error</b><p>If you mix PBE with PBE-sol type, it results in Error: conflicting values for
-igcx. However, it is allowed to mix those two types of pseudo. We can set
-desired exchange correlation functional via <code>input_dft</code> instead of reading from
-the pseudopotential file.</p></div>
-<h2 id="resources">Resources</h2>
+<div class="admonition warn"><b>Common error</b><p>Misturar pseudopotenciais PBE e PBE-sol resulta em <em>Error: conflicting values for igcx</em>. Ainda assim, é permitido misturar esses dois tipos: basta definir o funcional de troca e correlação desejado pelo <code>input_dft</code>, em vez de lê-lo do arquivo do pseudopotencial.</p></div>
+<h2 id="resources">Recursos</h2>
 <ul>
-<li><a href="https://www.quantum-espresso.org/pseudopotentials/naming-convention" rel="noopener" target="_blank">Naming convention for PP files</a></li>
+<li><a href="https://www.quantum-espresso.org/pseudopotentials/naming-convention" rel="noopener" target="_blank">Convenção de nomes dos arquivos de PP</a></li>
 </ul>
-<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/setup/pseudo-potential" target="_blank" rel="noopener">Pseudo potentials</a>,
+<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/setup/pseudo-potential" rel="noopener" target="_blank">Pseudo potentials</a>,
 do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
-<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY 4.0</a>.
-Alterações: layout, título e navegação traduzidos para o português.</p>
-    <nav class="pager"></nav>
-  </main>
+<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" rel="noopener" target="_blank">CC BY 4.0</a>.
+Alterações: texto traduzido para o português; layout e navegação adaptados.</p>
+<nav class="pager"></nav>
+</main>
 </div>
 <script src="../assets/js/site.js"></script>
-<script defer src="../assets/vendor/katex/katex.min.js"></script>
-<script defer src="../assets/vendor/katex/contrib/auto-render.min.js"
-  onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})"></script>
+<script defer="" src="../assets/vendor/katex/katex.min.js"></script>
+<script defer="" onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})" src="../assets/vendor/katex/contrib/auto-render.min.js"></script>
 </body>
 </html>

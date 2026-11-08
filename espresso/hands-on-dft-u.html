@@ -130,10 +130,10 @@ Hubbard_U(2) = 4.6</code></pre></div>
 ground state.</p>
 <img alt="feo-pdos-dft-u" loading="lazy" src="img/feo-pdos-dft-u.webp"/>
 <div class="admonition"><b>ℹ️ Info</b><p><code>U_projection_type = 'ortho-atomic'</code> might give more realistic result than the
-default 'atomic'.<p>When performing \(DFT+U\) calculation, the ground state might get stuck in a
+default 'atomic'.</p><p>When performing \(DFT+U\) calculation, the ground state might get stuck in a
 <strong>local minimum</strong>, in such cases we need to provide <code>starting_ns_eigenvalue</code> to
 help calculation reach desired/actual ground state. Please see <a href="https://pranabdas.github.io/espresso/assets/files/dft+u-Iurii-Timrov-5f6cc931c153910b3ba506e9f5f1b9d5.pdf" rel="noopener" target="_blank">these slides</a> by
-Dr. Iurii Timrov for a relevant example.</p></p></div>
+Dr. Iurii Timrov for a relevant example.</p></div>
 <div class="admonition tip"><b>💡 Dica</b><p>Here we have plotted the <code>lpdos</code> (local density of states). If we want to know
 the contribution of \(d_{z^2}, d_{yz}, d_{x^2-z^2}\) ect., we can find them from
 the <code>pdos</code> columns. Also there arise important Lowdin charges information in the
