@@ -13,9 +13,8 @@
   <aside class="sidebar" data-docs="orca"></aside>
   <main class="content">
 <h1>Experimento 3: busca conformacional</h1>
-<p>A busca conformacional é fundamental para entender propriedades de moléculas orgânicas e investigar mecanismos de reação. Por exemplo,
-os parâmetros de RMN de uma molécula são a média, ponderada pela distribuição de Boltzmann, sobre todos os confôrmeros de menor energia.
-Da mesma forma, estudar a reatividade de uma molécula pressupõe encontrar os intermediários e estados de transição de menor energia.</p>
+<p>Neste experimento você encontra os confôrmeros de menor energia de um sistema simples e calcula suas populações.
+Veja a base teórica em <a href="theory-pes.html">Superfície de energia potencial</a>.</p>
 
 <h2 id="exercicio-5">Exercício 5: busca conformacional manual</h2>
 <p>Vamos estudar o equilíbrio ceto-enólico do acetaldeído (<b>I</b>) e de sua forma enólica (<b>II</b>) com DFT. Por ser um caso simples, a busca
@@ -28,10 +27,8 @@ a linha do método deve ficar assim (uma boa escolha para buscas conformacionais
 <div class="codeblock"><pre><code>! B3LYP TIGHTSCF Opt D3BJ 6-31G*</code></pre></div>
 
 <h3 id="boltzmann">Distribuição de Boltzmann</h3>
-<p>A população de cada espécie <i>i</i> é dada por</p>
-<p>\[ p_i = \frac{e^{-\Delta E_i / RT}}{\sum_j e^{-\Delta E_j / RT}} \]</p>
-<p>onde Δ<i>E</i><sub>i</sub> é a energia relativa ao confôrmero mais estável, <i>R</i> = 8,314 J mol⁻¹ K⁻¹ e <i>T</i> = 298,15 K.
-Lembre-se de converter as energias de hartree (1 Eh = 2625,5 kJ/mol).</p>
+<p>As populações seguem a <a href="theory-pes.html#boltzmann">distribuição de Boltzmann</a>. Lembre-se de converter as energias de hartree
+(1 Eh = 2625,5 kJ/mol). O script abaixo faz a conta:</p>
 <div class="codeblock"><div class="code-title">boltzmann.py</div><pre><code>import numpy as np
 
 # energias finais em hartree: SUBSTITUA pelos valores dos seus cálculos

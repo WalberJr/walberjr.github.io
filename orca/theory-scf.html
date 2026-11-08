@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Orbitais moleculares e SCF · Tutorial ORCA</title>
+  <link rel="icon" href="../assets/img/favicon.png">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+</head>
+<body data-root="../" data-section="orca">
+<div class="docs">
+  <aside class="sidebar" data-docs="orca"></aside>
+  <main class="content">
+<h1>Orbitais moleculares e SCF</h1>
+<h2 id="single-point">Energia de ponto único</h2>
+<p>O cálculo de energia de ponto único (<i>single point</i>) prevê a energia e as propriedades de uma molécula numa geometria
+fixa, num ponto da superfície de energia potencial que não é necessariamente o mínimo. A validade dos resultados depende de você ter uma boa geometria.</p>
+
+<h2 id="lcao">Combinação linear de orbitais atômicos</h2>
+<p>Um orbital molecular \(\Psi\) é escrito como uma combinação linear de funções de base \(\phi\) centradas nos átomos,
+cada uma multiplicada por um coeficiente que indica sua contribuição:</p>
+<p>\[ \Psi = c_1\phi_1 + c_2\phi_2 + \dots + c_n\phi_n \]</p>
+<p>O conjunto de funções \(\phi\) é a <b>função de base</b>. Quanto maior e mais flexível a base, melhor a descrição, e maior o custo:</p>
+<table>
+<tr><th>Base</th><th>Descrição</th></tr>
+<tr><td><code>STO-3G</code></td><td>Base mínima: uma função por orbital atômico ocupado</td></tr>
+<tr><td><code>3-21G</code>, <code>6-31G</code></td><td>Bases de Pople de valência dividida (<i>split valence</i>)</td></tr>
+<tr><td><code>6-31G*</code></td><td>Acrescenta funções de polarização (d) nos átomos pesados</td></tr>
+<tr><td><code>6-31G**</code></td><td>Acrescenta polarização também nos hidrogênios (p)</td></tr>
+<tr><td><code>6-311++G**</code></td><td>Valência tripla, com funções difusas (<code>++</code>) e de polarização</td></tr>
+</table>
+
+<h2 id="scf">Campo autoconsistente (SCF)</h2>
+<p>Os coeficientes \(c_i\) são obtidos de forma iterativa no ciclo <b>SCF</b> (<i>self-consistent field</i>, campo autoconsistente):
+parte-se de um chute inicial dos orbitais, monta-se o operador de Fock (ou de Kohn-Sham, em DFT), obtêm-se novos orbitais e repete-se
+o processo. A cada iteração a energia diminui, até que a variação de energia e da densidade fique abaixo do critério de convergência.
+No ORCA, critérios mais rigorosos são pedidos com <code>TightSCF</code> ou <code>VeryTightSCF</code>.</p>
+<p>Em sistemas de camada fechada usam-se métodos <b>restritos</b> (<code>RHF</code>, <code>RKS</code>), em que elétrons α e β compartilham os mesmos
+orbitais espaciais. Em sistemas de camada aberta (radicais, íons, estados tripleto) usam-se métodos <b>não restritos</b> (<code>UHF</code>, <code>UKS</code>),
+com orbitais diferentes para cada spin.</p>
+
+<h2 id="metodos">Métodos usados nos experimentos</h2>
+<table>
+<tr><th>Palavra-chave</th><th>Método</th></tr>
+<tr><td><code>HF</code></td><td>Hartree-Fock</td></tr>
+<tr><td><code>B3LYP</code></td><td>Funcional híbrido de DFT</td></tr>
+<tr><td><code>D3BJ</code></td><td>Correção empírica de dispersão de Grimme (D3) com amortecimento de Becke-Johnson</td></tr>
+<tr><td><code>AM1</code>, <code>PM3</code></td><td>Métodos semiempíricos, muito mais rápidos e menos precisos</td></tr>
+</table>
+
+<h2 id="propriedades">Orbitais e análises populacionais</h2>
+<p>Os orbitais moleculares são listados na saída em ordem crescente de energia. O orbital ocupado de maior energia é o <b>HOMO</b> e o desocupado
+de menor energia é o <b>LUMO</b>; eles são os mais importantes para discutir reatividade.</p>
+<p>As análises populacionais de <b>Mulliken</b>, <b>Löwdin</b> e <b>Mayer</b> dividem a densidade eletrônica entre os átomos e fornecem
+cargas atômicas parciais e ordens de ligação. Os valores dependem do método de partição e da base, então compare sempre resultados obtidos da mesma forma.</p>
+    <nav class="pager"></nav>
+  </main>
+</div>
+<script src="../assets/js/site.js"></script>
+<script defer src="../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../assets/vendor/katex/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})"></script>
+</body>
+</html>
