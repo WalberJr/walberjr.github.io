@@ -14,7 +14,6 @@
 <aside class="sidebar" data-docs="espresso"></aside>
 <main class="content">
 <h1>Constante dielétrica</h1>
-<p class="byline">Tradução do <i>Quantum Espresso Tutorial</i> de Pranab Das. As menções em primeira pessoa são do autor original.</p>
 <p>Primeiro fazemos o cálculo autoconsistente:</p>
 <div class="codeblock"><pre><code>mpirun -np 4 pw.x -i pw.scf.silicon_epsilon.in &gt; pw.scf.silicon_epsilon.out</code></pre></div>
 <div class="codeblock"><div class="code-title">src/silicon/pw.scf.silicon_epsilon.in</div><pre><code>&amp;CONTROL
@@ -120,10 +119,6 @@ mpirun -np 16 epsilon.x -in epsilon.jdos.si.in &gt; epsilon.jdos.si.out</code></
 <ul>
 <li><a href="https://pranabdas.github.io/espresso/assets/files/eps_man-ab3fac19eb366509dd129c37fbf94ac0.pdf" rel="noopener" target="_blank">Manual do epsilon.x</a></li>
 </ul>
-<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/epsilon" rel="noopener" target="_blank">Dielectric constant</a>,
-do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
-<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" rel="noopener" target="_blank">CC BY 4.0</a>.
-Alterações: texto traduzido para o português; layout e navegação adaptados.</p>
 <nav class="pager"></nav>
 </main>
 </div>

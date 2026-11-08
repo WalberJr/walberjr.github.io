@@ -14,7 +14,6 @@
 <aside class="sidebar" data-docs="espresso"></aside>
 <main class="content">
 <h1>Superfície de Fermi</h1>
-<p class="byline">Tradução do <i>Quantum Espresso Tutorial</i> de Pranab Das. As menções em primeira pessoa são do autor original.</p>
 <p>Aqui vamos calcular a superfície de Fermi do cobre. O primeiro passo é o cálculo autoconsistente.</p>
 <div class="codeblock"><div class="code-title">src/cu/pw.scf.cu.in</div><pre><code>&amp;control
   calculation = "scf",
@@ -92,10 +91,6 @@ K_POINTS automatic
 <p>Podemos visualizar o arquivo de saída <code>cu_fs.bxsf</code> com o programa XCrySDen:</p>
 <div class="codeblock"><pre><code>xcrysden --bxsf cu_fs.bxsf</code></pre></div>
 <p><img alt="Fermi-surface-copper" loading="lazy" src="img/fs-cu.webp"/></p>
-<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/fermi-surface" rel="noopener" target="_blank">Fermi Surface</a>,
-do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
-<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" rel="noopener" target="_blank">CC BY 4.0</a>.
-Alterações: texto traduzido para o português; layout e navegação adaptados.</p>
 <nav class="pager"></nav>
 </main>
 </div>

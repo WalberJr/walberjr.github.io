@@ -14,7 +14,6 @@
 <aside class="sidebar" data-docs="espresso"></aside>
 <main class="content">
 <h1>Estrutura cristalina</h1>
-<p class="byline">Tradução do <i>Quantum Espresso Tutorial</i> de Pranab Das. As menções em primeira pessoa são do autor original.</p>
 <h2 id="structure-databases">Bancos de dados de estruturas</h2>
 <p>Cálculos de teoria do funcional da densidade (DFT) são <em>ab initio</em>, ou seja, feitos do zero a partir dos parâmetros de entrada. Para fazer um cálculo DFT precisamos fornecer a estrutura cristalina. Estruturas cristalinas estão amplamente disponíveis no formato Crystallographic Information File (<code>.CIF</code>). Há vários bancos de dados onde você pode procurar estruturas cristalinas.</p>
 <ul>
@@ -43,15 +42,15 @@
 <div class="codeblock"><pre><code>sudo apt update
 sudo apt install bc xcrysden</code></pre></div>
 <p>Instalação manual:</p>
-<div class="codeblock"><pre><code># install dependencies
+<div class="codeblock"><pre><code># instala as dependências
 sudo apt install --no-install-recommends bc tk libglu1-mesa libtogl2 \
       libfftw3-3 libxmu6 imagemagick openbabel libgfortran5
 
-# download the latest version of xcrysden and extract
+# baixa e descompacta a versão mais recente do XCrySDen
 wget http://www.xcrysden.org/download/xcrysden-1.6.2-linux_x86_64-shared.tar.gz
 tar -zxvf xcrysden-1.6.2-linux_x86_64-shared.tar.gz
 
-# launch (provided you extracted under your home directory)
+# inicia o programa (supondo que foi descompactado na sua pasta pessoal)
 ~/xcrysden-1.6.2-bin-shared/xcrysden</code></pre></div>
 <p>Se estiver no WSL, instale um servidor X (Xming, no Windows) no sistema hospedeiro e defina <code>export DISPLAY=:0</code> na sua instância do WSL.</p>
 <h3 id="qe-input-generator">Gerador de inputs do QE</h3>
@@ -61,10 +60,6 @@ tar -zxvf xcrysden-1.6.2-linux_x86_64-shared.tar.gz
 <ul>
 <li><a href="https://www.youtube.com/watch?v=Jk0QUB1fkMU" rel="noopener" target="_blank">Construção de supercélulas com o Vesta</a></li>
 </ul>
-<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/setup/crystal-structure" rel="noopener" target="_blank">Crystal structure</a>,
-do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
-<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" rel="noopener" target="_blank">CC BY 4.0</a>.
-Alterações: texto traduzido para o português; layout e navegação adaptados.</p>
 <nav class="pager"></nav>
 </main>
 </div>

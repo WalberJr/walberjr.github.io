@@ -14,7 +14,6 @@
 <aside class="sidebar" data-docs="espresso"></aside>
 <main class="content">
 <h1>Dinâmica molecular (PW)</h1>
-<p class="byline">Tradução do <i>Quantum Espresso Tutorial</i> de Pranab Das. As menções em primeira pessoa são do autor original.</p>
 <p>Vamos partir do cálculo de relaxação e usar a estrutura relaxada no cálculo <code>md</code>. Abaixo está o arquivo de entrada do cálculo <code>md</code>:</p>
 <div class="codeblock"><div class="code-title">src/H2O-md-pw/pw.md.h2o.in</div><pre><code>&amp;control
     calculation  = 'md'
@@ -53,7 +52,7 @@ ATOMIC_SPECIES
  H  1.00784  H_ONCV_PBE-1.0.oncvpsp.upf
  O  15.999   O.pbe-n-kjpaw_psl.0.1.UPF
 
-! relaxed structure
+! estrutura relaxada
 ATOMIC_POSITIONS (angstrom)
 O             5.0000068025        4.8011777008        4.9999667189
 H             4.9999962341        5.3994076541        5.7670041300
@@ -63,10 +62,6 @@ K_POINTS automatic
   1 1 1 0 0 0</code></pre></div>
 <p>O arquivo de saída do Quantum ESPRESSO pode ser aberto no XCrySDen para visualização.</p>
 <img alt="Molecular dynamics of H2O" loading="lazy" src="img/H2O-molecular-dynamics.gif"/>
-<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/molecular-dynamics-pw" rel="noopener" target="_blank">Molecular Dynamics (using pw.x)</a>,
-do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
-<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" rel="noopener" target="_blank">CC BY 4.0</a>.
-Alterações: texto traduzido para o português; layout e navegação adaptados.</p>
 <nav class="pager"></nav>
 </main>
 </div>

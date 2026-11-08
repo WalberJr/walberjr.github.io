@@ -14,7 +14,6 @@
 <aside class="sidebar" data-docs="espresso"></aside>
 <main class="content">
 <h1>Otimização de estrutura</h1>
-<p class="byline">Tradução do <i>Quantum Espresso Tutorial</i> de Pranab Das. As menções em primeira pessoa são do autor original.</p>
 <p>Há dois tipos de otimização estrutural no Quantum ESPRESSO: (1) <strong>relax</strong>, em que só as posições atômicas podem variar; e (2) <strong>vc-relax</strong>, que permite variar tanto as posições atômicas quanto as constantes de rede.</p>
 <div class="codeblock"><div class="code-title">src/silicon/si_relax.in</div><pre><code>&amp;control
     calculation = 'vc-relax'
@@ -69,10 +68,6 @@ Si            0.0000000000        0.0000000000        0.0000000000    0   0   0
 Si            0.1822781896        0.1822781896        0.1822781896    0   0   0
 End final coordinates</code></pre></div>
 <p>Constante de rede = 0,364556379 × 14 / 0,5 = 10,2076 Bohr.</p>
-<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/structure-optimization" rel="noopener" target="_blank">Structure optimization</a>,
-do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
-<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" rel="noopener" target="_blank">CC BY 4.0</a>.
-Alterações: texto traduzido para o português; layout e navegação adaptados.</p>
 <nav class="pager"></nav>
 </main>
 </div>

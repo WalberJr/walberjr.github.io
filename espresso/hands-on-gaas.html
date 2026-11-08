@@ -14,9 +14,8 @@
 <aside class="sidebar" data-docs="espresso"></aside>
 <main class="content">
 <h1>GaAs</h1>
-<p class="byline">Tradução do <i>Quantum Espresso Tutorial</i> de Pranab Das. As menções em primeira pessoa são do autor original.</p>
 <p>Depois de calcular a estrutura de bandas do silício (semicondutor) e do alumínio (metal), vamos a um composto com dois átomos diferentes. Seguimos os mesmos passos de antes:</p>
-<p>Primeiro verifique a constante de rede com uma relaxação de célula para o pseudopotencial escolhido. Usaremos essa constante de rede nas próximas etapas. Nossa constante de rede = 10,6867 × 0,508176602 / 0,5 = 10,861462.</p>
+<p>Primeiro verifique a constante de rede com uma relaxação de célula para o pseudopotencial escolhido. Usaremos essa constante de rede nas próximas etapas. A constante de rede obtida = 10,6867 × 0,508176602 / 0,5 = 10,861462.</p>
 <div class="codeblock"><pre><code>pw.x &lt; pw.relax.GaAs.in &gt; pw.relax.GaAs.out</code></pre></div>
 <p>Faça o cálculo autoconsistente:</p>
 <div class="codeblock"><pre><code>pw.x &lt; pw.scf.GaAs.in &gt; pw.scf.GaAs.out</code></pre></div>
@@ -30,10 +29,6 @@
 <img alt="GaAs-bands" loading="lazy" src="img/GaAs-bands.webp"/>
 <div class="admonition warn"><b>⚠️ Atenção</b><p>Às vezes um cálculo com os mesmos inputs converge em um computador e falha em outro, por causa da configuração das bibliotecas ou até de aproximações de ponto flutuante. Os números finais sempre variam um pouco entre máquinas diferentes, ou mesmo entre execuções na mesma máquina. Para reprodutibilidade, verifique também a versão do Quantum ESPRESSO.</p></div>
 <p>Veja também a estrutura de bandas do GaAs com <a href="hands-on-soc.html#soc-calculation-for-gaas">SOC</a>.</p>
-<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/GaAs" rel="noopener" target="_blank">Bandstructure of GaAs</a>,
-do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
-<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" rel="noopener" target="_blank">CC BY 4.0</a>.
-Alterações: texto traduzido para o português; layout e navegação adaptados.</p>
 <nav class="pager"></nav>
 </main>
 </div>

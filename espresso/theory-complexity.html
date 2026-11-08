@@ -14,7 +14,6 @@
 <aside class="sidebar" data-docs="espresso"></aside>
 <main class="content">
 <h1>Complexidade computacional</h1>
-<p class="byline">Tradução do <i>Quantum Espresso Tutorial</i> de Pranab Das. As menções em primeira pessoa são do autor original.</p>
 <p>Escalonamento teórico do tempo de um cálculo DFT</p>
 <ul>
 <li><strong>Número de átomos:</strong> o tempo de CPU cresce como \(\mathcal{O}(N^3)\), onde \(N\) é o número de átomos do sistema</li>
@@ -22,10 +21,6 @@
 <li><strong>Número de ondas planas:</strong> o tempo de CPU escala como \(\mathcal{O}(N \log N)\) com o número de ondas planas, que por sua vez é proporcional a (ecutwfc)<sup>3/2</sup></li>
 <li><strong>Diagonalização no subespaço:</strong> escala como \(\mathcal{O}(N^3)\) com o número de bandas. Há diferentes algoritmos de diagonalização disponíveis; os mais rápidos podem ser menos estáveis, então às vezes é preciso trocar por um método mais lento, porém mais robusto, para obter convergência.</li>
 </ul>
-<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/theory/complexity" rel="noopener" target="_blank">Computational complexity</a>,
-do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
-<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" rel="noopener" target="_blank">CC BY 4.0</a>.
-Alterações: texto traduzido para o português; layout e navegação adaptados.</p>
 <nav class="pager"></nav>
 </main>
 </div>

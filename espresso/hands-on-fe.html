@@ -14,7 +14,6 @@
 <aside class="sidebar" data-docs="espresso"></aside>
 <main class="content">
 <h1>Fe (magnético)</h1>
-<p class="byline">Tradução do <i>Quantum Espresso Tutorial</i> de Pranab Das. As menções em primeira pessoa são do autor original.</p>
 <p>Este exemplo segue a <a href="https://gitlab.com/QEF/materials-for-max-qe2021-online-school" rel="noopener" target="_blank">escola online do ICTP 2021</a>.</p>
 <p>Vamos calcular os orbitais de KS por SCF para o ferro magnético (<code>nspin=2</code>). Como os orbitais d do Fe são localizados/<wbr/>"duros", usaremos um pseudopotencial ultrasoft (USPP).</p>
 <div class="admonition"><b>📝 Nota</b><p>Se a estrutura cristalina tiver apenas um átomo por célula unitária, ou apenas um tipo de átomo, o único ordenamento possível é o ferromagnético. Nesses casos, precisamos montar uma supercélula com mais átomos ou rotular vários átomos separadamente, para que suas orientações magnéticas possam ser diferentes, permitindo estados finais ferro ou antiferromagnéticos.</p></div>
@@ -25,10 +24,10 @@ pw.x -i pw.scf.fe_afm.in &gt; pw.scf.fe_afm.out</code></pre></div>
 <div class="admonition"><b>ℹ️ Info</b><p>No caso de pseudopotenciais ultrasoft, o padrão do Quantum ESPRESSO de <code>ecutrho</code> igual a 4 vezes o <code>ecutoff</code> não é suficiente. Precisamos definir o <code>ecutrho</code> como 8 ou até 12 vezes o <code>ecutoff</code>, e testar a convergência para os valores escolhidos.</p></div>
 <h2 id="convergence-test-for-uspp">Teste de convergência para USPP</h2>
 <p>Abaixo está o script do PWTK:</p>
-<div class="codeblock"><div class="code-title">src/fe/fe_ecut.pwtk</div><pre><code># load the pw.x input from file
+<div class="codeblock"><div class="code-title">src/fe/fe_ecut.pwtk</div><pre><code># carrega o input do pw.x a partir do arquivo
 load_fromPWI fe_scf_fm.in
 
-# dual is the ratio ecutrho/ecutwfc
+# dual é a razão ecutrho/ecutwfc
 foreach dual { 4 8 12 } {
 
     set fid [open etot-vs-ecutwfc.dual$dual.dat w]
@@ -94,24 +93,24 @@ runPROJWFC projwfc.$name.in</code></pre></div>
 <p>Note também que a DFT supõe temperatura zero, então faz sentido fazer cálculos FM ou AFM para sistemas magnéticos.</p>
 <h2 id="visualizing-magnetic-moments">Visualizando os momentos magnéticos</h2>
 <p>Podemos usar o <a href="http://www.xcrysden.org" rel="noopener" target="_blank">XCrySDen</a> para visualizar a orientação dos momentos magnéticos. O XCrySDen não lê diretamente os vetores de momento magnético das saídas do Quantum ESPRESSO; em vez disso, precisamos criar o arquivo de entrada <code>.xsf</code> com os momentos magnéticos como vetores de força. Você também pode trocar a cor de fundo preta pelo menu Palette, à esquerda do menu File.</p>
-<div class="codeblock"><div class="code-title">src/fe/fe.xsf</div><pre><code># this is a specification for crystal structure
+<div class="codeblock"><div class="code-title">src/fe/fe.xsf</div><pre><code># especificação de estrutura cristalina
 CRYSTAL
 
-# primitive lattice vectors (in Angstroms)
+# vetores da rede primitiva (em ångström)
 PRIMVEC
     2.8681404710    0.0000000000    0.0000000000
     0.0000000000    2.8681404710    0.0000000000
     0.0000000000    0.0000000000    2.8681404710
 
-# conventional lattice vectors (in Angstroms)
+# vetores da rede convencional (em ångström)
 CONVVEC
     2.8681404710    0.0000000000    0.0000000000
     0.0000000000    2.8681404710    0.0000000000
     0.0000000000    0.0000000000    2.8681404710
 
-# First number stands for number of atoms in primitive cell
-# the second number is always 1 for PRIMCOORD coordinates
-# followed by atomic coordinates (in Angstroms) and forces:
+# o primeiro número é o número de átomos na célula primitiva
+# o segundo número é sempre 1 para coordenadas PRIMCOORD
+# seguido das coordenadas atômicas (em ångström) e das forças:
 # AtNum   X Y Z   Fx Fy Fz
 PRIMCOORD
  2  1
@@ -119,10 +118,6 @@ PRIMCOORD
  26  1.4340702350  1.4340702350  1.4340702350    0.00  0.00 -0.01</code></pre></div>
 <p>Abra o arquivo pelo menu do XCrySDen: <strong>File → Open Structure → Open XSF</strong>. Depois vá ao menu <strong>Display</strong> e selecione <strong>Forces</strong>. Para ajustar a escala dos vetores, vá em <strong>Modify → Force Settings</strong> e defina um fator de comprimento (Length factor) adequado.</p>
 <p><img alt="fe-magnetic-structure" loading="lazy" src="img/fe-magnetic-structure.webp"/></p>
-<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/fe" rel="noopener" target="_blank">Magnetic system: bulk iron</a>,
-do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
-<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" rel="noopener" target="_blank">CC BY 4.0</a>.
-Alterações: texto traduzido para o português; layout e navegação adaptados.</p>
 <nav class="pager"></nav>
 </main>
 </div>

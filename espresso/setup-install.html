@@ -14,17 +14,16 @@
 <aside class="sidebar" data-docs="espresso"></aside>
 <main class="content">
 <h1>Instalação</h1>
-<p class="byline">Tradução do <i>Quantum Espresso Tutorial</i> de Pranab Das. As menções em primeira pessoa são do autor original.</p>
 <p>Podemos instalar o Quantum ESPRESSO em notebooks ou desktops pessoais para rodar cálculos relativamente leves. Para tarefas computacionalmente pesadas, precisamos de recursos melhores, com muitos núcleos de CPU (ou GPU), memória, largura de banda e E/S de disco.</p>
-<p>Ao longo deste tutorial, usarei um sistema Ubuntu para os cálculos menores, enquanto os cálculos mais pesados serão feitos em clusters de HPC.</p>
-<p>Talvez a forma mais fácil de instalar o Quantum ESPRESSO seja pelo gerenciador de pacotes da sua distribuição Linux. Isso deve funcionar bem para nós e é a opção recomendada. Os comandos a seguir são para Ubuntu/Debian. Primeiro, garanta que o sistema está atualizado.</p>
+<p>Os exemplos deste tutorial usam um sistema Ubuntu para os cálculos menores; cálculos mais pesados costumam ser feitos em clusters de HPC.</p>
+<p>Talvez a forma mais fácil de instalar o Quantum ESPRESSO seja pelo gerenciador de pacotes da sua distribuição Linux. Essa é a opção recomendada para começar. Os comandos a seguir são para Ubuntu/Debian. Primeiro, garanta que o sistema está atualizado.</p>
 <div class="codeblock"><pre><code>sudo apt update &amp;&amp; sudo apt upgrade</code></pre></div>
 <p>Instale o Quantum ESPRESSO pelo repositório apt:</p>
 <div class="codeblock"><pre><code>sudo apt install --no-install-recommends \
     libfftw3-dev \
     quantum-espresso</code></pre></div>
-<div class="admonition tip"><b>💡 Dica</b><p>Binários pré-compilados do Quantum ESPRESSO para Ubuntu estão nos <a href="https://github.com/pranabdas/espresso/releases" rel="noopener" target="_blank">releases</a> do meu repositório no GitHub, para facilitar a instalação. Veja as notas de cada release para mais detalhes sobre como instalar.</p></div>
-<p>Se quiser compilar a partir do código-fonte, estes são os passos de instalação do Quantum ESPRESSO 7.2 em um sistema Ubuntu (LTS 22.04). Vou compilar para um único processador. Primeiro instale as bibliotecas e dependências recomendadas:</p>
+<div class="admonition tip"><b>💡 Dica</b><p>Binários pré-compilados do Quantum ESPRESSO para Ubuntu estão nos <a href="https://github.com/pranabdas/espresso/releases" rel="noopener" target="_blank">releases</a> do repositório pranabdas/espresso no GitHub, para facilitar a instalação. Veja as notas de cada release para mais detalhes sobre como instalar.</p></div>
+<p>Se quiser compilar a partir do código-fonte, estes são os passos de instalação do Quantum ESPRESSO 7.2 em um sistema Ubuntu (LTS 22.04). Os passos abaixo compilam a versão serial (um único processador). Primeiro instale as bibliotecas e dependências recomendadas:</p>
 <div class="codeblock"><pre><code>sudo apt install --no-install-recommends \
     autoconf \
     build-essential \
@@ -51,14 +50,14 @@
 <p>Aqui podemos passar várias opções de configuração. Leia o manual para entendê-las bem. Na maioria dos casos, porém, os valores padrão funcionam: o configure deve detectar a configuração do sistema automaticamente. Se não obtiver o que deseja, experimente as diversas <code>flags</code> do configure.</p>
 <div class="admonition warn"><b>⚠️ Cuidado</b><p>Note que alguns programas/utilitários que acompanham o Quantum ESPRESSO podem não funcionar corretamente com compilação paralela; para eles, pode ser preciso compilar em modo serial com a opção <code>./configure --disable-parallel</code>, caso o modo paralelo seja detectado automaticamente.</p></div>
 <p>Por fim, compile o código-fonte e gere os executáveis:</p>
-<div class="codeblock"><pre><code># compile individual packages
+<div class="codeblock"><pre><code># compila pacotes individuais
 make pw
-# or compile everything
+# ou compila tudo
 make all
-# we can parallelize e.g., below command uses 4 CPUs
+# é possível paralelizar; o comando abaixo usa 4 CPUs
 make -j4 all</code></pre></div>
 <p>Os executáveis (ou links simbólicos para eles) ficarão no diretório <code>bin</code>. É uma boa ideia incluir esse caminho no seu arquivo <code>.bashrc</code> (ou <code>.zshrc</code>, ou o do shell que você usa):</p>
-<div class="codeblock"><pre><code># use the correct path if it differs from mine
+<div class="codeblock"><pre><code># ajuste o caminho se for diferente
 echo 'export PATH="/root/q-e-qe-7.2/bin:$PATH"' &gt;&gt; ~/.bashrc</code></pre></div>
 <p>Por fim, talvez seja preciso reiniciar o terminal ou rodar <code>source .bashrc</code>.</p>
 <div class="codeblock"><pre><code>source ~/.bashrc</code></pre></div>
@@ -68,9 +67,9 @@ echo 'export PATH="/root/q-e-qe-7.2/bin:$PATH"' &gt;&gt; ~/.bashrc</code></pre><
 <div class="codeblock"><pre><code>pdflatex filename.tex</code></pre></div>
 <p>Agora podemos rodar o <code>pw.x</code> (ou qualquer outro programa) do Quantum ESPRESSO com <code>mpirun</code>, usando o comando:</p>
 <div class="codeblock"><pre><code>pw.x -inp inputfile &gt; outputfile
-# For parallel version
+# para a versão paralela
 mpirun -np 12 pw.x -inp inputfile &gt; outputfile</code></pre></div>
-<p>Onde <code>-np 12</code> define o número de processadores e <code>-inp</code> indica o arquivo de entrada. Também é possível usar <code>-i</code>, <code>-in</code>, <code>-input</code> ou até o redirecionamento da entrada padrão <code>&lt;</code>. Mas atenção: alguns sistemas podem não interpretar todas essas opções; acho que a opção mais segura é <code>-i</code>.</p>
+<p>Onde <code>-np 12</code> define o número de processadores e <code>-inp</code> indica o arquivo de entrada. Também é possível usar <code>-i</code>, <code>-in</code>, <code>-input</code> ou até o redirecionamento da entrada padrão <code>&lt;</code>. Mas atenção: alguns sistemas podem não interpretar todas essas opções; a opção mais segura é <code>-i</code>.</p>
 <p>Terminada a instalação, opcionalmente podemos rodar os testes para ver se tudo deu certo. Entre no diretório <code>test-suite</code> e rode</p>
 <div class="codeblock"><pre><code>make run-tests</code></pre></div>
 <p>Se estiver tudo bem, veremos mensagens <strong>Passed</strong> e podemos seguir em frente.</p>
@@ -85,10 +84,6 @@ mpirun -np 12 pw.x -inp inputfile &gt; outputfile</code></pre></div>
 <p>Adicione o caminho (ajuste conforme o seu caso) ao <code>.bashrc</code>:</p>
 <div class="codeblock"><pre><code>echo 'export PATH="/root/pwtk-2.0:$PATH"' &gt;&gt; ~/.bashrc
 source ~/.bashrc</code></pre></div>
-<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/setup/install" rel="noopener" target="_blank">Quantum Espresso installation</a>,
-do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
-<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" rel="noopener" target="_blank">CC BY 4.0</a>.
-Alterações: texto traduzido para o português; layout e navegação adaptados.</p>
 <nav class="pager"></nav>
 </main>
 </div>

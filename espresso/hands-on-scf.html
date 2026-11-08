@@ -14,42 +14,41 @@
 <aside class="sidebar" data-docs="espresso"></aside>
 <main class="content">
 <h1>Cálculo SCF</h1>
-<p class="byline">Tradução do <i>Quantum Espresso Tutorial</i> de Pranab Das. As menções em primeira pessoa são do autor original.</p>
 <p>Os parâmetros importantes do cálculo autoconsistente (que resolve a equação de Kohn-Sham de forma autoconsistente) são fornecidos por um arquivo de entrada. Nos inputs do QE há <code>NAMELISTS</code> e <code>INPUT_CARDS</code>. As variáveis das <code>NAMELISTS</code> têm valores padrão, e novos valores podem ser dados conforme a necessidade de cada cálculo. Elas podem ser declaradas em qualquer ordem. Já as variáveis dos <code>INPUT_CARDS</code> precisam sempre ser especificadas, e numa ordem definida. <code>INPUT_CARDS</code> logicamente independentes podem vir em qualquer ordem.</p>
 <p>Há três <code>NAMELISTS</code> obrigatórias no <code>PWscf</code>: (1) <code>&amp;CONTROL</code>: define o fluxo do cálculo; (2) <code>&amp;SYSTEM</code>: define o sistema; e (3) <code>&amp;ELECTRONS</code>: define os algoritmos usados para resolver a equação de Kohn-Sham. Há outras duas <code>NAMELISTS</code>, <code>&amp;IONS</code> e <code>&amp;CELLS</code>, que precisam ser especificadas conforme o tipo de cálculo.</p>
 <p>Três <code>INPUT_CARDS</code> são obrigatórios no <code>PWscf</code>: <code>ATOMIC_SPECIES</code>, <code>ATOMIC_POSITIONS</code> e <code>K_POINTS</code>. Há alguns outros que precisam ser fornecidos em certos cálculos.</p>
-<p>Abaixo está o nosso arquivo de entrada <a href="https://github.com/pranabdas/espresso/tree/main/src/silicon" rel="noopener" target="_blank">pw.scf.silicon.in</a> para o silício na estrutura padrão do diamante (FCC). Note que o Quantum ESPRESSO usa a célula unitária primitiva quando <code>CELL_PARAMETERS</code> não é informado. É possível usar qualquer outro tipo de célula, como a célula convencional ou uma supercélula, especificando os <code>CELL_PARAMETERS</code> e as <code>ATOMIC_POSITIONS</code> correspondentes. Os arquivos de entrada costumam ter a extensão <code>.in</code> e os de saída a extensão <code>.out</code>, para facilitar a identificação. Os parâmetros de entrada são organizados em <code>&amp;namelists</code> seguidas de seus campos ou cards. As namelists <code>&amp;control</code>, <code>&amp;system</code> e <code>&amp;electrons</code> são obrigatórias. Há também as opcionais <code>&amp;cell</code> e <code>&amp;ions</code>, que devem ser fornecidas quando o cálculo exigir. A maioria dos parâmetros das <code>namelists</code> tem valores padrão (que podem ou não servir para você), mas algumas variáveis precisam sempre ser informadas. Linhas de comentário começam com <code>!</code>, como no FORTRAN. Também como no FORTRAN, os nomes dos parâmetros não diferenciam maiúsculas de minúsculas, isto é, <code>&amp;control</code> e <code>&amp;CONTROL</code> são iguais.</p>
+<p>Abaixo está o arquivo de entrada <a href="https://github.com/pranabdas/espresso/tree/main/src/silicon" rel="noopener" target="_blank">pw.scf.silicon.in</a> para o silício na estrutura padrão do diamante (FCC). Note que o Quantum ESPRESSO usa a célula unitária primitiva quando <code>CELL_PARAMETERS</code> não é informado. É possível usar qualquer outro tipo de célula, como a célula convencional ou uma supercélula, especificando os <code>CELL_PARAMETERS</code> e as <code>ATOMIC_POSITIONS</code> correspondentes. Os arquivos de entrada costumam ter a extensão <code>.in</code> e os de saída a extensão <code>.out</code>, para facilitar a identificação. Os parâmetros de entrada são organizados em <code>&amp;namelists</code> seguidas de seus campos ou cards. As namelists <code>&amp;control</code>, <code>&amp;system</code> e <code>&amp;electrons</code> são obrigatórias. Há também as opcionais <code>&amp;cell</code> e <code>&amp;ions</code>, que devem ser fornecidas quando o cálculo exigir. A maioria dos parâmetros das <code>namelists</code> tem valores padrão (que podem ou não servir para você), mas algumas variáveis precisam sempre ser informadas. Linhas de comentário começam com <code>!</code>, como no FORTRAN. Também como no FORTRAN, os nomes dos parâmetros não diferenciam maiúsculas de minúsculas, isto é, <code>&amp;control</code> e <code>&amp;CONTROL</code> são iguais.</p>
 <div class="codeblock"><div class="code-title">src/silicon/pw.scf.silicon.in</div><pre><code>&amp;CONTROL
-! we want to perform self consistent field calculation
+! queremos um cálculo autoconsistente
   calculation = 'scf',
 
-! prefix is reference to the output files
+! prefix é o nome de referência dos arquivos de saída
   prefix = 'silicon',
 
-! output directory. Note that it is deprecated.
+! diretório de saída (note que está obsoleto)
   outdir = './tmp/'
 
-! directory for the pseudo potential directory
+! diretório dos pseudopotenciais
   pseudo_dir = '../pseudos/'
 
-! verbosity high will give more details on the output file
+! verbosity high dá mais detalhes no arquivo de saída
   verbosity = 'high'
 /
 
 &amp;SYSTEM
-! Bravais lattice index, which is 2 for FCC structure
+! índice da rede de Bravais: 2 para a estrutura FCC
   ibrav = 2,
 
-! Lattice constant in BOHR
+! constante de rede em bohr
   celldm(1) = 10.26,
 
-! number of atoms in an unit cell
+! número de átomos na célula unitária
   nat = 2,
 
-! number of different types of atom in the cell
+! número de tipos diferentes de átomos na célula
   ntyp = 1,
 
-! kinetic energy cutoff for wavefunction in Ry
+! energia de corte cinética da função de onda, em Ry
   ecutwfc = 30
 
 ! number of bands to calculate
@@ -57,7 +56,7 @@
 /
 
 &amp;ELECTRONS
-! Mixing factor used in the self-consistent method
+! fator de mistura usado no método autoconsistente
   mixing_beta = 0.6
 /
 
@@ -70,13 +69,13 @@ ATOMIC_POSITIONS (alat)
 
 K_POINTS (automatic)
   6 6 6 0 0 0</code></pre></div>
-<p>Estou usando o arquivo de pseudopotencial (<code>Si.pz-vbc.UPF</code>) baixado do <a href="https://www.quantum-espresso.org/pseudopotentials" rel="noopener" target="_blank">site do Quantum ESPRESSO</a>.</p>
+<p>O exemplo usa o arquivo de pseudopotencial (<code>Si.pz-vbc.UPF</code>) baixado do <a href="https://www.quantum-espresso.org/pseudopotentials" rel="noopener" target="_blank">site do Quantum ESPRESSO</a>.</p>
 <p>Leia o <strong>manual do usuário do PWscf</strong> para um entendimento aprofundado. Veja a pasta <code>qe-x.x/PW/Doc/</code> no diretório de instalação. Veja também o <code>INPUT_PW.html</code>, que descreve os parâmetros de entrada. PW significa <em>plane waves</em> (ondas planas).</p>
 <p>Rode o <code>pw.x</code> no modo autoconsistente para o silício.</p>
 <div class="codeblock"><pre><code>pw.x &lt; pw.scf.silicon.in &gt; pw.scf.silicon.out
-# For parallel execution
+# para execução em paralelo
 mpirun -np 4 pw.x -inp pw.scf.silicon.in &gt; pw.scf.silicon.out</code></pre></div>
-<div class="admonition"><b>📝 Nota</b><p>Adicionei o diretório dos executáveis do Quantum ESPRESSO à variável de ambiente <code>PATH</code> no perfil do bash/zsh; caso contrário, teríamos que digitar o caminho completo do executável <code>pw.x</code>.</p></div>
+<div class="admonition"><b>📝 Nota</b><p>O comando acima supõe que o diretório dos executáveis do Quantum ESPRESSO está na variável de ambiente <code>PATH</code> (no perfil do bash/zsh); caso contrário, é preciso digitar o caminho completo do executável <code>pw.x</code>.</p></div>
 <p>Agora vamos olhar o arquivo de saída <code>pw.scf.silicon.out</code> e ver como a convergência é atingida:</p>
 <div class="codeblock"><pre><code>grep -e 'total energy' -e estimate pw.scf.silicon.out</code></pre></div>
 <p>e você deve ver algo assim:</p>
@@ -125,16 +124,12 @@ Sum         433     433    139                 5961     5961    1067</code></pre
 <p>Número de estados de Kohn-Sham:</p>
 <div class="codeblock"><pre><code>number of electrons       =         8.00
 number of Kohn-Sham states=            8</code></pre></div>
-<p>No nosso cálculo definimos o número de bandas = 8. Caso contrário, haveria 4 bandas para 8 elétrons, num sistema sem polarização de spin.</p>
+<p>Neste cálculo definimos o número de bandas = 8. Caso contrário, haveria 4 bandas para 8 elétrons, num sistema sem polarização de spin.</p>
 <h2 id="resources">Recursos</h2>
 <ul>
 <li><a href="https://www.quantum-espresso.org/Doc/pw_user_guide/" rel="noopener" target="_blank">https://www.quantum-espresso.org/Doc/pw_user_guide/</a></li>
 <li><a href="https://www.materialscloud.org/work/tools/qeinputgenerator" rel="noopener" target="_blank">Gerador de inputs do Quantum ESPRESSO</a> (ajuda a criar arquivos de entrada do QE)</li>
 </ul>
-<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/scf" rel="noopener" target="_blank">Self consistent field calculation for silicon</a>,
-do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
-<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" rel="noopener" target="_blank">CC BY 4.0</a>.
-Alterações: texto traduzido para o português; layout e navegação adaptados.</p>
 <nav class="pager"></nav>
 </main>
 </div>

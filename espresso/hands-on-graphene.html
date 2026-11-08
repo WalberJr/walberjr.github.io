@@ -14,7 +14,6 @@
 <aside class="sidebar" data-docs="espresso"></aside>
 <main class="content">
 <h1>Grafeno</h1>
-<p class="byline">Tradução do <i>Quantum Espresso Tutorial</i> de Pranab Das. As menções em primeira pessoa são do autor original.</p>
 <p>Este exemplo segue a <a href="https://gitlab.com/QEF/materials-for-max-qe2021-online-school" rel="noopener" target="_blank">escola online do ICTP 2021</a>.</p>
 <p>O grafeno é uma única camada de átomos de carbono. Primeiro faça o cálculo autoconsistente para obter os orbitais de Kohn-Sham. Veja os arquivos de entrada no repositório do <a href="https://github.com/pranabdas/espresso/" rel="noopener" target="_blank">GitHub</a>. Rode o <code>pw.x</code>:</p>
 <div class="codeblock"><pre><code>pw.x -i graphene_scf.in &gt; graphene_scf.out</code></pre></div>
@@ -41,20 +40,16 @@ for band in range(len(bands)):
     plt.plot(k, bands[band, :], linewidth=1, alpha=0.5, color='k')
 plt.xlim(min(k), max(k))
 
-# Fermi energy
+# energia de Fermi
 plt.axhline(0.921, linestyle=(0, (8, 10)), linewidth=0.75, color='k', alpha=0.5)
-# High symmetry k-points (check bands_pp.out)
+# pontos k de alta simetria (veja bands_pp.out)
 plt.axvline(0.6667, linewidth=0.75, color='k', alpha=0.5)
 plt.axvline(1, linewidth=0.75, color='k', alpha=0.5)
-# text labels
+# rótulos de texto
 plt.xticks(ticks= [0, 0.6667, 1, 1.5774], labels=['$\Gamma$', 'K', 'M', '$\Gamma$'])
 plt.ylabel("Energy (eV)")
 plt.show()</code></pre></div>
 <img alt="graphene-bands" loading="lazy" src="img/graphene-bands.webp"/>
-<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/graphene" rel="noopener" target="_blank">DOS and Bandstructure of Graphene</a>,
-do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
-<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" rel="noopener" target="_blank">CC BY 4.0</a>.
-Alterações: texto traduzido para o português; layout e navegação adaptados.</p>
 <nav class="pager"></nav>
 </main>
 </div>

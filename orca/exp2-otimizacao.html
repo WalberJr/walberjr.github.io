@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Experimento 2: otimização de geometria · Tutorial ORCA</title>
+  <link rel="icon" href="../assets/img/favicon.png">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body data-root="../" data-section="orca">
+<div class="docs">
+  <aside class="sidebar" data-docs="orca"></aside>
+  <main class="content">
+<h1>Experimento 2: otimização de geometria</h1>
+<h2 id="exercicio-4">Exercício 4: energia de ionização</h2>
+<p>A energia de ionização (EI) é a diferença de energia entre o estado ionizado (F) e o estado fundamental (I) da molécula: EI = F − I.
+Teoricamente, ela pode ser calculada como potencial de ionização <b>vertical</b> (princípio de Franck-Condon) ou <b>adiabático</b>.
+Agora não usaremos as geometrias experimentais das moléculas.</p>
+<div class="admonition"><b>📝 Para o relatório</b> Estude a diferença entre ionização vertical e adiabática.</div>
+
+<h3 id="otimizacao">Otimização do formaldeído</h3>
+<p>Otimize a geometria do formaldeído no nível <b>HF/6-31G**</b>. A otimização é feita com a palavra-chave <code>Opt</code> e termina quando a
+estrutura converge. Use também <code>Freq</code> para caracterizar o ponto estacionário encontrado (mais detalhes no <a href="exp5-frequencias.html">Experimento 5</a>).</p>
+<div class="codeblock"><pre><code>! HF 6-31G** TightSCF Opt Freq</code></pre></div>
+<p>Na saída, a otimização começa com:</p>
+<div class="codeblock"><pre><code>*****************************
+* Geometry Optimization Run *
+*****************************</code></pre></div>
+<p>Os critérios de convergência usados pelo programa aparecem logo depois; todos podem ser alterados:</p>
+<div class="codeblock"><pre><code>Convergence Tolerances:
+Energy Change            TolE      ....  5.0000e-06 Eh
+Max. Gradient            TolMAXG   ....  3.0000e-04 Eh/bohr
+RMS Gradient             TolRMSG   ....  1.0000e-04 Eh/bohr
+Max. Displacement        TolMAXD   ....  4.0000e-03 bohr
+RMS Displacement         TolRMSD   ....  2.0000e-03 bohr</code></pre></div>
+<p>Cada ciclo começa com:</p>
+<div class="codeblock"><pre><code>*************************************************************
+*                GEOMETRY OPTIMIZATION CYCLE   1            *
+*************************************************************</code></pre></div>
+<p>Você também pode acompanhar a otimização pela tabela abaixo. Neste caso, ainda não convergiu:</p>
+<div class="codeblock"><pre><code>----------------------|Geometry convergence|---------------------
+Item                value                 Tolerance   Converged
+-----------------------------------------------------------------
+RMS gradient        0.01688773            0.00010000      NO
+MAX gradient        0.03556546            0.00030000      NO
+RMS step            0.03312567            0.00200000      NO
+MAX step            0.04807470            0.00400000      NO
+....................................................
+Max(Bonds)      0.0254      Max(Angles)    2.11
+Max(Dihed)        0.00      Max(Improp)    0.08
+-----------------------------------------------------------------
+The optimization has not yet converged - more geometry cycles are needed</code></pre></div>
+<p>Ao convergir, todos os critérios ficam <b>YES</b> e aparece a mensagem de sucesso:</p>
+<div class="codeblock"><pre><code>----------------------|Geometry convergence|---------------------
+Item                value                 Tolerance   Converged
+-----------------------------------------------------------------
+Energy change      -0.00000025            0.00000500      YES
+RMS gradient        0.00007708            0.00010000      YES
+MAX gradient        0.00019856            0.00030000      YES
+RMS step            0.00014338            0.00200000      YES
+MAX step            0.00028899            0.00400000      YES
+-----------------------------------------------------------------
+                    ***********************HURRAY********************
+                    ***        THE OPTIMIZATION HAS CONVERGED     ***
+                    *************************************************</code></pre></div>
+<p>Outra forma de acompanhar é pelo GABEDIT: clique em <b>Geom. Conv.</b> para ver a energia em cada passo (durante o cálculo, clique de novo para
+atualizar o gráfico). Note que a energia converge. Para ver a geometria, clique em <b>Draw</b>.</p>
+<figure><img src="img/exp2-geom-conv.webp" alt="Convergência da otimização no GABEDIT" loading="lazy" style="max-width:440px"></figure>
+<p>A energia final do sistema:</p>
+<div class="codeblock"><pre><code>-------------------------   --------------------
+FINAL SINGLE POINT ENERGY      -113.869250572037
+-------------------------   --------------------</code></pre></div>
+
+<h3 id="tarefas">Tarefas</h3>
+<ul>
+  <li>Calcule todos os intermediários e o potencial de ionização nos dois casos (vertical e adiabático). Compare com os dados experimentais
+    (EI = 10,88 eV para o formaldeído e 10,51 eV para o eteno). <b>Mostre todas as energias.</b></li>
+  <li>Compare as geometrias dos estados fundamentais com os valores experimentais, completando a tabela:</li>
+</ul>
+<table>
+<tr><th></th><th>formaldeído</th><th>[formaldeído]<sup>+</sup></th><th></th><th>eteno</th><th>[eteno]<sup>+</sup></th></tr>
+<tr><td><i>r</i><sub>CH</sub></td><td></td><td></td><td><i>r</i><sub>CH</sub></td><td></td><td></td></tr>
+<tr><td><i>r</i><sub>CO</sub></td><td></td><td></td><td><i>r</i><sub>CC</sub></td><td></td><td></td></tr>
+<tr><td>∠HCH</td><td></td><td></td><td>∠HCH</td><td></td><td></td></tr>
+</table>
+<div class="admonition tip"><b>❓ Questões para o relatório</b><ol><li>Compare brevemente as geometrias nas ionizações adiabáticas.</li><li>Analise a densidade de spin dada pelas diferentes análises populacionais e faça os gráficos. A partir delas, discuta de qual orbital molecular o elétron é removido na ionização e a diferença entre as energias de ionização nos dois casos.</li><li>Repita os cálculos com HF/STO-3G (base mínima), HF/6-311++G** e B3LYP/6-311++G** e compare as geometrias do estado fundamental e as EI com os resultados anteriores, discutindo a qualidade de cada nível de teoria.</li></ol></div>
+<div class="admonition warn"><b>⚠️ Íons</b> Para o cátion, use carga +1 e multiplicidade 2 (dubleto), com cálculo não restrito (<code>UHF</code> ou <code>UKS</code>).</div>
+    <nav class="pager"></nav>
+  </main>
+</div>
+<script src="../assets/js/site.js"></script>
+</body>
+</html>

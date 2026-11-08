@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Experimento 1: energia single-point · Tutorial ORCA</title>
+  <link rel="icon" href="../assets/img/favicon.png">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body data-root="../" data-section="orca">
+<div class="docs">
+  <aside class="sidebar" data-docs="orca"></aside>
+  <main class="content">
+<h1>Experimento 1: energia single-point</h1>
+<p>O cálculo de energia de ponto único (<i>single point</i>) prevê a energia e as propriedades de uma molécula numa geometria
+fixa, num ponto da superfície de energia potencial que não é necessariamente o mínimo. A validade dos resultados depende de você ter uma boa geometria.</p>
+
+<h2 id="exercicio-3">Exercício 3: propriedades e reatividade do formaldeído e do eteno</h2>
+<p>Vamos comparar propriedades obtidas por cálculos single-point do <b>formaldeído</b> e do <b>eteno</b>: energia, momento de dipolo,
+cargas atômicas parciais, ordem de ligação e orbitais moleculares.</p>
+<div class="admonition tip"><b>❓ Questões para o relatório</b><ol><li>Tabele as propriedades do formaldeído, do eteno e do ácido clorídrico (cargas atômicas, dipolo, energia total e ordem de ligação). Faça os mapas de potencial eletrostático e relacione-os com essas propriedades.</li><li>Quais são os orbitais HOMO, HOMO-1 e LUMO das moléculas? Faça as superfícies e um diagrama qualitativo de energia.</li><li>Relacione as superfícies dos orbitais HOMO/LUMO com os coeficientes orbitais.</li><li>O que você conclui sobre a regioquímica desses compostos numa reação com o eletrófilo HCl?</li></ol></div>
+<p>A seguir há um roteiro para o formaldeído. Faça o mesmo para o eteno e responda às questões.</p>
+
+<h3 id="input">Criando o input do formaldeído</h3>
+<p>Desenhe o formaldeído com os passos do <a href="exp1-input.html">exercício anterior</a> e ajuste os comprimentos de ligação para os valores
+experimentais. O <a href="https://webbook.nist.gov/chemistry/" target="_blank" rel="noopener">NIST Chemistry WebBook</a> traz dados experimentais desta e de muitas outras moléculas.</p>
+<figure><img src="img/exp1-formaldeido-geometria.webp" alt="Geometria experimental do formaldeído" loading="lazy" style="max-width:420px"></figure>
+<p>Crie o input para um cálculo <i>single point</i> com uma função de base do tipo Pople, a <b>6-31G</b>. Os outros parâmetros não precisam ser alterados.
+O input deve ficar parecido com este:</p>
+<div class="codeblock"><div class="code-title">formaldeido.inp</div><pre><code># ================================================================
+# Orca input file made in Gabedit
+# ================================================================
+! TightSCF HF
+! PrintBasis 6-31G
+%output
+    print[p_mos] 1
+ end #output
+* xyz 0 1
+ C  0.009039 -0.030722 -0.001920
+ O  1.173985 -0.014066  0.305728
+ H -0.509612 -0.971078 -0.286619
+ H -0.606982  0.893697 -0.018872
+*
+%geom Constraints
+  {C 0 C}
+  {C 1 C}
+  {C 2 C}
+  {C 3 C}
+ end #Constraints
+ invertConstraints true
+ end #geom</code></pre></div>
+<p>Sobre as partes do input ainda não vistas:</p>
+<ul>
+  <li>As linhas 1 a 3, começando com <code>#</code>, são o título do projeto. Altere se quiser, mantendo o <code>#</code>.</li>
+  <li><code>PrintBasis</code> faz com que todos os coeficientes dos orbitais sejam impressos na saída.</li>
+  <li>O bloco <code>%output</code> … <code>end</code> pede ao ORCA mais informações na saída (aqui, as necessárias para montar os orbitais moleculares), que o GABEDIT usa depois.</li>
+  <li>O bloco <code>%geom Constraints</code> … <code>end</code> define restrições durante o cálculo, por exemplo otimizar a molécula mantendo
+    uma ligação ou um ângulo fixo. O GABEDIT costuma inseri-lo, mas ele <b>não</b> é necessário aqui e pode atrapalhar uma otimização:
+    se aparecer, apague-o. Ele será usado mais adiante.</li>
+</ul>
+
+<h3 id="rodando">Rodando o cálculo</h3>
+<p>Clique no ícone de executar. Na janela que abre, escolha a pasta do cálculo em <b>Folder</b> e dê um nome ao arquivo no campo onde está escrito <b>NoName</b>. Clique em <b>OK</b>.</p>
+<figure><img src="img/exp1-gabedit-run.webp" alt="Janela para rodar o cálculo" loading="lazy" style="max-width:440px"></figure>
+<p>Clique na aba <b>[nome do arquivo].out</b> para ver a saída. Os ícones ao lado ajudam a navegar; <b>Update/end</b> mostra a última linha do arquivo naquele momento.</p>
+<figure><img src="img/exp1-gabedit-saida.webp" alt="Saída do ORCA no GABEDIT" loading="lazy"></figure>
+<p>O cálculo leva poucos segundos. Ao final, procure sempre as duas últimas linhas, que dizem se o cálculo terminou normalmente e quanto tempo levou:</p>
+<div class="codeblock"><pre><code>****ORCA TERMINATED NORMALLY****
+TOTAL RUN TIME: 0 days 0 hours 0 minutes 11 seconds 352 msec</code></pre></div>
+<p>Há dois tipos de erro num cálculo:</p>
+<ul>
+  <li><b>De sintaxe:</b> o programa confere o input e avisa se encontrar problemas. Por exemplo, apague o asterisco que fecha as coordenadas e rode
+    de novo com outro nome. A última linha será:
+    <div class="codeblock"><pre><code>Error: &#x27;END&#x27; expected in COORDS/XYZ</code></pre></div>
+    O programa não dá a solução, mas indica que o final das coordenadas cartesianas está errado.</li>
+  <li><b>De cálculo:</b> dificuldades que o programa encontra ao fazer o cálculo.</li>
+</ul>
+<p>Um ponto importante são as iterações <b>SCF</b> (<i>self-consistent field</i>, campo autoconsistente). Um orbital molecular (Ψ) é uma combinação
+linear de orbitais atômicos (φ), cada um multiplicado por um coeficiente que indica sua contribuição:
+Ψ = c₁φ₁ + c₂φ₂ + … + cₙφₙ. O ciclo SCF otimiza esses coeficientes a cada iteração, e a energia do sistema diminui até convergir.
+Aqui usamos a opção <b>TightSCF</b>. Se tudo der certo, aparece a mensagem de sucesso no fim do bloco:</p>
+<div class="codeblock"><pre><code>--------------
+SCF ITERATIONS
+--------------
+ITER       Energy         Delta-E        Max-DP      RMS-DP      [F,P]     Damp
+               ***  Starting incremental Fock matrix formation  ***
+  0   -113.2078036340   0.000000000000 0.04812624  0.00323957  0.0953923 0.7000
+  1   -113.2112903068  -0.003486672775 0.03889590  0.00262768  0.0685840 0.7000
+                               ***Turning on DIIS***
+  2   -113.2139006030  -0.002610296187 0.09690121  0.00656073  0.0491587 0.0000
+  3   -113.2255267247  -0.011626121665 0.01300483  0.00106392  0.0074897 0.0000
+                      *** Initiating the SOSCF procedure ***
+  ...
+  9   -113.22078023  -0.0000000089  0.000008  0.000010  0.000017  0.000002
+               **** Energy Check signals convergence ****
+
+                *****************************************************
+                *                     SUCCESS                       *
+                *           SCF CONVERGED AFTER  10 CYCLES          *
+                *****************************************************</code></pre></div>
+
+<h3 id="propriedades">Buscando as propriedades</h3>
+<p>A energia final de um cálculo single-point vem sempre depois de <b>FINAL SINGLE POINT ENERGY</b>. A unidade é hartree (1 hartree = 627,51 kcal/mol).</p>
+<div class="codeblock"><pre><code>-------------------------   --------------------
+FINAL SINGLE POINT ENERGY      -113.220780228673
+-------------------------   --------------------</code></pre></div>
+<p>As energias dos orbitais moleculares aparecem em ordem crescente. <b>NO</b> é o número do orbital (aqui, de 0 a 21), <b>OCC</b> é quantos
+elétrons ocupam o orbital e <b>E</b> é a energia, em duas unidades:</p>
+<div class="codeblock"><pre><code>----------------
+ORBITAL ENERGIES
+----------------
+  NO   OCC          E(Eh)            E(eV)
+   0   2.0000     -20.484693      -557.4168
+   1   2.0000     -11.287149      -307.1389
+   2   2.0000      -1.420357       -38.6499
+   3   2.0000      -0.859353       -23.3842
+   4   2.0000      -0.695012       -18.9122
+   5   2.0000      -0.636172       -17.3111
+   6   2.0000      -0.528511       -14.3815
+   7   2.0000      -0.430493       -11.7143
+   8   0.0000       0.147610         4.0167
+   9   0.0000       0.268158         7.2970
+  ...
+  21   0.0000       3.323714        90.4429</code></pre></div>
+<ul>
+  <li><b>MOLECULAR ORBITALS:</b> os coeficientes dos orbitais atômicos que compõem cada orbital molecular.</li>
+  <li><b>MULLIKEN</b>, <b>LOEWDIN</b> e <b>MAYER POPULATION ANALYSIS:</b> três análises da densidade eletrônica, que fornecem as cargas dos átomos e dos orbitais atômicos e as ordens de ligação.</li>
+  <li><b>DIPOLE MOMENT:</b> o dipolo da molécula, em u.a. e em Debye:</li>
+</ul>
+<div class="codeblock"><pre><code>Magnitude (a.u.)       :      1.03492
+Magnitude (Debye)      :      2.63056</code></pre></div>
+
+<h3 id="orbitais">Visualizando os orbitais moleculares</h3>
+<p>Clique no ícone de visualização de propriedades e depois em <b>M</b> &gt; <b>Orbitals</b> &gt; <b>Read geometry and orbitals from a ORCA output file</b>.
+Abra o arquivo <code>[nome do arquivo].out</code>. A molécula aparece, junto com uma janela com todos os orbitais. Selecione o <b>HOMO</b> (aqui, o orbital 8) e clique em <b>OK</b>.</p>
+<figure><img src="img/exp1-gabedit-orbitais.webp" alt="Seleção de orbitais no GABEDIT" loading="lazy"></figure>
+<p>Na janela seguinte, mantenha os valores padrão e clique em <b>OK</b>. Na próxima, ajuste o <i>isovalue</i> para 0,05 e clique em <b>OK</b>.</p>
+<div class="figrow"><figure><img src="img/exp1-grid-orbital.webp" alt="Grade para o orbital" loading="lazy"></figure><figure><img src="img/exp1-isovalor.webp" alt="Isovalor" loading="lazy" style="max-width:260px"></figure></div>
+<figure><img src="img/exp1-homo-cortado.webp" alt="HOMO cortado" loading="lazy" style="max-width:260px"><figcaption>HOMO com a superfície cortada</figcaption></figure>
+<p>Note que o orbital aparece cortado: é preciso aumentar a região do gráfico. Vá em <b>M</b> &gt; <b>Orbitals</b> &gt; <b>Selection</b>, selecione o HOMO
+novamente e clique em <b>OK</b>. Mude o valor <b>Minimum</b> da linha <b>First direction</b> para −6; os outros valores são atualizados.
+Repita os passos e você terá o orbital completo. Para deixar a superfície transparente: <b>M</b> &gt; <b>Render</b> &gt; <b>Surface</b> &gt; <b>Transparency</b>.</p>
+<div class="figrow"><figure><img src="img/exp1-homo.webp" alt="HOMO" loading="lazy"><figcaption>HOMO</figcaption></figure><figure><img src="img/exp1-homo-transparente.webp" alt="HOMO transparente" loading="lazy"><figcaption>HOMO com transparência</figcaption></figure></div>
+<p>O HOMO-1 corresponde à ligação π. Ele e o LUMO estão abaixo:</p>
+<div class="figrow"><figure><img src="img/exp1-homo-menos-1.webp" alt="HOMO-1" loading="lazy"><figcaption>HOMO-1</figcaption></figure><figure><img src="img/exp1-lumo.webp" alt="LUMO" loading="lazy"><figcaption>LUMO</figcaption></figure></div>
+
+<h3 id="outras">Outras funções importantes</h3>
+<ul>
+  <li><b>Vetor do dipolo:</b> <b>M</b> &gt; <b>Render</b> &gt; <b>Show dipole</b>.</li>
+  <li><b>Numeração dos átomos:</b> <b>M</b> &gt; <b>Render</b> &gt; <b>Label</b> &gt; <b>Show numbers</b>. Os números seguem a ordem dos átomos nas
+    coordenadas cartesianas, o que ajuda a associar as cargas calculadas a cada átomo.</li>
+</ul>
+<div class="figrow"><figure><img src="img/exp1-dipolo.webp" alt="Vetor do dipolo" loading="lazy"><figcaption>Dipolo</figcaption></figure><figure><img src="img/exp1-numeracao.webp" alt="Numeração dos átomos" loading="lazy"><figcaption>Numeração dos átomos</figcaption></figure></div>
+
+<h3 id="mep">Mapa de potencial eletrostático</h3>
+<p>A forma de uma molécula é determinada pela sua densidade eletrônica. Mapas de potencial eletrostático mostram regiões de densidade
+positiva e negativa e ajudam a entender propriedades físicas e químicas, como reatividade, polaridade e interações entre proteínas e ligantes.</p>
+<ol>
+  <li>Clique em <b>Orbitals</b> &gt; <b>Read geometry and orbitals from a ORCA output file</b>, abra o <code>.out</code> e clique em <b>Close</b> na janela de orbitais.</li>
+  <li>Leia a densidade eletrônica: <b>M</b> &gt; <b>Density</b> &gt; <b>Electronic</b>. Siga os mesmos passos dos orbitais: mude o <b>Minimum</b>
+    da <b>First direction</b> para −6, clique em <b>OK</b> e ajuste o <i>isovalue</i> para 0,05. A densidade ainda aparece sem cores.</li>
+  <li>Associe a densidade às cargas: <b>M</b> &gt; <b>MEP</b> &gt; <b>Mapped the current grid</b> &gt; <b>MEP using partial charges</b>. Ajuste o
+    <i>isovalue</i> para 0,05 e clique em <b>OK</b>. Na escala de cores, digite −0.18 no lado vermelho (negativo) e 0.18 no lado azul (positivo), com <kbd>Enter</kbd>.</li>
+</ol>
+<div class="figrow"><figure><img src="img/exp1-densidade.webp" alt="Densidade eletrônica" loading="lazy"><figcaption>Densidade eletrônica</figcaption></figure><figure><img src="img/exp1-mep.webp" alt="Mapa de potencial eletrostático" loading="lazy"><figcaption>Potencial eletrostático</figcaption></figure></div>
+    <nav class="pager"></nav>
+  </main>
+</div>
+<script src="../assets/js/site.js"></script>
+</body>
+</html>

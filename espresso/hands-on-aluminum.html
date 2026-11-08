@@ -14,7 +14,6 @@
 <aside class="sidebar" data-docs="espresso"></aside>
 <main class="content">
 <h1>Al (metal)</h1>
-<p class="byline">Tradução do <i>Quantum Espresso Tutorial</i> de Pranab Das. As menções em primeira pessoa são do autor original.</p>
 <h2 id="variable-cell-relaxation">Relaxação com célula variável</h2>
 <p>Primeiro vamos relaxar a célula e escolher a constante de rede adequada para o pseudopotencial escolhido. No caso de metais, é importante incluir os parâmetros de <em>smearing</em> no arquivo de entrada.</p>
 <div class="codeblock"><div class="code-title">src/al/al_vc_relax.in</div><pre><code>&amp;CONTROL
@@ -202,10 +201,6 @@ K_POINTS {crystal_b}
 <div class="codeblock"><pre><code>pwtk al.degauss.pwtk</code></pre></div>
 <img alt="al-smearing" loading="lazy" src="img/al-smearing.webp"/>
 <p>Vemos que os alargamentos <code>m-v</code> e <code>m-p</code> permitem uma convergência mais rápida e suave, dependendo menos do valor de <code>degauss</code> que o alargamento gaussiano. O número ao lado de cada legenda é o número de pontos k uniformes na malha de Monkhorst-Pack.</p>
-<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/aluminum" rel="noopener" target="_blank">DOS and bandstructure for Aluminum (metal)</a>,
-do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
-<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" rel="noopener" target="_blank">CC BY 4.0</a>.
-Alterações: texto traduzido para o português; layout e navegação adaptados.</p>
 <nav class="pager"></nav>
 </main>
 </div>

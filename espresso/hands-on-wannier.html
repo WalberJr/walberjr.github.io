@@ -14,7 +14,6 @@
 <aside class="sidebar" data-docs="espresso"></aside>
 <main class="content">
 <h1>Método de Wannier</h1>
-<p class="byline">Tradução do <i>Quantum Espresso Tutorial</i> de Pranab Das. As menções em primeira pessoa são do autor original.</p>
 <h2 id="obtain-bandstructure-of-silicon">Obter a estrutura de bandas do silício</h2>
 <ol>
 <li>Fazer o cálculo <code>scf</code> com o <code>pw.x</code> do Quantum ESPRESSO</li>
@@ -25,7 +24,7 @@ mpirun -np 4 ${QE_PATH}/pw.x -i pw.scf.silicon.in &gt; pw.scf.silicon.out</code>
 <li>Fazer o cálculo <code>nscf</code> com o <code>pw.x</code>. Em vez de uma malha automática de pontos k, precisamos fornecer uma lista explícita de pontos k. Essa lista pode ser gerada com o script Perl incluído no pacote Wannier, na pasta <em>utility</em>.</li>
 </ol>
 <div class="codeblock"><pre><code>WANNIER_PATH="/workspaces/wannier90-3.1.0"
-# directly append the k-points to the input file
+# acrescenta os pontos k direto no arquivo de entrada
 ${WANNIER_PATH}/utility/kmesh.pl 4 4 4 &gt;&gt; pw.nscf.silicon.in</code></pre></div>
 <p>Rode o cálculo <code>nscf</code>:</p>
 <div class="codeblock"><pre><code>mpirun -np 4 ${QE_PATH}/pw.x -i pw.nscf.silicon.in &gt; pw.nscf.silicon.out</code></pre></div>
@@ -36,7 +35,7 @@ ${WANNIER_PATH}/utility/kmesh.pl 4 4 4 &gt;&gt; pw.nscf.silicon.in</code></pre><
 <ol start="4">
 <li>Gere o input nnkp:</li>
 </ol>
-<div class="codeblock"><pre><code># we can just provide the seedname or seedname.win
+<div class="codeblock"><pre><code># basta informar o seedname ou seedname.win
 ${WANNIER_PATH}/wannier90.x -pp silicon</code></pre></div>
 <ol start="5">
 <li>Crie o arquivo de entrada do <code>pw2wan</code> e gere as projeções iniciais:</li>
@@ -51,10 +50,6 @@ ${WANNIER_PATH}/wannier90.x -pp silicon</code></pre></div>
 <ul>
 <li><a href="https://sites.google.com/view/hubbard-koopmans/program" rel="noopener" target="_blank">https://sites.google.com/view/hubbard-koopmans/program</a></li>
 </ul>
-<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/wannier" rel="noopener" target="_blank">Wannier method</a>,
-do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
-<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" rel="noopener" target="_blank">CC BY 4.0</a>.
-Alterações: texto traduzido para o português; layout e navegação adaptados.</p>
 <nav class="pager"></nav>
 </main>
 </div>

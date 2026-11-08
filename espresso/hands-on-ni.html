@@ -14,7 +14,6 @@
 <aside class="sidebar" data-docs="espresso"></aside>
 <main class="content">
 <h1>Ni (bandas com spin)</h1>
-<p class="byline">Tradução do <i>Quantum Espresso Tutorial</i> de Pranab Das. As menções em primeira pessoa são do autor original.</p>
 <p>Preparamos o arquivo de entrada <code>pw_scf_ni.in</code> e rodamos o cálculo:</p>
 <div class="codeblock"><pre><code>mpirun -np 8 pw.x -i pw_scf_ni.in &gt; pw_scf_ni.out</code></pre></div>
 <p>Prepare o arquivo de entrada do cálculo de bandas <code>pw_bands_ni.in</code> com o caminho de pontos k desejado e rode:</p>
@@ -30,10 +29,6 @@
 <div class="codeblock"><pre><code>mpirun -np 8 bands.x -i bands_ni_up.in &gt; bands_ni_up.out</code></pre></div>
 <p>Da mesma forma, processamos as bandas de spin down com <code>spin_component=2</code> e fazemos o gráfico.</p>
 <img alt="ni-spin-bands" loading="lazy" src="img/ni-spin-bands.webp"/>
-<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/ni" rel="noopener" target="_blank">Spin polarized bandstructure calculation for nickel</a>,
-do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
-<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" rel="noopener" target="_blank">CC BY 4.0</a>.
-Alterações: texto traduzido para o português; layout e navegação adaptados.</p>
 <nav class="pager"></nav>
 </main>
 </div>

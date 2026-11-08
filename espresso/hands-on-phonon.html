@@ -14,7 +14,6 @@
 <aside class="sidebar" data-docs="espresso"></aside>
 <main class="content">
 <h1>Dispersão de fônons</h1>
-<p class="byline">Tradução do <i>Quantum Espresso Tutorial</i> de Pranab Das. As menções em primeira pessoa são do autor original.</p>
 <p>No Quantum ESPRESSO, a dispersão de fônons é calculada com o programa <code>ph.x</code>, uma implementação da <a href="https://doi.org/10.1103/RevModPhys.73.515" rel="noopener" target="_blank">teoria de perturbação do funcional da densidade (DFPT)</a>.</p>
 <p>Estes são os passos para calcular a dispersão de fônons:</p>
 <p>(1) fazer o cálculo SCF com o <code>pw.x</code></p>
@@ -76,9 +75,9 @@ K_POINTS {automatic}
 /</code></pre></div>
 <p>Rode o cálculo:</p>
 <div class="codeblock"><pre><code>mpirun -np 4 ph.x -i ph.GaAs.in &gt; ph.GaAs.out</code></pre></div>
-<p>O cálculo acima é computacionalmente exigente. Nosso exemplo levou cerca de um dia inteiro num processador de quatro núcleos de 2,6 GHz.</p>
+<p>O cálculo acima é computacionalmente exigente. Este exemplo levou cerca de um dia inteiro num processador de quatro núcleos de 2,6 GHz.</p>
 <div class="admonition"><b>ℹ️ Info</b><p>Você pode retomar um cálculo <code>ph.x</code> interrompido com <code>recover = .true.</code> na namelist <code>INPUTPH</code>. Para encerrar de forma limpa um cálculo em andamento, crie um arquivo vazio com o nome <code>{prefix}.EXIT</code>.</p></div>
-<p>(3) fazer a transformada de Fourier inversa da matriz dinâmica para obter as componentes no espaço real, com o <code>q2r.x</code>. Este é o nosso arquivo de entrada:</p>
+<p>(3) fazer a transformada de Fourier inversa da matriz dinâmica para obter as componentes no espaço real, com o <code>q2r.x</code>. Este é o arquivo de entrada:</p>
 <div class="codeblock"><div class="code-title">src/GaAs-phonon/q2r.GaAs.in</div><pre><code>&amp;INPUT
   fildyn = 'GaAs.dyn'
   zasr = 'crystal'
@@ -111,7 +110,7 @@ data = np.loadtxt("../src/GaAs-phonon/GaAs.freq.gp")
 nbands = data.shape[1] - 1
 for band in range(nbands):
     plt.plot(data[:, 0], data[:, band + 1], linewidth=1, alpha=0.5, color='k')
-# High symmetry k-points (check matdyn.GaAs.in)
+# pontos k de alta simetria (veja matdyn.GaAs.in)
 plt.axvline(x=data[0, 0], linewidth=0.5, color='k', alpha=0.5)
 plt.axvline(x=data[20, 0], linewidth=0.5, color='k', alpha=0.5)
 plt.axvline(x=data[40, 0], linewidth=0.5, color='k', alpha=0.5)
@@ -154,10 +153,6 @@ plt.show()</code></pre></div>
 <li><a href="https://indico.ictp.it/event/8301/other-view?view=ictptimetable" rel="noopener" target="_blank">Escola de Física Elétron-Fônon por Primeiros Princípios (2018)</a> (<a href="https://www.youtube.com/playlist?list=PLYc-eBoIpXTIboem6dKTYD1-1m0sMYnYz" rel="noopener" target="_blank">aulas em vídeo no YouTube</a>)</li>
 <li><a href="https://github.com/nguyen-group/QE-SSP" rel="noopener" target="_blank">https://github.com/nguyen-group/QE-SSP</a></li>
 </ul>
-<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/phonon" rel="noopener" target="_blank">Phonon dispersion</a>,
-do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
-<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" rel="noopener" target="_blank">CC BY 4.0</a>.
-Alterações: texto traduzido para o português; layout e navegação adaptados.</p>
 <nav class="pager"></nav>
 </main>
 </div>

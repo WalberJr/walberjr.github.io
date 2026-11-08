@@ -14,7 +14,6 @@
 <aside class="sidebar" data-docs="espresso"></aside>
 <main class="content">
 <h1>Acoplamento spin-órbita</h1>
-<p class="byline">Tradução do <i>Quantum Espresso Tutorial</i> de Pranab Das. As menções em primeira pessoa são do autor original.</p>
 <p>Para considerar o efeito do acoplamento spin-órbita no cálculo de estrutura eletrônica no Quantum ESPRESSO, precisamos usar um pseudopotencial totalmente relativístico. As seguintes configurações são necessárias no card <code>&amp;SYSTEM</code>:</p>
 <div class="codeblock"><pre><code>&amp;SYSTEM
     ...
@@ -56,7 +55,7 @@
 <p>Garanta também que os cortes de energia e de densidade de carga são suficientes. Alguns pseudopotenciais podem ter problemas; experimente os de outra biblioteca. Em sistemas metálicos, lembre-se de aplicar <em>smearing</em>.</p>
 <div class="admonition warn"><b>⚠️ Erros comuns</b><ul>
 <li>
-<p><strong>S matrix not positive definite:</strong> esse erro pode aparecer por instabilidade numérica causada por átomos sobrepostos. Verifique as posições atômicas com cuidado. Num dos meus cálculos, o erro foi resolvido aumentando o <code>ecutrho</code>.</p>
+<p><strong>S matrix not positive definite:</strong> esse erro pode aparecer por instabilidade numérica causada por átomos sobrepostos. Verifique as posições atômicas com cuidado. Em alguns casos, o erro é resolvido aumentando o <code>ecutrho</code>.</p>
 </li>
 <li>
 <p>O LDA+U simplificado não está implementado com magnetismo <code>noncol</code>; use <code>lda_plus_u_kind=1</code>.</p>
@@ -160,10 +159,6 @@ K_POINTS tpiba_b
 mpirun -np 8 pw.x -i pw.bands.GaAs_soc.in &gt; pw.bands.GaAs_soc.out
 mpirun -np 8 bands.x -i pp.bands.GaAs_soc.in &gt; pp.bands.GaAs_soc.out</code></pre></div>
 <img alt="GaAs-soc-bands" loading="lazy" src="img/GaAs-soc-bands.webp"/>
-<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/soc" rel="noopener" target="_blank">Spin-Orbit Coupling</a>,
-do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
-<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" rel="noopener" target="_blank">CC BY 4.0</a>.
-Alterações: texto traduzido para o português; layout e navegação adaptados.</p>
 <nav class="pager"></nav>
 </main>
 </div>

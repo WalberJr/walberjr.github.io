@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Experimento 3: busca conformacional · Tutorial ORCA</title>
+  <link rel="icon" href="../assets/img/favicon.png">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+</head>
+<body data-root="../" data-section="orca">
+<div class="docs">
+  <aside class="sidebar" data-docs="orca"></aside>
+  <main class="content">
+<h1>Experimento 3: busca conformacional</h1>
+<p>A busca conformacional é fundamental para entender propriedades de moléculas orgânicas e investigar mecanismos de reação. Por exemplo,
+os parâmetros de RMN de uma molécula são a média, ponderada pela distribuição de Boltzmann, sobre todos os confôrmeros de menor energia.
+Da mesma forma, estudar a reatividade de uma molécula pressupõe encontrar os intermediários e estados de transição de menor energia.</p>
+
+<h2 id="exercicio-5">Exercício 5: busca conformacional manual</h2>
+<p>Vamos estudar o equilíbrio ceto-enólico do acetaldeído (<b>I</b>) e de sua forma enólica (<b>II</b>) com DFT. Por ser um caso simples, a busca
+dos confôrmeros pode ser feita manualmente. Calcule os confôrmeros indicados abaixo com o funcional <b>B3LYP</b>, associado à correção empírica
+de dispersão <b>D3BJ</b>, e a função de base <b>6-31G*</b>. Depois, a partir das energias, indique o equilíbrio em porcentagens pela
+distribuição de Boltzmann a 25 °C.</p>
+<figure><img src="img/exp3-ceto-enol.webp" alt="Isômeros e confôrmeros do acetaldeído" loading="lazy"></figure>
+<p>Crie os inputs das geometrias com os passos anteriores. Algumas palavras-chave não estão disponíveis no GABEDIT e precisam ser editadas à mão;
+a linha do método deve ficar assim (uma boa escolha para buscas conformacionais em geral):</p>
+<div class="codeblock"><pre><code>! B3LYP TIGHTSCF Opt D3BJ 6-31G*</code></pre></div>
+
+<h3 id="boltzmann">Distribuição de Boltzmann</h3>
+<p>A população de cada espécie <i>i</i> é dada por</p>
+<p>\[ p_i = \frac{e^{-\Delta E_i / RT}}{\sum_j e^{-\Delta E_j / RT}} \]</p>
+<p>onde Δ<i>E</i><sub>i</sub> é a energia relativa ao confôrmero mais estável, <i>R</i> = 8,314 J mol⁻¹ K⁻¹ e <i>T</i> = 298,15 K.
+Lembre-se de converter as energias de hartree (1 Eh = 2625,5 kJ/mol).</p>
+<div class="codeblock"><div class="code-title">boltzmann.py</div><pre><code>import numpy as np
+
+# energias finais em hartree: SUBSTITUA pelos valores dos seus cálculos
+E = {&quot;I&quot;: -153.000000, &quot;II-180&quot;: -152.980000, &quot;II-0&quot;: -152.982000}
+R, T = 8.314462618e-3, 298.15  # kJ/(mol K), K
+dE = {k: (v - min(E.values())) * 2625.4996 for k, v in E.items()}  # kJ/mol
+w = {k: np.exp(-v / (R * T)) for k, v in dE.items()}
+for k in E:
+    print(f&quot;{k:7s} dE = {dE[k]:7.2f} kJ/mol   p = {100 * w[k] / sum(w.values()):6.2f} %&quot;)</code></pre></div>
+<div class="admonition tip"><b>❓ Questões para o relatório</b><ol><li>Calcule as porcentagens de cada espécie pela distribuição de Boltzmann.</li><li>Explique a conformação preferencial da cetona I e das formas enólicas (efeitos estéreos e eletrônicos).</li></ol></div>
+    <nav class="pager"></nav>
+  </main>
+</div>
+<script src="../assets/js/site.js"></script>
+<script defer src="../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../assets/vendor/katex/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})"></script>
+</body>
+</html>

@@ -14,10 +14,9 @@
 <aside class="sidebar" data-docs="espresso"></aside>
 <main class="content">
 <h1>Cálculo de DOS</h1>
-<p class="byline">Tradução do <i>Quantum Espresso Tutorial</i> de Pranab Das. As menções em primeira pessoa são do autor original.</p>
 <p>A densidade de estados eletrônicos é uma propriedade importante de um material.</p>
 <p>\(\rho(E)dE\) = número de estados eletrônicos no intervalo de energia \((E, E + dE)\)</p>
-<p>Antes de rodar o cálculo da densidade de estados (DOS), precisamos</p>
+<p>Antes de rodar o cálculo da densidade de estados (DOS), precisamos:</p>
 <ol>
 <li>
 <p>Fazer um cálculo autoconsistente (scf) com íons fixos. Em cálculos DFT com ondas planas, a densidade eletrônica é expressa por funções da forma \(\exp (i \textbf{k} \cdot \textbf{r})\), com energia dada por \(E = \hbar^2k^2/2m\).</p>
@@ -29,7 +28,7 @@
 <p>Por fim, a DOS é obtida integrando a densidade eletrônica no espaço \(k\).</p>
 </li>
 </ol>
-<p>Criei um novo arquivo de entrada (<code>pw.scf.silicon_dos.in</code>), praticamente igual ao input scf anterior, com alguns parâmetros modificados. Todos os arquivos de entrada estão no meu <a href="https://github.com/pranabdas/espresso/" rel="noopener" target="_blank">repositório no GitHub</a>. Usamos a constante de rede obtida no cálculo de relaxação. Não devemos usar diretamente a constante de rede experimental/real: dependendo do método e do pseudopotencial, isso pode gerar tensão no sistema. Aumentamos o <code>ecutwfc</code> para ter mais precisão. Rodamos o cálculo scf:</p>
+<p>Usamos um novo arquivo de entrada (<code>pw.scf.silicon_dos.in</code>), praticamente igual ao input scf anterior, com alguns parâmetros modificados. Todos os arquivos de entrada estão no <a href="https://github.com/pranabdas/espresso/" rel="noopener" target="_blank">repositório pranabdas/espresso no GitHub</a>. Usamos a constante de rede obtida no cálculo de relaxação. Não devemos usar diretamente a constante de rede experimental/real: dependendo do método e do pseudopotencial, isso pode gerar tensão no sistema. Aumentamos o <code>ecutwfc</code> para ter mais precisão. Rodamos o cálculo scf:</p>
 <div class="codeblock"><pre><code>pw.x &lt; pw.scf.silicon_dos.in &gt; pw.scf.silicon_dos.out</code></pre></div>
 <p>Em seguida, preparamos o arquivo de entrada do cálculo <code>nscf</code>. Nele adicionamos <code>occupations</code> no card <code>&amp;system</code> como <code>tetrahedra</code> (adequado para cálculo de DOS). Aumentamos o número de pontos k para 12 × 12 × 12, com a opção automatic. Também especificamos <code>nosym = .TRUE.</code> para evitar a geração de pontos k adicionais em casos de baixa simetria. <code>outdir</code> e <code>prefix</code> devem ser os mesmos da etapa <code>scf</code>, pois algumas entradas e saídas são lidas da etapa anterior. Aqui podemos definir um <code>nbnd</code> maior para calcular bandas desocupadas. O número de bandas ocupadas aparece na saída do <code>scf</code> como <em>number of Kohn-Sham states</em>.</p>
 <div class="codeblock"><pre><code>pw.x &lt; pw.nscf.silicon_dos.in &gt; pw.nscf.silicon_dos.out</code></pre></div>
@@ -49,10 +48,10 @@ from matplotlib import rcParamsDefault
 import numpy as np
 %matplotlib inline
 
-# load data
+# carrega os dados
 energy, dos, idos = np.loadtxt('../src/silicon/si_dos.dat', unpack=True)
 
-# make plot
+# faz o gráfico
 plt.figure(figsize = (12, 6))
 plt.plot(energy, dos, linewidth=0.75, color='red')
 plt.yticks([])
@@ -67,10 +66,6 @@ plt.show()</code></pre></div>
 <img alt="silicon-dos" loading="lazy" src="img/silicon-dos.webp"/>
 <div class="admonition"><b>❗ Importante</b><p>Em um conjunto de cálculos, o <code>prefix</code> precisa ser o mesmo. Por exemplo, os cálculos <strong>nscf</strong> e <strong>bands</strong> usam a função de onda calculada pelo <strong>scf</strong>. Ao fazer cálculos diferentes (por exemplo, quando você muda um parâmetro e quer ver o efeito), use uma pasta de saída diferente ou um <code>prefix</code> único para cada cálculo, para que as saídas não se misturem.</p></div>
 <div class="admonition tip"><b>💡 Dica</b><p>Às vezes é importante amostrar o ponto \(\Gamma\) no cálculo de DOS (por exemplo, quando as bandas de condução cruzam a superfície de Fermi apenas em \(\Gamma\)). Nesses casos, use uma malha de pontos k ímpar (por exemplo, 9✕9✕5).</p></div>
-<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/dos" rel="noopener" target="_blank">Density of States calculation</a>,
-do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
-<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" rel="noopener" target="_blank">CC BY 4.0</a>.
-Alterações: texto traduzido para o português; layout e navegação adaptados.</p>
 <nav class="pager"></nav>
 </main>
 </div>

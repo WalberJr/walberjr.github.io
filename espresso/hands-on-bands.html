@@ -14,8 +14,7 @@
 <aside class="sidebar" data-docs="espresso"></aside>
 <main class="content">
 <h1>Estrutura de bandas</h1>
-<p class="byline">Tradução do <i>Quantum Espresso Tutorial</i> de Pranab Das. As menções em primeira pessoa são do autor original.</p>
-<p>Antes de rodar o cálculo <code>bands</code>, precisamos fazer um <a href="hands-on-scf.html">cálculo autoconsistente</a> de ponto único. Temos o nosso input <code>scf</code> com alguns parâmetros novos:</p>
+<p>Antes de rodar o cálculo <code>bands</code>, precisamos fazer um <a href="hands-on-scf.html">cálculo autoconsistente</a> de ponto único. O input <code>scf</code> traz alguns parâmetros novos:</p>
 <div class="codeblock"><div class="code-title">src/silicon/pw.scf.silicon_bands.in</div><pre><code>&amp;CONTROL
   calculation = 'scf',
   restart_mode = 'from_scratch',
@@ -130,7 +129,7 @@ plt.rcParams["figure.dpi"]=150
 plt.rcParams["figure.facecolor"]="white"
 plt.rcParams["figure.figsize"]=(8, 6)
 
-# load data
+# carrega os dados
 data = np.loadtxt('../src/silicon/si_bands.dat.gnu')
 
 k = np.unique(data[:, 0])
@@ -140,13 +139,13 @@ for band in range(len(bands)):
     plt.plot(k, bands[band, :], linewidth=1, alpha=0.5, color='k')
 plt.xlim(min(k), max(k))
 
-# Fermi energy
+# energia de Fermi
 plt.axhline(6.6416, linestyle=(0, (5, 5)), linewidth=0.75, color='k', alpha=0.5)
-# High symmetry k-points (check bands_pp.out)
+# pontos k de alta simetria (veja bands_pp.out)
 plt.axvline(0.8660, linewidth=0.75, color='k', alpha=0.5)
 plt.axvline(1.8660, linewidth=0.75, color='k', alpha=0.5)
 plt.axvline(2.2196, linewidth=0.75, color='k', alpha=0.5)
-# text labels
+# rótulos de texto
 plt.xticks(ticks= [0, 0.8660, 1.8660, 2.2196, 3.2802], \
            labels=['L', '$\Gamma$', 'X', 'U', '$\Gamma$'])
 plt.ylabel("Energy (eV)")
@@ -182,10 +181,6 @@ inorganic scintillator materials., ACS Combinatorial Science. (2011)
 </li>
 </ol>
 </section>
-<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/bands" rel="noopener" target="_blank">Bandstructure Calculation</a>,
-do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
-<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" rel="noopener" target="_blank">CC BY 4.0</a>.
-Alterações: texto traduzido para o português; layout e navegação adaptados.</p>
 <nav class="pager"></nav>
 </main>
 </div>

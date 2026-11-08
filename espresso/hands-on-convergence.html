@@ -14,28 +14,27 @@
 <aside class="sidebar" data-docs="espresso"></aside>
 <main class="content">
 <h1>Testes de convergência</h1>
-<p class="byline">Tradução do <i>Quantum Espresso Tutorial</i> de Pranab Das. As menções em primeira pessoa são do autor original.</p>
 <h2 id="convergence-with-cutoff-energy-using-pwtk">Convergência com a energia de corte usando o PWTK</h2>
 <p>Podemos automatizar o cálculo autoconsistente anterior variando um parâmetro. Digamos que queremos ver a energia total do sistema para vários valores de <code>ecutwfc</code>. Podemos fazer isso com um script <code>pwtk</code>.</p>
-<div class="codeblock"><div class="code-title">src/silicon/si_scf_ecutoff.pwtk</div><pre><code># load the pw.x input from file
+<div class="codeblock"><div class="code-title">src/silicon/si_scf_ecutoff.pwtk</div><pre><code># carrega o input do pw.x a partir do arquivo
 load_fromPWI pw.scf.silicon.in
 
-# open a file for writing resulting total energies
+# abre um arquivo para gravar as energias totais
 set fid [open etot_vs_ecutwfc.dat w]
 
-# loop over different "ecut" values
+# laço sobre diferentes valores de "ecut"
 foreach ecut { 12 16 20 24 28 32 } {
 
     # name of I/O files: $name.in &amp; $name.out
     set name si_scf_ecutwfc-$ecut
 
-    # set the pw.x "ecutwfc" variable
+    # define a variável "ecutwfc" do pw.x
     SYSTEM "ecutwfc = $ecut"
 
-    # run the pw.x calculation
+    # roda o cálculo do pw.x
     runPW $name.in
 
-    # extract the "total energy" and write it to file
+    # extrai a "total energy" e grava no arquivo
     set Etot [::pwtk::pwo::totene $name.out]
     puts $fid "$ecut $Etot"
 }
@@ -107,7 +106,7 @@ done</code></pre></div>
 # or
 sh si_script.sh</code></pre></div>
 <p>Podemos fazer o gráfico da energia em função da energia de corte e escolher um valor razoável.</p>
-<div class="admonition warn"><b>⚠️ Cuidado</b><p>No início tive problemas para rodar o script no macOS. Isso aconteceu porque o formato do arquivo estava como DOS. O formato do arquivo pode ser verificado assim:</p><p>Abra o arquivo no editor <strong>vi</strong>: <code>vi si_script.sh</code>. No modo de comando do <strong>vi</strong> (tecla ESC), digite <code>:set ff?</code>; isso mostra o formato do arquivo. Para mudar o formato, use o comando <code>:set fileformat=unix</code></p></div>
+<div class="admonition warn"><b>⚠️ Cuidado</b><p>Se o script não rodar (no macOS, por exemplo), verifique se o arquivo não está no formato DOS, com quebras de linha do Windows. O formato pode ser verificado assim:</p><p>Abra o arquivo no editor <strong>vi</strong>: <code>vi si_script.sh</code>. No modo de comando do <strong>vi</strong> (tecla ESC), digite <code>:set ff?</code>; isso mostra o formato do arquivo. Para mudar o formato, use o comando <code>:set fileformat=unix</code></p></div>
 <h2 id="convergence-test-against-the-number-of-k-points">Teste de convergência em relação ao número de pontos k</h2>
 <p>Podemos fazer um teste de convergência semelhante para outro parâmetro e escolher o melhor valor para ele. Aqui vamos variar o número de pontos k na malha de Monkhorst-Pack.</p>
 <div class="codeblock"><div class="code-title">src/silicon/si_scf_kpoints.pwtk</div><pre><code>load_fromPWI pw.scf.silicon.in
@@ -139,10 +138,10 @@ plt.show()</code></pre></div>
 <p>Calculando a energia total em função da constante de rede.</p>
 <div class="codeblock"><div class="code-title">src/silicon/si_scf_alat.pwtk</div><pre><code>load_fromPWI pw.scf.silicon.in
 
-# please uncomment &amp; insert value as determined in the "ecutwfc" exercise
+# descomente e insira o valor obtido no exercício de "ecutwfc"
 SYSTEM { ecutwfc = 30 }
 
-# please uncomment &amp; insert values as determined in the "kpoints" exercise
+# descomente e insira os valores obtidos no exercício de "kpoints"
 K_POINTS automatic { 6 6 6 1 1 1 }
 
 
@@ -169,10 +168,6 @@ plt.ylabel('Etot (Ry)')
 plt.legend(frameon=False)
 plt.show()</code></pre></div>
 <img alt="etot-vs-alat" loading="lazy" src="img/etot-vs-alat.webp"/>
-<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/convergence" rel="noopener" target="_blank">Convergence testing</a>,
-do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
-<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" rel="noopener" target="_blank">CC BY 4.0</a>.
-Alterações: texto traduzido para o português; layout e navegação adaptados.</p>
 <nav class="pager"></nav>
 </main>
 </div>
