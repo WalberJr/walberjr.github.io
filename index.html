@@ -3,10 +3,113 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Meu primeiro site</title>
+  <title>Walber Jr. · Química Computacional</title>
+  <meta name="description" content="Página pessoal de Walber Jr.: química computacional, KStudio, tutoriais de Quantum ESPRESSO e ORCA.">
+  <link rel="icon" href="assets/img/favicon.png">
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
-<body>
-  <h1>Bem-vindo ao meu site!</h1>
-  <p>Este é meu espaço para compartilhar meus projetos.</p>
+<body data-root="./" data-section="home">
+
+<main class="container">
+
+  <!-- ============ SOBRE ============ -->
+  <section class="hero" id="sobre">
+    <img class="avatar" src="assets/img/walber.webp" alt="Foto de Walber Jr.">
+    <div>
+      <h1>Olá, eu sou <span class="k">Walber Jr.</span></h1>
+      <!-- EDITE: seu cargo / instituição -->
+      <p class="role">Química Computacional · DFT · Modelagem de Materiais e Moléculas</p>
+      <p>
+        Trabalho com simulações de estrutura eletrônica usando <b>Quantum ESPRESSO</b> e <b>ORCA</b>.
+        Desenvolvo o <a href="#kstudio">KStudio</a>, uma plataforma para criar inputs e analisar
+        resultados desses programas, e mantenho aqui tutoriais em português para quem está começando.
+      </p>
+      <div class="links">
+        <a class="btn primary" href="espresso/index.html">⚛️ Tutorial Quantum ESPRESSO</a>
+        <a class="btn" href="orca/index.html">🧪 Tutorial ORCA</a>
+        <a class="btn" href="https://github.com/WalberJr" target="_blank" rel="noopener">GitHub</a>
+        <!-- EDITE: troque "#" pelos seus links -->
+        <a class="btn" href="#">Lattes</a>
+        <a class="btn" href="#">ORCID</a>
+        <a class="btn" href="#">Google Scholar</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PESQUISA ============ -->
+  <section id="pesquisa">
+    <h2 class="title">Áreas de pesquisa</h2>
+    <div class="grid">
+      <div class="card"><div class="icon">🔬</div><h3>Teoria do Funcional da Densidade</h3>
+        <p>Cálculos de estrutura eletrônica em sólidos e moléculas: bandas, DOS, PDOS e propriedades de estado fundamental.</p></div>
+      <div class="card"><div class="icon">🧬</div><h3>Química Quântica Molecular</h3>
+        <p>Otimização de geometria, frequências vibracionais, espectros IR/Raman/UV-Vis, RMN e termoquímica.</p></div>
+      <div class="card"><div class="icon">💻</div><h3>Ferramentas Computacionais</h3>
+        <p>Desenvolvimento de softwares para automatizar a criação de inputs e a análise de resultados.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ KSTUDIO ============ -->
+  <section id="kstudio">
+    <h2 class="title">Projeto em destaque</h2>
+    <div class="card project">
+      <img src="assets/img/kstudio.png" alt="Logo do KStudio">
+      <div>
+        <h3><b>K</b>Studio</h3>
+        <p>Plataforma para construir inputs e analisar resultados do ORCA e do Quantum ESPRESSO:
+          estruturas 3D, convergência de SCF e otimização, orbitais, espectros IR/Raman/UV-Vis, RMN,
+          termoquímica, bandas, DOS e PDOS.</p>
+        <span class="tag">ORCA</span><span class="tag">Quantum ESPRESSO</span>
+        <span class="tag">Visualização 3D</span><span class="tag">Espectros</span>
+        <!-- EDITE: coloque o link do KStudio quando estiver publicado -->
+        <div class="links"><a class="btn primary" href="#">📂 Conhecer o KStudio</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TUTORIAIS ============ -->
+  <section id="tutoriais">
+    <h2 class="title">Tutoriais</h2>
+    <div class="grid">
+      <a class="card" href="espresso/index.html"><div class="icon">⚛️</div><h3>Quantum ESPRESSO</h3>
+        <p>Do zero ao cálculo de bandas e DOS: instalação, SCF, convergência, otimização e pós-processamento.</p>
+        <span class="tag">Disponível</span></a>
+      <a class="card" href="orca/index.html"><div class="icon">🧪</div><h3>ORCA</h3>
+        <p>Cálculos moleculares: otimização, frequências, TD-DFT, RMN e termoquímica.</p>
+        <span class="tag wip">🚧 Em construção</span></a>
+    </div>
+  </section>
+
+  <!-- ============ PUBLICAÇÕES ============ -->
+  <section id="publicacoes">
+    <h2 class="title">Publicações</h2>
+    <div class="card">
+      <!-- EDITE: copie um bloco .pub para cada artigo -->
+      <div class="pub">
+        <div class="t">Título do artigo</div>
+        <div class="m">Autores · <i>Nome da Revista</i>, Ano · <a href="#">DOI</a></div>
+      </div>
+      <div class="pub">
+        <div class="t">Título do artigo</div>
+        <div class="m">Autores · <i>Nome da Revista</i>, Ano · <a href="#">DOI</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTATO ============ -->
+  <section id="contato">
+    <h2 class="title">Contato</h2>
+    <p class="muted">Quer conversar sobre pesquisa, colaborações ou o KStudio? Fale comigo:</p>
+    <div class="links">
+      <a class="btn" href="https://github.com/WalberJr" target="_blank" rel="noopener">GitHub</a>
+      <!-- EDITE: seu e-mail e LinkedIn -->
+      <a class="btn" href="mailto:seu-email@exemplo.com">✉️ E-mail</a>
+      <a class="btn" href="#">LinkedIn</a>
+    </div>
+  </section>
+
+</main>
+
+<script src="assets/js/site.js"></script>
 </body>
 </html>
