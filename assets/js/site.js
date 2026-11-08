@@ -84,6 +84,13 @@
     pre.appendChild(b);
   });
 
+  // ---- Download do KStudio: escolhe o arquivo conforme o sistema do visitante ----
+  const dl = document.getElementById("kstudio-dl");
+  if (dl && /Linux/i.test(navigator.userAgent) && !/Android/i.test(navigator.userAgent)) {
+    dl.href = dl.href.replace("KStudio-Windows-x64.exe", "KStudio-Linux-x86_64.AppImage");
+    document.getElementById("kstudio-os").textContent = "Linux";
+  }
+
   // ---- Rodapé ----
   const f = document.createElement("footer");
   f.innerHTML = `© ${new Date().getFullYear()} Walber Gonçalves Guimarães Júnior · Hospedado no GitHub Pages`;
