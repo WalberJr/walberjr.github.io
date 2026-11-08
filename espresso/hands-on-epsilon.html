@@ -1,21 +1,22 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Constante dielétrica · Tutorial Quantum ESPRESSO</title>
-  <link rel="icon" href="../assets/img/favicon.png">
-  <link rel="stylesheet" href="../assets/css/style.css">
-  <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Constante dielétrica · Tutorial Quantum ESPRESSO</title>
+<link href="../assets/img/favicon.png" rel="icon"/>
+<link href="../assets/css/style.css" rel="stylesheet"/>
+<link href="../assets/vendor/katex/katex.min.css" rel="stylesheet"/>
 </head>
 <body data-root="../" data-section="espresso">
 <div class="docs">
-  <aside class="sidebar" data-docs="espresso"></aside>
-  <main class="content">
+<aside class="sidebar" data-docs="espresso"></aside>
+<main class="content">
 <h1>Constante dielétrica</h1>
-<p>First we perform self consistent field calculation:</p>
+<p class="byline">Tradução do <i>Quantum Espresso Tutorial</i> de Pranab Das. As menções em primeira pessoa são do autor original.</p>
+<p>Primeiro fazemos o cálculo autoconsistente:</p>
 <div class="codeblock"><pre><code>mpirun -np 4 pw.x -i pw.scf.silicon_epsilon.in &gt; pw.scf.silicon_epsilon.out</code></pre></div>
-
 <div class="codeblock"><div class="code-title">src/silicon/pw.scf.silicon_epsilon.in</div><pre><code>&amp;CONTROL
   calculation = 'scf',
   prefix = 'silicon',
@@ -49,24 +50,12 @@ ATOMIC_POSITIONS (alat)
 
 K_POINTS automatic
 6 6 6 0 0 0</code></pre></div>
-<p>Especially, notice following changes:</p>
+<p>Observe em especial as seguintes mudanças:</p>
 <div class="codeblock"><pre><code>  nbnd = 20
   nosym = .true.
   noinv = .true.</code></pre></div>
-<p>We turn off the automatic reduction of k-points that <code>pw.x</code> does by using
-crystal symmetries (<code>nosym = .true.</code> and <code>noinv = .true.</code>). This is because
-<code>epsilon.x</code> does not recognize crystal symmetries, therefore the entire list of
-k-points in the grid is needed. Secondly, we calculate a larger number of bands
-(20), since we are interested in interband transitions. Also, note that
-<code>epsilon.x</code> doesn't support the reduction of the k-points grid into the
-irreducible Brillouin zone, so the PW runs must be performed with a uniform
-k-points grid and all k-points weights must be equal to each other, i.e. in the
-k-points card the k-points coordinates must be given manually in <code>crystal</code> or
-<code>alat</code> or <code>bohr</code>, but not with the <code>automatic</code> option. However, the automatic
-k-points option seems to work with <code>nosym = .true.</code> and <code>noinv = .true.</code>. If
-required, we can perform <code>nscf</code> calculation with finer k-grid.</p>
-<p>Next step is to prepare the input file for <code>epsilon.x</code>:</p>
-
+<p>Desligamos a redução automática de pontos k que o <code>pw.x</code> faz usando as simetrias do cristal (<code>nosym = .true.</code> e <code>noinv = .true.</code>). Isso porque o <code>epsilon.x</code> não reconhece simetrias cristalinas, então é preciso a lista completa de pontos k da malha. Em segundo lugar, calculamos um número maior de bandas (20), pois nos interessam as transições interbanda. Note também que o <code>epsilon.x</code> não aceita a redução da malha de pontos k à zona de Brillouin irredutível; por isso, os cálculos PW devem usar uma malha uniforme de pontos k, todos com o mesmo peso. Ou seja, no card de pontos k as coordenadas devem ser dadas manualmente em <code>crystal</code>, <code>alat</code> ou <code>bohr</code>, e não com a opção <code>automatic</code>. Ainda assim, a opção automática parece funcionar com <code>nosym = .true.</code> e <code>noinv = .true.</code>. Se necessário, podemos fazer um cálculo <code>nscf</code> com uma malha de pontos k mais fina.</p>
+<p>O próximo passo é preparar o arquivo de entrada do <code>epsilon.x</code>:</p>
 <div class="codeblock"><div class="code-title">src/silicon/epsilon.si.in</div><pre><code>&amp;inputpp
   outdir = "./tmp/"
   prefix = "silicon"
@@ -81,14 +70,9 @@ required, we can perform <code>nscf</code> calculation with finer k-grid.</p>
   wmax = 30.0
   nw = 1000
 /</code></pre></div>
-<p>The variables <code>smeartype</code> and <code>intersmear</code> define the numerical approximation
-used to represent the Dirac delta functions in the expression for \(\epsilon_2\)
-given above. For metals, we also need to use <code>intrasmear</code> broadening parameter,
-usually 0.1 - 0.2 eV. The variables <code>wmin</code>, <code>wmax</code> and <code>nw</code> define the energy
-grid for the dielectric function. All the energy variables are in eV.</p>
+<p>As variáveis <code>smeartype</code> e <code>intersmear</code> definem a aproximação numérica usada para representar as funções delta de Dirac na expressão de \(\epsilon_2\) dada acima. Para metais, também é preciso usar o parâmetro de alargamento <code>intrasmear</code>, geralmente de 0,1 a 0,2 eV. As variáveis <code>wmin</code>, <code>wmax</code> e <code>nw</code> definem a malha de energia da função dielétrica. Todas as energias estão em eV.</p>
 <div class="codeblock"><pre><code>mpirun -np 4 epsilon.x -i epsilon.si.in &gt; epsilon.si.out</code></pre></div>
-<p>We will see the results are saved in separate <code>.dat</code> files. We can plot the real
-(\(\epsilon_1\)) and imaginary (\(\epsilon_2\)) parts of dielectric constants:</p>
+<p>Os resultados são salvos em arquivos <code>.dat</code> separados. Podemos fazer o gráfico das partes real (\(\epsilon_1\)) e imaginária (\(\epsilon_2\)) da constante dielétrica:</p>
 <div class="codeblock"><pre><code>import matplotlib.pyplot as plt
 from matplotlib import rcParamsDefault
 import numpy as np
@@ -109,17 +93,9 @@ plt.ylabel("$\\epsilon_1~/~\\epsilon_2$")
 plt.legend(frameon=False)
 plt.show()</code></pre></div>
 <img alt="silicon-epsilon" loading="lazy" src="img/silicon-epsilon.webp"/>
-<div class="admonition warn"><b>⚠️ Atenção</b><p>Ultra-soft pseudopotentials do not work with <code>epsilon.x</code>. Use norm-conserving
-pseudopotentials. Also note that the above example is not tested against the
-k-mesh. We usually need finer k-mesh for \(\epsilon\) to converge. By default the
-maximum number of k-points is set to 40000 in Quantum Espresso, if we need more
-k-points, we can change <a href="https://gitlab.com/QEF/q-e/-/blob/develop/Modules/parameters.f90" rel="noopener" target="_blank">Modules/parameters.f90</a> and recompile
-Quantum Espresso.</p></div>
-<h2 id="joint-density-of-states">Joint Density of States</h2>
-<p>JDOS gives the number of states for a pair of initial and final states as a
-function of frequency (in eV). A larger intensity indicates a larger absorption
-in the absorption spectra. Input file for JDOS calculation:</p>
-
+<div class="admonition warn"><b>⚠️ Atenção</b><p>Pseudopotenciais ultrasoft não funcionam com o <code>epsilon.x</code>; use pseudopotenciais de norma conservada. Note também que o exemplo acima não foi testado quanto à malha de pontos k. Em geral, \(\epsilon\) precisa de uma malha mais fina para convergir. Por padrão, o número máximo de pontos k no Quantum ESPRESSO é 40000; se precisar de mais, altere o <a href="https://gitlab.com/QEF/q-e/-/blob/develop/Modules/parameters.f90" rel="noopener" target="_blank">Modules/parameters.f90</a> e recompile o Quantum ESPRESSO.</p></div>
+<h2 id="joint-density-of-states">Densidade de estados conjunta</h2>
+<p>A JDOS dá o número de estados para um par de estados inicial e final em função da frequência (em eV). Uma intensidade maior indica maior absorção no espectro de absorção. Arquivo de entrada para o cálculo da JDOS:</p>
 <div class="codeblock"><div class="code-title">src/silicon/epsilon.jdossi.in</div><pre><code>&amp;INPUTPP
   outdir      = "./tmp/"
   prefix      = "silicon"
@@ -135,27 +111,24 @@ in the absorption spectra. Input file for JDOS calculation:</p>
   nw         = 1000
   shift      = 0.0
 /</code></pre></div>
-<p>Sequence of steps to run:</p>
+<p>Sequência de passos:</p>
 <div class="codeblock"><pre><code>mpirun -np 16 pw.x -in pw.scf.silicon_epsilon.in &gt; pw.scf.silicon_epsilon.out
 mpirun -np 16 pw.x -in pw.nscf.silicon_epsilon.in &gt; pw.nscf.silicon_epsilon.out
 mpirun -np 16 epsilon.x -in epsilon.jdos.si.in &gt; epsilon.jdos.si.out</code></pre></div>
 <img alt="silicon-epsilon-jdos" loading="lazy" src="img/silicon-epsilon-jdos.webp"/>
-<h2 id="resources">Resources</h2>
+<h2 id="resources">Recursos</h2>
 <ul>
-<li>
-<a href="https://pranabdas.github.io/espresso/assets/files/eps_man-ab3fac19eb366509dd129c37fbf94ac0.pdf" rel="noopener" target="_blank">Epsilon.x Manual</a>
-</li>
+<li><a href="https://pranabdas.github.io/espresso/assets/files/eps_man-ab3fac19eb366509dd129c37fbf94ac0.pdf" rel="noopener" target="_blank">Manual do epsilon.x</a></li>
 </ul>
-<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/epsilon" target="_blank" rel="noopener">Dielectric constant</a>,
+<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/epsilon" rel="noopener" target="_blank">Dielectric constant</a>,
 do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
-<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY 4.0</a>.
-Alterações: layout, título e navegação traduzidos para o português.</p>
-    <nav class="pager"></nav>
-  </main>
+<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" rel="noopener" target="_blank">CC BY 4.0</a>.
+Alterações: texto traduzido para o português; layout e navegação adaptados.</p>
+<nav class="pager"></nav>
+</main>
 </div>
 <script src="../assets/js/site.js"></script>
-<script defer src="../assets/vendor/katex/katex.min.js"></script>
-<script defer src="../assets/vendor/katex/contrib/auto-render.min.js"
-  onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})"></script>
+<script defer="" src="../assets/vendor/katex/katex.min.js"></script>
+<script defer="" onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})" src="../assets/vendor/katex/contrib/auto-render.min.js"></script>
 </body>
 </html>

@@ -1,21 +1,21 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Dinâmica molecular (PW) · Tutorial Quantum ESPRESSO</title>
-  <link rel="icon" href="../assets/img/favicon.png">
-  <link rel="stylesheet" href="../assets/css/style.css">
-  <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Dinâmica molecular (PW) · Tutorial Quantum ESPRESSO</title>
+<link href="../assets/img/favicon.png" rel="icon"/>
+<link href="../assets/css/style.css" rel="stylesheet"/>
+<link href="../assets/vendor/katex/katex.min.css" rel="stylesheet"/>
 </head>
 <body data-root="../" data-section="espresso">
 <div class="docs">
-  <aside class="sidebar" data-docs="espresso"></aside>
-  <main class="content">
+<aside class="sidebar" data-docs="espresso"></aside>
+<main class="content">
 <h1>Dinâmica molecular (PW)</h1>
-<p>We will start from the relaxation calculation, and use the relaxed structure for
-<code>md</code> calculation. Below in the input file for <code>md</code> calculation:</p>
-
+<p class="byline">Tradução do <i>Quantum Espresso Tutorial</i> de Pranab Das. As menções em primeira pessoa são do autor original.</p>
+<p>Vamos partir do cálculo de relaxação e usar a estrutura relaxada no cálculo <code>md</code>. Abaixo está o arquivo de entrada do cálculo <code>md</code>:</p>
 <div class="codeblock"><div class="code-title">src/H2O-md-pw/pw.md.h2o.in</div><pre><code>&amp;control
     calculation  = 'md'
     restart_mode = 'from_scratch'
@@ -61,18 +61,17 @@ H             4.9999969634        5.3994146451        4.2330291511
 
 K_POINTS automatic
   1 1 1 0 0 0</code></pre></div>
-<p>Quantum ESPRESSO output file can be loaded in Xcrysden for visualization.</p>
+<p>O arquivo de saída do Quantum ESPRESSO pode ser aberto no XCrySDen para visualização.</p>
 <img alt="Molecular dynamics of H2O" loading="lazy" src="img/H2O-molecular-dynamics.gif"/>
-<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/molecular-dynamics-pw" target="_blank" rel="noopener">Molecular Dynamics (using pw.x)</a>,
+<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/molecular-dynamics-pw" rel="noopener" target="_blank">Molecular Dynamics (using pw.x)</a>,
 do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
-<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY 4.0</a>.
-Alterações: layout, título e navegação traduzidos para o português.</p>
-    <nav class="pager"></nav>
-  </main>
+<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" rel="noopener" target="_blank">CC BY 4.0</a>.
+Alterações: texto traduzido para o português; layout e navegação adaptados.</p>
+<nav class="pager"></nav>
+</main>
 </div>
 <script src="../assets/js/site.js"></script>
-<script defer src="../assets/vendor/katex/katex.min.js"></script>
-<script defer src="../assets/vendor/katex/contrib/auto-render.min.js"
-  onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})"></script>
+<script defer="" src="../assets/vendor/katex/katex.min.js"></script>
+<script defer="" onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})" src="../assets/vendor/katex/contrib/auto-render.min.js"></script>
 </body>
 </html>

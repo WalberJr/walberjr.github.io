@@ -1,47 +1,36 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Acoplamento spin-órbita · Tutorial Quantum ESPRESSO</title>
-  <link rel="icon" href="../assets/img/favicon.png">
-  <link rel="stylesheet" href="../assets/css/style.css">
-  <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Acoplamento spin-órbita · Tutorial Quantum ESPRESSO</title>
+<link href="../assets/img/favicon.png" rel="icon"/>
+<link href="../assets/css/style.css" rel="stylesheet"/>
+<link href="../assets/vendor/katex/katex.min.css" rel="stylesheet"/>
 </head>
 <body data-root="../" data-section="espresso">
 <div class="docs">
-  <aside class="sidebar" data-docs="espresso"></aside>
-  <main class="content">
+<aside class="sidebar" data-docs="espresso"></aside>
+<main class="content">
 <h1>Acoplamento spin-órbita</h1>
-<p>In order to consider spin orbit coupling effect in our electronic structure
-calculation in quantum espresso, we need to use a full relativistic pseudo
-potential. Following settings are needed in the <code>&amp;SYSTEM</code> card:</p>
+<p class="byline">Tradução do <i>Quantum Espresso Tutorial</i> de Pranab Das. As menções em primeira pessoa são do autor original.</p>
+<p>Para considerar o efeito do acoplamento spin-órbita no cálculo de estrutura eletrônica no Quantum ESPRESSO, precisamos usar um pseudopotencial totalmente relativístico. As seguintes configurações são necessárias no card <code>&amp;SYSTEM</code>:</p>
 <div class="codeblock"><pre><code>&amp;SYSTEM
     ...
     noncolin = .true.
     lspinorb = .true.
     ...
 /</code></pre></div>
-<h2 id="non-collinear-spin">Non collinear spin</h2>
-<p>In simple spin polarized calculation (<code>nspin=2</code>), the spin quantum number (up or
-down) is considered in the calculation. In non-collinear case, the spin has more
-degrees of freedom, and can be oriented in any direction. Non-collinear
-magnetism is quite common in nature, where the spins are not parallel
-(ferromagnetic) or anti-parallel (antiferromagnetic), rather they orient in
-spirals, helicoids, canted or disordered. Non-collinear magnetism can occur
-because of geometric frustration of magnetic interaction. It can also occur due
-to the magnetocrystalline anisotropy which is the result of interaction between
-the spin and lattice interaction. This relativistic effect comes via spin-orbit
-coupling.</p>
-<p>We can constrain the magnetic moment:</p>
+<h2 id="non-collinear-spin">Spin não colinear</h2>
+<p>Num cálculo simples com polarização de spin (<code>nspin=2</code>), considera-se o número quântico de spin (up ou down). No caso não colinear, o spin tem mais graus de liberdade e pode apontar em qualquer direção. O magnetismo não colinear é bastante comum na natureza: os spins não ficam paralelos (ferromagnético) nem antiparalelos (antiferromagnético), mas se orientam em espirais, helicoides, de forma inclinada ou desordenada. Ele pode surgir pela frustração geométrica da interação magnética, ou pela anisotropia magnetocristalina, resultado da interação entre o spin e a rede. Esse efeito relativístico vem do acoplamento spin-órbita.</p>
+<p>Podemos restringir o momento magnético:</p>
 <div class="codeblock"><pre><code>&amp;SYSTEM
   ...
   constrained_magnetization = 'atomic direction'
   ...
 /</code></pre></div>
-<p>Starting magnetization can be specified by <code>angle1</code> (angle with \(z\) axis) and
-<code>angle2</code> (angle of projection in \(xy\)-plane and with \(x\)-axis). Also check the
-penalty function (\(\lambda\)).</p>
+<p>A magnetização inicial pode ser definida por <code>angle1</code> (ângulo com o eixo \(z\)) e <code>angle2</code> (ângulo da projeção no plano \(xy\) com o eixo \(x\)). Veja também a função de penalidade (\(\lambda\)).</p>
 <div class="codeblock"><pre><code>&amp;SYSTEM
   ...
   angle1(i) = 0.0d0
@@ -49,44 +38,31 @@ penalty function (\(\lambda\)).</p>
   lambda = 0.5
   ...
 /</code></pre></div>
-<p><code>i</code> is the index of the atom in <code>ATOMIC_SPECIES</code> card.</p>
-<h2 id="strategy-for-convergence">Strategy for convergence</h2>
-<p>Spin-orbit coupling calculations are often hard to converge. Use a smaller
-<code>mixing_beta</code> for such calculations. First perform a collinear calculation with
-non-relativistic pseudopotential, and then start from the obtained charge
-density to perform non-colinear spin orbit calculation.</p>
+<p><code>i</code> é o índice do átomo no card <code>ATOMIC_SPECIES</code>.</p>
+<h2 id="strategy-for-convergence">Estratégia de convergência</h2>
+<p>Cálculos com acoplamento spin-órbita costumam ser difíceis de convergir. Use um <code>mixing_beta</code> menor nesses cálculos. Primeiro faça um cálculo colinear com pseudopotencial não relativístico e, depois, parta da densidade de carga obtida para fazer o cálculo spin-órbita não colinear.</p>
 <div class="codeblock"><pre><code>&amp;ELECTRONS
   ...
   mixing_beta = 1.0000000000d-01
   startingpot = 'file'
 /</code></pre></div>
-<p>When starting with non-collinear calculation from an existing charge density
-file from a collinear lsda calculation, we need to set <code>lforcet=.true.</code>. It
-assumes previous density points in z direction, and rotates in the direction
-specified by <code>angle1</code> (initial magnetization angle with \(z\)-axis in degrees),
-and <code>angle2</code> (angle in degrees for projections in \(xy\)-plane and with \(x\)-axis).</p>
+<p>Ao iniciar um cálculo não colinear a partir de uma densidade de carga existente de um cálculo lsda colinear, é preciso definir <code>lforcet=.true.</code>. O programa supõe que a densidade anterior aponta na direção z e a gira para a direção definida por <code>angle1</code> (ângulo inicial da magnetização com o eixo \(z\), em graus) e <code>angle2</code> (ângulo, em graus, da projeção no plano \(xy\) com o eixo \(x\)).</p>
 <div class="codeblock"><pre><code>&amp;SYSTEM
 ...
   angle1(i) = 0.0
   angle2(i) = 0.0
   lforcet = .true.
 /</code></pre></div>
-<p>Also, make sure that energy and charge density cutoffs are sufficient. Certain
-pseudo potentials might have issues, try with pseudo potentials from a different
-library. In case of metallic systems, remember to apply smearing.</p>
-<div class="admonition warn"><b>Common Errors</b><ul>
+<p>Garanta também que os cortes de energia e de densidade de carga são suficientes. Alguns pseudopotenciais podem ter problemas; experimente os de outra biblioteca. Em sistemas metálicos, lembre-se de aplicar <em>smearing</em>.</p>
+<div class="admonition warn"><b>⚠️ Erros comuns</b><ul>
 <li>
-<p><strong>S matrix not positive definite:</strong> This error might appear due to numerical
-instability from overlapping atoms. Check atomic positions carefully. In one my
-calculations, this error was resolved after setting higher <code>ecutrho</code>.</p>
+<p><strong>S matrix not positive definite:</strong> esse erro pode aparecer por instabilidade numérica causada por átomos sobrepostos. Verifique as posições atômicas com cuidado. Num dos meus cálculos, o erro foi resolvido aumentando o <code>ecutrho</code>.</p>
 </li>
 <li>
-<p>Simplified LDA+U not implemented with <code>noncol</code> magnetism, use
-<code>lda_plus_u_kind=1</code>.</p>
+<p>O LDA+U simplificado não está implementado com magnetismo <code>noncol</code>; use <code>lda_plus_u_kind=1</code>.</p>
 </li>
 </ul></div>
-<h2 id="bandstructure-of-fe-with-soc">Bandstructure of Fe with SOC</h2>
-
+<h2 id="bandstructure-of-fe-with-soc">Estrutura de bandas do Fe com SOC</h2>
 <div class="codeblock"><div class="code-title">src/fe/pw.scf.fe_soc.in</div><pre><code>&amp;control
    calculation='scf'
    pseudo_dir = '../pseudos/',
@@ -123,10 +99,9 @@ Fe 0.0 0.0 0.0
 
 K_POINTS AUTOMATIC
 14 14 14 1 1 1</code></pre></div>
-<p>Run the scf calculation:</p>
+<p>Rode o cálculo scf:</p>
 <div class="codeblock"><pre><code>mpirun -np 8 pw.x -i pw.scf.fe_soc.in &gt; pw.scf.fe_soc.out</code></pre></div>
-<p>Prepare the input file for <code>nscf</code> <code>bands</code> calculation:</p>
-
+<p>Prepare o arquivo de entrada do cálculo <code>nscf</code> <code>bands</code>:</p>
 <div class="codeblock"><div class="code-title">src/fe/pw.bands.fe_soc.in</div><pre><code>&amp;control
    calculation='bands'
    pseudo_dir = '../pseudos/',
@@ -168,37 +143,32 @@ K_POINTS tpiba_b
 0.000  0.000  0.000  30  !gamma
 0.500  0.500  0.500  30  !P
 0.000  1.000  0.000   1  !H</code></pre></div>
-<p>Run the <code>bands</code> calculation:</p>
+<p>Rode o cálculo <code>bands</code>:</p>
 <div class="codeblock"><pre><code>mpirun -np 8 pw.x -i pw.bands.fe_soc.in &gt; pw.bands.fe_soc.out</code></pre></div>
-<p>Finally post process the bandstructure data:</p>
-
+<p>Por fim, pós-processe os dados da estrutura de bandas:</p>
 <div class="codeblock"><div class="code-title">src/fe/pp.bands.fe_soc.in</div><pre><code>&amp;BANDS
     outdir='./tmp/',
     prefix='fe',
     filband='fe_bands_soc.dat',
 /</code></pre></div>
-<p>In this case <code>spin_component</code> has been removed and we add <code>lsigma(3)=.true.</code>
-that instructs the program to compute the expectation value for the <code>z</code>
-component of the spin operator for each eigenfunction and save all values in
-the file <code>fe.noncolin.data.3</code>. All values in this case are either +1/2 or -1/2.</p>
+<p>Neste caso o <code>spin_component</code> foi removido e adicionamos <code>lsigma(3)=.true.</code>, que faz o programa calcular o valor esperado da componente <code>z</code> do operador de spin para cada autofunção e salvar todos os valores no arquivo <code>fe.noncolin.data.3</code>. Aqui, todos os valores são +1/2 ou -1/2.</p>
 <div class="codeblock"><pre><code>mpirun -np 8 bands.x -i pp.bands.fe_soc.in &gt; pp.bands.fe_soc.out</code></pre></div>
 <img alt="fe-soc-bands" loading="lazy" src="img/fe-soc-bands.webp"/>
-<h2 id="soc-calculation-for-gaas">SOC calculation for GaAs</h2>
-<p>Please check the respective <a href="https://github.com/pranabdas/espresso/tree/master/src/GaAs" rel="noopener" target="_blank">input files</a>.</p>
+<h2 id="soc-calculation-for-gaas">Cálculo com SOC para o GaAs</h2>
+<p>Veja os <a href="https://github.com/pranabdas/espresso/tree/master/src/GaAs" rel="noopener" target="_blank">arquivos de entrada</a> correspondentes.</p>
 <div class="codeblock"><pre><code>mpirun -np 8 pw.x -i pw.scf.GaAs_soc.in &gt; pw.scf.GaAs_soc.out
 mpirun -np 8 pw.x -i pw.bands.GaAs_soc.in &gt; pw.bands.GaAs_soc.out
 mpirun -np 8 bands.x -i pp.bands.GaAs_soc.in &gt; pp.bands.GaAs_soc.out</code></pre></div>
 <img alt="GaAs-soc-bands" loading="lazy" src="img/GaAs-soc-bands.webp"/>
-<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/soc" target="_blank" rel="noopener">Spin-Orbit Coupling</a>,
+<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/soc" rel="noopener" target="_blank">Spin-Orbit Coupling</a>,
 do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
-<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY 4.0</a>.
-Alterações: layout, título e navegação traduzidos para o português.</p>
-    <nav class="pager"></nav>
-  </main>
+<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" rel="noopener" target="_blank">CC BY 4.0</a>.
+Alterações: texto traduzido para o português; layout e navegação adaptados.</p>
+<nav class="pager"></nav>
+</main>
 </div>
 <script src="../assets/js/site.js"></script>
-<script defer src="../assets/vendor/katex/katex.min.js"></script>
-<script defer src="../assets/vendor/katex/contrib/auto-render.min.js"
-  onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})"></script>
+<script defer="" src="../assets/vendor/katex/katex.min.js"></script>
+<script defer="" onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})" src="../assets/vendor/katex/contrib/auto-render.min.js"></script>
 </body>
 </html>

@@ -14,6 +14,7 @@
 <aside class="sidebar" data-docs="espresso"></aside>
 <main class="content">
 <h1>Pseudopotenciais</h1>
+<p class="byline">Tradução do <i>Quantum Espresso Tutorial</i> de Pranab Das. As menções em primeira pessoa são do autor original.</p>
 <p>No Quantum ESPRESSO, o pseudopotencial substitui a interação elétron-íon real. O pseudopotencial descreve o núcleo atômico e todos os elétrons, exceto os da camada de valência mais externa. O potencial que varia rapidamente perto do caroço atômico é substituído por uma função mais suave, que reproduz muito bem o potencial longe do caroço. Com isso, são necessárias menos ondas planas na base para expandir a função de onda.</p>
 <div class="admonition tip"><b>💡 Dica</b><p>Experimente o meu <a href="https://pseudos.netlify.app/" rel="noopener" target="_blank">aplicativo web Pseudos</a>, onde você pode buscar pseudopotenciais pelo nome do elemento e baixá-los. No momento, estão incluídos os pseudopotenciais SSSP (Standard Solid State Pseudopotentials) e GBRV.</p></div>
 <p>Podemos escolher entre várias bibliotecas de pseudopotenciais. A escolha depende do problema investigado: por exemplo, se houver um elemento pesado no sistema e nos interessarem os efeitos de acoplamento spin-órbita, devemos escolher um pseudopotencial totalmente relativístico. É preciso verificar se o pseudopotencial escolhido reproduz corretamente as propriedades físicas. Algumas bibliotecas de pseudopotenciais:</p>
@@ -43,7 +44,7 @@
 <p>O "sol" de PBE-sol vem de <em>solid</em> (sólido). Para sistemas <em>bulk</em> deve-se usar PBE-sol, enquanto o PBE é adequado para moléculas. Para materiais 2D geralmente se escolhe o PBE, mas vale testar o PBE-sol.</p>
 </li>
 </ol></div>
-<div class="admonition warn"><b>Common error</b><p>Misturar pseudopotenciais PBE e PBE-sol resulta em <em>Error: conflicting values for igcx</em>. Ainda assim, é permitido misturar esses dois tipos: basta definir o funcional de troca e correlação desejado pelo <code>input_dft</code>, em vez de lê-lo do arquivo do pseudopotencial.</p></div>
+<div class="admonition warn"><b>⚠️ Erro comum</b><p>Misturar pseudopotenciais PBE e PBE-sol resulta em <em>Error: conflicting values for igcx</em>. Ainda assim, é permitido misturar esses dois tipos: basta definir o funcional de troca e correlação desejado pelo <code>input_dft</code>, em vez de lê-lo do arquivo do pseudopotencial.</p></div>
 <h2 id="resources">Recursos</h2>
 <ul>
 <li><a href="https://www.quantum-espresso.org/pseudopotentials/naming-convention" rel="noopener" target="_blank">Convenção de nomes dos arquivos de PP</a></li>

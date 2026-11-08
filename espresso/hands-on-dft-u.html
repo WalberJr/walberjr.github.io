@@ -1,46 +1,38 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Cálculo DFT+U · Tutorial Quantum ESPRESSO</title>
-  <link rel="icon" href="../assets/img/favicon.png">
-  <link rel="stylesheet" href="../assets/css/style.css">
-  <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Cálculo DFT+U · Tutorial Quantum ESPRESSO</title>
+<link href="../assets/img/favicon.png" rel="icon"/>
+<link href="../assets/css/style.css" rel="stylesheet"/>
+<link href="../assets/vendor/katex/katex.min.css" rel="stylesheet"/>
 </head>
 <body data-root="../" data-section="espresso">
 <div class="docs">
-  <aside class="sidebar" data-docs="espresso"></aside>
-  <main class="content">
+<aside class="sidebar" data-docs="espresso"></aside>
+<main class="content">
 <h1>Cálculo DFT+U</h1>
-<p>Electronic structure for transition metals (with localized \(d\) or \(f\)
-electrons) is not accurately described by standard DFT, and therefore the need
-for DFT+U formulation.</p>
+<p class="byline">Tradução do <i>Quantum Espresso Tutorial</i> de Pranab Das. As menções em primeira pessoa são do autor original.</p>
+<p>A estrutura eletrônica de metais de transição (com elétrons \(d\) ou \(f\) localizados) não é bem descrita pela DFT padrão, daí a necessidade da formulação DFT+U.</p>
 <div class="codeblock"><pre><code>&amp;SYSTEM
     ...
     lda_plus_u = .TRUE.
     Hubbard_u(i) = 2.0
     ...
 /</code></pre></div>
-<p>Here <code>i</code> refers to the atomic index in the <code>&amp;ATOMIC_SPECIES</code> card corresponding
-to each <code>ntyp</code>. We can specify <code>Hubbard_u(i)</code> corresponding to more than one
-atom in separate lines.</p>
-<p>There is also \(U_{eff} = U - J\) implementation in QE. \(J\) represents on-site
-exchange interaction. Number of \(J\) terms depends on the manifold of localized
-electrons. For \(p\), we have 1; for \(d\), we have 2; and for \(f\), we have 3
-terms.</p>
+<p>Aqui, <code>i</code> é o índice atômico no card <code>&amp;ATOMIC_SPECIES</code> correspondente a cada <code>ntyp</code>. Podemos definir <code>Hubbard_u(i)</code> para mais de um átomo, em linhas separadas.</p>
+<p>O QE também implementa \(U_{eff} = U - J\). \(J\) representa a interação de troca local. O número de termos \(J\) depende da camada de elétrons localizados: 1 para \(p\), 2 para \(d\) e 3 para \(f\).</p>
 <div class="codeblock"><pre><code>    ...
     lda_plus_u = .TRUE.
     lda_plus_u_kind = 1
     Hubbard_u(i) = U
     Hubbard_J(k, i) = J_{ki}
     ...</code></pre></div>
-<div class="admonition warn"><b>COMMON ERRORS</b><p>If you add <code>Hubbard_u</code> for elements that is not implemented to have \(U\) term
-in QE, you might see a "pseudopotential not yet inserted" error.</p></div>
-<h2 id="changes-to-input-syntax-in-v71">Changes to input syntax in v7.1</h2>
-<p>Starting from Quantum Espresso version <code>7.1</code>, there are changes to input syntax
-for DFT+U calculations. In the new version, instead of defining the necessary
-DFT+U parameters, now there is a new Hubbard card.</p>
+<div class="admonition warn"><b>⚠️ Erros comuns</b><p>Se você adicionar <code>Hubbard_u</code> para elementos em que o termo \(U\) não está implementado no QE, pode aparecer o erro "pseudopotential not yet inserted".</p></div>
+<h2 id="changes-to-input-syntax-in-v71">Mudanças na sintaxe do input na v7.1</h2>
+<p>A partir da versão <code>7.1</code> do Quantum ESPRESSO, a sintaxe do input para cálculos DFT+U mudou. Na nova versão, em vez de definir os parâmetros de DFT+U nas namelists, há um novo card Hubbard.</p>
 <div class="codeblock"><pre><code>&amp;system
 ...
 -  lda_plus_u = .true.,
@@ -54,106 +46,74 @@ DFT+U parameters, now there is a new Hubbard card.</p>
 + HUBBARD (ortho-atomic)
 + U Fe1-3d 4.6
 + U Fe2-3d 4.6</code></pre></div>
-<p>Please refer to the <a href="https://pranabdas.github.io/espresso/assets/files/Hubbard_input-63017ccb804e1b466d256baa695b3730.pdf" rel="noopener" target="_blank">
-qe-x.x/Doc/Hubbard_input.pdf</a> for details.</p>
-<h2 id="dft-calculation-for-feo">DFT calculation for FeO</h2>
-<p>We will first perform the standard DFT calculation.</p>
+<p>Consulte o <a href="https://pranabdas.github.io/espresso/assets/files/Hubbard_input-63017ccb804e1b466d256baa695b3730.pdf" rel="noopener" target="_blank"> qe-x.x/Doc/Hubbard_input.pdf</a> para os detalhes.</p>
+<h2 id="dft-calculation-for-feo">Cálculo DFT para o FeO</h2>
+<p>Primeiro faremos o cálculo DFT padrão.</p>
 <ol>
-<li>Perform the SCF calculation:</li>
+<li>Faça o cálculo SCF:</li>
 </ol>
 <div class="codeblock"><pre><code>pw.x -in feo_scf.in &gt; feo_scf.out</code></pre></div>
 <ol start="2">
-<li>Perform NSCF calculation with denser k-grid:</li>
+<li>Faça o cálculo NSCF com uma malha de pontos k mais densa:</li>
 </ol>
 <div class="codeblock"><pre><code>pw.x -in feo_nscf.in &gt; feo_nscf.out</code></pre></div>
 <ol start="3">
-<li>Perform P-DOS calculation:</li>
+<li>Faça o cálculo da PDOS:</li>
 </ol>
 <div class="codeblock"><pre><code>projwfc.x -in feo_projwfc.in &gt; feo_projwfc.out</code></pre></div>
 <img alt="feo-pdos-dft" loading="lazy" src="img/feo-pdos-dft.webp"/>
-<p>This gives us metallic density of states. In practice we get insulating FeO.</p>
-<h2 id="calculating-hubbard-u">Calculating Hubbard U</h2>
-
+<p>Isso nos dá uma densidade de estados metálica. Na prática, o FeO é isolante.</p>
+<h2 id="calculating-hubbard-u">Calculando o U de Hubbard</h2>
 <div class="codeblock"><div class="code-title">src/FeO/feo_hp.in</div><pre><code>&amp;inputhp
    prefix = 'FeO'
    outdir = './tmp/'
    nq1 = 1, nq2 = 1, nq3 = 1
 /</code></pre></div>
-<p>Perform a linear-response calculation using <code>hp.x</code> program:</p>
+<p>Faça um cálculo de resposta linear com o programa <code>hp.x</code>:</p>
 <div class="codeblock"><pre><code>hp.x -in feo_hp.in &gt; feo_hp.out</code></pre></div>
-<p>Check the file <code>FeO.Hubbard_parameters.dat</code>.</p>
+<p>Veja o arquivo <code>FeO.Hubbard_parameters.dat</code>.</p>
 <div class="admonition"><b>ℹ️ Info</b><ol>
 <li>
-<p>We need to check the convergence against q-mesh (as well as k-mesh in SCF
-calculation). Here \(1\times 1\times 1\) mesh is used. <strong>Important:</strong> <code>lda_plus_u</code>
-must be set to <code>.true.</code> during the SCF calculation, \(U\) may be set to zero.</p>
+<p>Precisamos verificar a convergência em relação à malha de q (e à malha de k no cálculo SCF). Aqui é usada uma malha \(1\times 1\times 1\). <strong>Importante:</strong> <code>lda_plus_u</code> deve ser <code>.true.</code> durante o cálculo SCF; \(U\) pode ser zero.</p>
 </li>
 <li>
-<p>We can update the obtained \(U\) value in our SCF calculation, and repeat
-linear response calculation until we have reached self consistency in \(U\) value.</p>
+<p>Podemos atualizar o valor de \(U\) obtido no cálculo SCF e repetir o cálculo de resposta linear até atingir a autoconsistência no valor de \(U\).</p>
 </li>
 <li>
-<p>To go even further one can check the convergence of geometry during \(U\)
-updates.</p>
+<p>Indo além, é possível verificar a convergência da geometria durante as atualizações de \(U\).</p>
 </li>
 <li>
-<p>There is also inter-site Hubbard correction DFT+U+V calculation. The results
-could be more closer to hybrid functionals like GW. The \(V\) can also be
-calculated using Quantum Espresso <strong>hp.x</strong> code.</p>
+<p>Há também a correção de Hubbard entre sítios, o cálculo DFT+U+V. Os resultados podem ficar mais próximos de métodos mais sofisticados, como funcionais híbridos ou GW. O \(V\) também pode ser calculado com o código <strong>hp.x</strong> do Quantum ESPRESSO.</p>
 </li>
 <li>
-<p>Obtained value of \(U\) depends on pseudopotential, Hubbard manifold (whether
-atomic, ortho-atomic etc.).</p>
+<p>O valor de \(U\) obtido depende do pseudopotencial e da variedade de Hubbard (atomic, ortho-atomic etc.).</p>
 </li>
 </ol></div>
-<p>Calculating the self-consistent Hubbard \(U\) parameter involves an iterative
-workflow that begins with a standard self-consistent field (SCF) calculation
-using a tiny initial value \(U_{in} \sim 0.001\). Next, Density Functional
-Perturbation Theory (DFPT) is performed via the <strong>hp.x</strong> module to calculate a
-new linear-response Hubbard parameter \(U_{out}\). This newly obtained \(U_{out}\)
-is then used to perform a structural optimization (relaxation) of the crystal
-system. Finally, the calculated \(U_{out}\) is compared against the initial
-\(U_{in}\); if they have converged to a matching value, self-consistency is
-successfully reached. If they do not match, the loop repeats by feeding the new
-\(U_{out}\) value and the updated <code>CELL_PARAMETERS</code> back into a fresh SCF
-calculation until convergence is achieved. A convergence tolerance of 10
-meV/site for \(U\) is typically recommended.</p>
-
-<div class="admonition warn"><b>⛔ Perigo</b><p>The above <strong>hp.x</strong> code is not suitable for closed cell systems (e.g., fully
-occupied d-shell element), in such cases this linear response method gives
-unrealistically large \(U\) value.</p></div>
-<h2 id="dftu-calculation">DFT+U calculation</h2>
-<p>We repeat the calculation after setting in the <code>&amp;SYSTEM</code> card:</p>
+<p>Calcular o parâmetro de Hubbard \(U\) autoconsistente envolve um fluxo iterativo que começa com um cálculo autoconsistente (SCF) padrão usando um valor inicial muito pequeno, \(U_{in} \sim 0.001\). Em seguida, a Teoria de Perturbação do Funcional da Densidade (DFPT) é aplicada pelo módulo <strong>hp.x</strong> para calcular um novo parâmetro de Hubbard de resposta linear, \(U_{out}\). Esse \(U_{out}\) é então usado numa otimização estrutural (relaxação) do cristal. Por fim, compara-se o \(U_{out}\) calculado com o \(U_{in}\) inicial; se convergirem para o mesmo valor, a autoconsistência foi atingida. Se não, o ciclo se repete, levando o novo \(U_{out}\) e os <code>CELL_PARAMETERS</code> atualizados para um novo cálculo SCF, até a convergência. Recomenda-se em geral uma tolerância de convergência de 10 meV/sítio para \(U\).</p>
+<div class="admonition warn"><b>⛔ Perigo</b><p>O código <strong>hp.x</strong> acima não é adequado para sistemas de camada fechada (por exemplo, elementos com a camada d totalmente ocupada); nesses casos, o método de resposta linear dá valores de \(U\) irrealisticamente grandes.</p></div>
+<h2 id="dftu-calculation">Cálculo DFT+U</h2>
+<p>Repetimos o cálculo após definir no card <code>&amp;SYSTEM</code>:</p>
 <div class="codeblock"><pre><code>Hubbard_U(1) = 4.6
 Hubbard_U(2) = 4.6</code></pre></div>
-<p>We repeat the above calculation and plot the results. Now we find insulating
-ground state.</p>
+<p>Repetimos o cálculo acima e fazemos os gráficos. Agora encontramos um estado fundamental isolante.</p>
 <img alt="feo-pdos-dft-u" loading="lazy" src="img/feo-pdos-dft-u.webp"/>
-<div class="admonition"><b>ℹ️ Info</b><p><code>U_projection_type = 'ortho-atomic'</code> might give more realistic result than the
-default 'atomic'.</p><p>When performing \(DFT+U\) calculation, the ground state might get stuck in a
-<strong>local minimum</strong>, in such cases we need to provide <code>starting_ns_eigenvalue</code> to
-help calculation reach desired/actual ground state. Please see <a href="https://pranabdas.github.io/espresso/assets/files/dft+u-Iurii-Timrov-5f6cc931c153910b3ba506e9f5f1b9d5.pdf" rel="noopener" target="_blank">these slides</a> by
-Dr. Iurii Timrov for a relevant example.</p></div>
-<div class="admonition tip"><b>💡 Dica</b><p>Here we have plotted the <code>lpdos</code> (local density of states). If we want to know
-the contribution of \(d_{z^2}, d_{yz}, d_{x^2-z^2}\) ect., we can find them from
-the <code>pdos</code> columns. Also there arise important Lowdin charges information in the
-<code>feo_projwfc.out</code> file.</p></div>
-<h2 id="resources">Resources</h2>
+<div class="admonition"><b>ℹ️ Info</b><p><code>U_projection_type = 'ortho-atomic'</code> pode dar resultados mais realistas que o padrão 'atomic'.</p><p>Num cálculo \(DFT+U\), o estado fundamental pode ficar preso num <strong>mínimo local</strong>; nesses casos, precisamos fornecer <code>starting_ns_eigenvalue</code> para ajudar o cálculo a chegar ao estado fundamental desejado/real. Veja <a href="https://pranabdas.github.io/espresso/assets/files/dft+u-Iurii-Timrov-5f6cc931c153910b3ba506e9f5f1b9d5.pdf" rel="noopener" target="_blank">estes slides</a> do Dr. Iurii Timrov para um exemplo.</p></div>
+<div class="admonition tip"><b>💡 Dica</b><p>Aqui fizemos o gráfico da <code>lpdos</code> (densidade de estados local). Para saber a contribuição de \(d_{z^2}, d_{yz}, d_{x^2-z^2}\) etc., use as colunas <code>pdos</code>. O arquivo <code>feo_projwfc.out</code> também traz informações importantes sobre as cargas de Löwdin.</p></div>
+<h2 id="resources">Recursos</h2>
 <ul>
-<li><a href="https://youtu.be/34mHl0Iw2_E" rel="noopener" target="_blank">Hands-on DFT+U by Iurii Timrov and Matteo Cococcioni</a></li>
-<li><a href="https://youtu.be/64JKOF5lh2U" rel="noopener" target="_blank">Hubbard parameter calculation</a></li>
+<li><a href="https://youtu.be/34mHl0Iw2_E" rel="noopener" target="_blank">DFT+U na prática, por Iurii Timrov e Matteo Cococcioni</a></li>
+<li><a href="https://youtu.be/64JKOF5lh2U" rel="noopener" target="_blank">Cálculo do parâmetro de Hubbard</a></li>
 <li><a href="https://sites.psu.edu/jgoffcapstone/overview/" rel="noopener" target="_blank">https://sites.psu.edu/jgoffcapstone/overview/</a></li>
 </ul>
-<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/dft-u" target="_blank" rel="noopener">DFT+U calculation</a>,
+<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/dft-u" rel="noopener" target="_blank">DFT+U calculation</a>,
 do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
-<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY 4.0</a>.
-Alterações: layout, título e navegação traduzidos para o português.</p>
-    <nav class="pager"></nav>
-  </main>
+<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" rel="noopener" target="_blank">CC BY 4.0</a>.
+Alterações: texto traduzido para o português; layout e navegação adaptados.</p>
+<nav class="pager"></nav>
+</main>
 </div>
 <script src="../assets/js/site.js"></script>
-<script defer src="../assets/vendor/katex/katex.min.js"></script>
-<script defer src="../assets/vendor/katex/contrib/auto-render.min.js"
-  onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})"></script>
+<script defer="" src="../assets/vendor/katex/katex.min.js"></script>
+<script defer="" onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})" src="../assets/vendor/katex/contrib/auto-render.min.js"></script>
 </body>
 </html>

@@ -14,6 +14,7 @@
 <aside class="sidebar" data-docs="espresso"></aside>
 <main class="content">
 <h1>Cálculo SCF</h1>
+<p class="byline">Tradução do <i>Quantum Espresso Tutorial</i> de Pranab Das. As menções em primeira pessoa são do autor original.</p>
 <p>Os parâmetros importantes do cálculo autoconsistente (que resolve a equação de Kohn-Sham de forma autoconsistente) são fornecidos por um arquivo de entrada. Nos inputs do QE há <code>NAMELISTS</code> e <code>INPUT_CARDS</code>. As variáveis das <code>NAMELISTS</code> têm valores padrão, e novos valores podem ser dados conforme a necessidade de cada cálculo. Elas podem ser declaradas em qualquer ordem. Já as variáveis dos <code>INPUT_CARDS</code> precisam sempre ser especificadas, e numa ordem definida. <code>INPUT_CARDS</code> logicamente independentes podem vir em qualquer ordem.</p>
 <p>Há três <code>NAMELISTS</code> obrigatórias no <code>PWscf</code>: (1) <code>&amp;CONTROL</code>: define o fluxo do cálculo; (2) <code>&amp;SYSTEM</code>: define o sistema; e (3) <code>&amp;ELECTRONS</code>: define os algoritmos usados para resolver a equação de Kohn-Sham. Há outras duas <code>NAMELISTS</code>, <code>&amp;IONS</code> e <code>&amp;CELLS</code>, que precisam ser especificadas conforme o tipo de cálculo.</p>
 <p>Três <code>INPUT_CARDS</code> são obrigatórios no <code>PWscf</code>: <code>ATOMIC_SPECIES</code>, <code>ATOMIC_POSITIONS</code> e <code>K_POINTS</code>. Há alguns outros que precisam ser fornecidos em certos cálculos.</p>
@@ -94,7 +95,7 @@ mpirun -np 4 pw.x -inp pw.scf.silicon.in &gt; pw.scf.silicon.out</code></pre></d
      The total energy is the sum of the following terms:</code></pre></div>
 <p>É importante notar que o valor absoluto da energia total do DFT não tem o vácuo como referência e depende do pseudopotencial escolhido. A medida com significado é a diferença de energia total, em que os diversos deslocamentos se cancelam.</p>
 <div class="admonition"><b>📝 Nota</b><p>No cálculo acima, no arquivo de saída <code>pw.scf.silicon.out</code>, você encontrará: <em>highest occupied, lowest unoccupied level (eV): 6.2117 6.8442</em>. Portanto, o gap é de 0,6325 eV, uma subestimativa do gap real (1,12 eV).</p></div>
-<div class="admonition tip"><b>Tips on convergence</b><ol>
+<div class="admonition tip"><b>💡 Dicas de convergência</b><ol>
 <li>
 <p>Reduza o valor de <code>mixing_beta</code>, principalmente se houver oscilação em torno da energia de convergência.</p>
 </li>

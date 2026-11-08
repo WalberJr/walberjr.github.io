@@ -14,6 +14,7 @@
 <aside class="sidebar" data-docs="espresso"></aside>
 <main class="content">
 <h1>Cálculo de DOS</h1>
+<p class="byline">Tradução do <i>Quantum Espresso Tutorial</i> de Pranab Das. As menções em primeira pessoa são do autor original.</p>
 <p>A densidade de estados eletrônicos é uma propriedade importante de um material.</p>
 <p>\(\rho(E)dE\) = número de estados eletrônicos no intervalo de energia \((E, E + dE)\)</p>
 <p>Antes de rodar o cálculo da densidade de estados (DOS), precisamos</p>
@@ -64,7 +65,7 @@ plt.fill_between(energy, 0, dos, where=(energy &lt; 6.642), facecolor='red', alp
 plt.text(6, 1.7, 'Fermi energy', fontsize= med, rotation=90)
 plt.show()</code></pre></div>
 <img alt="silicon-dos" loading="lazy" src="img/silicon-dos.webp"/>
-<div class="admonition"><b>Important</b><p>Em um conjunto de cálculos, o <code>prefix</code> precisa ser o mesmo. Por exemplo, os cálculos <strong>nscf</strong> e <strong>bands</strong> usam a função de onda calculada pelo <strong>scf</strong>. Ao fazer cálculos diferentes (por exemplo, quando você muda um parâmetro e quer ver o efeito), use uma pasta de saída diferente ou um <code>prefix</code> único para cada cálculo, para que as saídas não se misturem.</p></div>
+<div class="admonition"><b>❗ Importante</b><p>Em um conjunto de cálculos, o <code>prefix</code> precisa ser o mesmo. Por exemplo, os cálculos <strong>nscf</strong> e <strong>bands</strong> usam a função de onda calculada pelo <strong>scf</strong>. Ao fazer cálculos diferentes (por exemplo, quando você muda um parâmetro e quer ver o efeito), use uma pasta de saída diferente ou um <code>prefix</code> único para cada cálculo, para que as saídas não se misturem.</p></div>
 <div class="admonition tip"><b>💡 Dica</b><p>Às vezes é importante amostrar o ponto \(\Gamma\) no cálculo de DOS (por exemplo, quando as bandas de condução cruzam a superfície de Fermi apenas em \(\Gamma\)). Nesses casos, use uma malha de pontos k ímpar (por exemplo, 9✕9✕5).</p></div>
 <p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/dos" rel="noopener" target="_blank">Density of States calculation</a>,
 do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
