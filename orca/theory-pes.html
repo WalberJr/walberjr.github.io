@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Superfície de energia potencial · Tutorial ORCA</title>
+  <link rel="icon" href="../assets/img/favicon.png">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+</head>
+<body data-root="../" data-section="orca">
+<div class="docs">
+  <aside class="sidebar" data-docs="orca"></aside>
+  <main class="content">
+<h1>Superfície de energia potencial</h1>
+<h2 id="sep">O que é a superfície de energia potencial</h2>
+<p>Na aproximação de Born-Oppenheimer, a energia eletrônica de uma molécula depende apenas das posições dos núcleos. A função
+\(E(\mathbf{R})\) que dá essa energia para cada geometria é a <b>superfície de energia potencial</b> (SEP).</p>
+
+<h2 id="pontos-estacionarios">Pontos estacionários</h2>
+<p>Pontos em que o gradiente da energia é nulo são <b>pontos estacionários</b>. A natureza de cada um é dada pelas curvaturas da SEP
+(os autovalores da matriz hessiana):</p>
+<ul>
+  <li><b>Mínimo</b>: todas as curvaturas positivas. Corresponde a uma estrutura estável (reagente, produto, intermediário, confôrmero).</li>
+  <li><b>Ponto de sela de primeira ordem</b>: uma curvatura negativa. Corresponde a um <b>estado de transição</b>, que liga dois mínimos.</li>
+</ul>
+<p>Uma otimização de geometria (<code>Opt</code>) procura um mínimo; uma busca de estado de transição (<code>OptTS</code>) procura um ponto de sela.
+O cálculo de <a href="theory-freq.html">frequências</a> confirma qual tipo de ponto foi encontrado.</p>
+
+<h2 id="scan">Scans</h2>
+<p>Para explorar a SEP ao longo de uma coordenada (ligação, ângulo ou diedro), faz-se um <b>scan</b>. No scan <b>relaxado</b>, a coordenada escolhida
+fica fixa em cada etapa e todas as outras são otimizadas; no scan <b>rígido</b>, as outras coordenadas não mudam. Os máximos e mínimos de um scan
+relaxado são boas estimativas iniciais para estados de transição e confôrmeros.</p>
+
+<h2 id="conformacional">Busca conformacional</h2>
+<p>A busca conformacional é fundamental para entender propriedades de moléculas orgânicas e investigar mecanismos de reação. Por exemplo,
+os parâmetros de RMN de uma molécula são a média, ponderada pela distribuição de Boltzmann, sobre todos os confôrmeros de menor energia.
+Da mesma forma, estudar a reatividade de uma molécula pressupõe encontrar os intermediários e estados de transição de menor energia.</p>
+
+<h2 id="boltzmann">Distribuição de Boltzmann</h2>
+<p>Em equilíbrio, a população de cada espécie <i>i</i> é dada por</p>
+<p>\[ p_i = \frac{e^{-\Delta E_i / RT}}{\sum_j e^{-\Delta E_j / RT}} \]</p>
+<p>onde \(\Delta E_i\) é a energia relativa à espécie mais estável, \(R\) = 8,314 J mol⁻¹ K⁻¹ e \(T\) a temperatura (298,15 K a 25 °C).
+Usar energias livres de Gibbs no lugar das energias eletrônicas inclui os efeitos de ponto zero, térmicos e de entropia.</p>
+    <nav class="pager"></nav>
+  </main>
+</div>
+<script src="../assets/js/site.js"></script>
+<script defer src="../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../assets/vendor/katex/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})"></script>
+</body>
+</html>

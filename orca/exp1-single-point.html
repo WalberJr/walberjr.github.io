@@ -12,8 +12,8 @@
   <aside class="sidebar" data-docs="orca"></aside>
   <main class="content">
 <h1>Experimento 1: energia single-point</h1>
-<p>O cálculo de energia de ponto único (<i>single point</i>) prevê a energia e as propriedades de uma molécula numa geometria
-fixa, num ponto da superfície de energia potencial que não é necessariamente o mínimo. A validade dos resultados depende de você ter uma boa geometria.</p>
+<p>Neste experimento você faz cálculos de energia de ponto único (<i>single point</i>) e analisa energias, cargas, dipolos e orbitais.
+A base teórica está em <a href="theory-scf.html">Orbitais moleculares e SCF</a>.</p>
 
 <h2 id="exercicio-3">Exercício 3: propriedades e reatividade do formaldeído e do eteno</h2>
 <p>Vamos comparar propriedades obtidas por cálculos single-point do <b>formaldeído</b> e do <b>eteno</b>: energia, momento de dipolo,
@@ -22,7 +22,7 @@ cargas atômicas parciais, ordem de ligação e orbitais moleculares.</p>
 <p>A seguir há um roteiro para o formaldeído. Faça o mesmo para o eteno e responda às questões.</p>
 
 <h3 id="input">Criando o input do formaldeído</h3>
-<p>Desenhe o formaldeído com os passos do <a href="exp1-input.html">exercício anterior</a> e ajuste os comprimentos de ligação para os valores
+<p>Desenhe o formaldeído com os passos do <a href="gabedit.html">GABEDIT</a> e ajuste os comprimentos de ligação para os valores
 experimentais. O <a href="https://webbook.nist.gov/chemistry/" target="_blank" rel="noopener">NIST Chemistry WebBook</a> traz dados experimentais desta e de muitas outras moléculas.</p>
 <figure><img src="img/exp1-formaldeido-geometria.webp" alt="Geometria experimental do formaldeído" loading="lazy" style="max-width:420px"></figure>
 <p>Crie o input para um cálculo <i>single point</i> com uma função de base do tipo Pople, a <b>6-31G</b>. Os outros parâmetros não precisam ser alterados.
@@ -75,10 +75,8 @@ TOTAL RUN TIME: 0 days 0 hours 0 minutes 11 seconds 352 msec</code></pre></div>
     O programa não dá a solução, mas indica que o final das coordenadas cartesianas está errado.</li>
   <li><b>De cálculo:</b> dificuldades que o programa encontra ao fazer o cálculo.</li>
 </ul>
-<p>Um ponto importante são as iterações <b>SCF</b> (<i>self-consistent field</i>, campo autoconsistente). Um orbital molecular (Ψ) é uma combinação
-linear de orbitais atômicos (φ), cada um multiplicado por um coeficiente que indica sua contribuição:
-Ψ = c₁φ₁ + c₂φ₂ + … + cₙφₙ. O ciclo SCF otimiza esses coeficientes a cada iteração, e a energia do sistema diminui até convergir.
-Aqui usamos a opção <b>TightSCF</b>. Se tudo der certo, aparece a mensagem de sucesso no fim do bloco:</p>
+<p>Confira também se o ciclo SCF convergiu (veja <a href="theory-scf.html">Orbitais moleculares e SCF</a>). Com a opção <b>TightSCF</b>,
+se tudo der certo, aparece a mensagem de sucesso no fim do bloco:</p>
 <div class="codeblock"><pre><code>--------------
 SCF ITERATIONS
 --------------

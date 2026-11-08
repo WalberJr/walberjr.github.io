@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tutorial de ORCA · Tutorial ORCA</title>
+  <title>Instalação · Tutorial ORCA</title>
   <link rel="icon" href="../assets/img/favicon.png">
   <link rel="stylesheet" href="../assets/css/style.css">
 </head>
@@ -11,10 +11,9 @@
 <div class="docs">
   <aside class="sidebar" data-docs="orca"></aside>
   <main class="content">
-<h1>Tutorial de ORCA</h1>
-<p>Tutorial prático de química quântica molecular com o <b>ORCA</b>, organizado em cinco experimentos.
-Os inputs são montados com a ajuda do <b>GABEDIT</b>, uma interface gráfica para desenhar moléculas,
-gerar arquivos de entrada, rodar os cálculos e visualizar os resultados.</p>
+<h1>Instalação</h1>
+<p>Este tutorial cobre cálculos de química quântica molecular com o <b>ORCA</b>. Os inputs são montados com a ajuda do
+<b>GABEDIT</b>, uma interface gráfica para desenhar moléculas, gerar arquivos de entrada, rodar os cálculos e visualizar os resultados.</p>
 
 <h2 id="programas">Programas necessários</h2>
 <table>
@@ -22,22 +21,25 @@ gerar arquivos de entrada, rodar os cálculos e visualizar os resultados.</p>
 <tr><td><b>ORCA</b></td><td>Cálculos de estrutura eletrônica (HF, DFT, semiempíricos, pós-HF)</td><td><a href="https://www.faccts.de/orca/" target="_blank" rel="noopener">FACCTs</a> / <a href="https://orcaforum.kofo.mpg.de" target="_blank" rel="noopener">fórum do ORCA</a> (gratuito para uso acadêmico)</td></tr>
 <tr><td><b>GABEDIT</b></td><td>Desenho de moléculas, geração de inputs e visualização de orbitais, espectros e vibrações</td><td><a href="https://gabedit.sourceforge.net" target="_blank" rel="noopener">gabedit.sourceforge.net</a></td></tr>
 </table>
-<p>Fora do GABEDIT, um cálculo do ORCA é rodado no terminal com:</p>
+
+<h2 id="orca">Instalando o ORCA</h2>
+<ol>
+  <li>Crie uma conta no fórum do ORCA e baixe o pacote da sua plataforma (Linux, macOS ou Windows).</li>
+  <li>Descompacte o pacote numa pasta, por exemplo <code>~/orca</code> (Linux/macOS) ou <code>C:\orca</code> (Windows).</li>
+  <li>Adicione essa pasta ao <code>PATH</code>. No Linux/macOS, acrescente ao <code>~/.bashrc</code>:</li>
+</ol>
+<div class="codeblock"><pre><code>export PATH=$HOME/orca:$PATH
+export LD_LIBRARY_PATH=$HOME/orca:$LD_LIBRARY_PATH</code></pre></div>
+<p>Para cálculos em paralelo, o ORCA precisa do OpenMPI na versão indicada nas notas do release, e deve ser chamado pelo caminho completo do executável.</p>
+
+<h2 id="rodando">Rodando um cálculo</h2>
+<p>Pelo GABEDIT, os cálculos são rodados pelo próprio programa (veja <a href="gabedit.html">GABEDIT</a>). No terminal:</p>
 <div class="codeblock"><pre><code>orca arquivo.inp &gt; arquivo.out</code></pre></div>
+<p>Ao final, a saída deve terminar com <code>****ORCA TERMINATED NORMALLY****</code>.</p>
+
 <div class="admonition"><b>ℹ️ Versões</b>
 As capturas de tela foram feitas com versões antigas do ORCA e do GABEDIT. As palavras-chave usadas aqui
-continuam válidas, mas a aparência das janelas e alguns trechos da saída podem ser diferentes na sua versão.
-Para cálculos em paralelo, chame o ORCA pelo caminho completo do executável.</div>
-
-<h2 id="experimentos">Experimentos</h2>
-<div class="grid">
-  <a class="card" href="exp1-input.html"><h3>Input do ORCA e GABEDIT</h3><p>Sintaxe do input, desenho de moléculas e geração de inputs (Exercícios 1 e 2).</p></a>
-  <a class="card" href="exp1-single-point.html"><h3>1 · Energia single-point</h3><p>Propriedades e reatividade: formaldeído e eteno, orbitais e potencial eletrostático (Exercício 3).</p></a>
-  <a class="card" href="exp2-otimizacao.html"><h3>2 · Otimização de geometria</h3><p>Energias de ionização vertical e adiabática (Exercício 4).</p></a>
-  <a class="card" href="exp3-conformacional.html"><h3>3 · Busca conformacional</h3><p>Equilíbrio ceto-enólico do acetaldeído e distribuição de Boltzmann (Exercício 5).</p></a>
-  <a class="card" href="exp4-scan.html"><h3>4 · Superfície de energia potencial</h3><p>Scans relaxados de ligação (H₂) e de diedro (butano) (Exercícios 6 e 7).</p></a>
-  <a class="card" href="exp5-frequencias.html"><h3>5 · Frequências e termoquímica</h3><p>Mínimos e estados de transição, espectro de IV e energia livre de Gibbs (Exercícios 8 a 10).</p></a>
-</div>
+continuam válidas, mas a aparência das janelas e alguns trechos da saída podem ser diferentes na sua versão.</div>
 
 <div class="admonition"><b>📊 Analise com o KStudio</b>
 As saídas do ORCA também podem ser abertas no <a href="../index.html#programas">KStudio</a>:

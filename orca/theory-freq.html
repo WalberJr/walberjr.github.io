@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Frequências e termoquímica · Tutorial ORCA</title>
+  <link rel="icon" href="../assets/img/favicon.png">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+</head>
+<body data-root="../" data-section="orca">
+<div class="docs">
+  <aside class="sidebar" data-docs="orca"></aside>
+  <main class="content">
+<h1>Frequências e termoquímica</h1>
+<h2 id="frequencias">Para que serve o cálculo de frequências</h2>
+<ul>
+  <li>Identificar a natureza de um ponto estacionário na superfície de energia potencial.</li>
+  <li>Calcular a correção de ponto zero e outras grandezas termodinâmicas, como entalpia e entropia.</li>
+  <li>Prever espectros de infravermelho.</li>
+</ul>
+<p>As frequências vêm da matriz hessiana (derivadas segundas da energia), na aproximação harmônica. Uma molécula com \(N\) átomos tem
+\(3N-6\) modos normais de vibração (\(3N-5\) se for linear); na saída do ORCA, as seis primeiras "frequências", iguais a zero, correspondem
+às translações e rotações.</p>
+<ul>
+  <li>Num <b>mínimo</b>, todas as frequências são positivas.</li>
+  <li>Num <b>estado de transição</b>, há exatamente uma frequência imaginária, impressa como negativa e marcada como <code>***imaginary mode***</code>.
+    O modo correspondente mostra o movimento dos átomos ao longo da coordenada de reação.</li>
+</ul>
+
+<h2 id="numfreq">Frequências numéricas e analíticas</h2>
+<p>As frequências podem ser calculadas de forma numérica (<code>NumFreq</code>) ou analítica (<code>Freq</code>). A analítica é muito mais rápida,
+mas usa mais memória RAM (o usuário precisa definir esse parâmetro), e nem todos os métodos têm frequências analíticas implementadas no ORCA.</p>
+
+<h2 id="termoquimica">Correção de ponto zero e propriedades termodinâmicas</h2>
+<p>A energia interna total de um sistema é dada por:</p>
+<p>\[ U = E_{el} + E_{ZPE} + E_{vib} + E_{rot} + E_{trans} \]</p>
+<ul>
+  <li>\(E_{el}\): energia total obtida no cálculo de estrutura eletrônica, \(E_{el} = E_{kin-el} + E_{nuc-el} + E_{el-el} + E_{nuc-nuc}\).</li>
+  <li>\(E_{ZPE}\): correção da energia vibracional de ponto zero, obtida no cálculo de frequências.</li>
+  <li>\(E_{vib}\), \(E_{rot}\) e \(E_{trans}\): contribuições dos modos vibracionais populados e das energias rotacional e translacional.</li>
+</ul>
+<p>A entalpia é \(H = U + k_B T\), onde \(k_B\) é a constante de Boltzmann e \(T\) a temperatura em kelvin, e a energia livre de Gibbs é
+\(G = H - TS\), onde \(S\) é a entropia. Muitos trabalhos usam apenas a correção de ponto zero, \(E_0 = E_{el} + E_{ZPE}\).
+Por padrão esses termos são calculados a 298,15 K e 1 atm, tratando a molécula como um gás ideal com vibrações harmônicas;
+temperatura e pressão podem ser alteradas.</p>
+    <nav class="pager"></nav>
+  </main>
+</div>
+<script src="../assets/js/site.js"></script>
+<script defer src="../assets/vendor/katex/katex.min.js"></script>
+<script defer src="../assets/vendor/katex/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})"></script>
+</body>
+</html>

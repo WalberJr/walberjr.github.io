@@ -13,14 +13,8 @@
   <aside class="sidebar" data-docs="orca"></aside>
   <main class="content">
 <h1>Experimento 5: frequências e termoquímica</h1>
-<p>O cálculo de frequências tem várias finalidades:</p>
-<ul>
-  <li>Identificar a natureza de um ponto estacionário na superfície de energia potencial.</li>
-  <li>Calcular a correção de ponto zero e outras grandezas termodinâmicas, como entalpia e entropia.</li>
-  <li>Prever espectros de infravermelho.</li>
-</ul>
-<p>As frequências podem ser calculadas de forma numérica (<code>NumFreq</code>) ou analítica (<code>Freq</code>). A analítica é muito mais rápida,
-mas usa mais memória RAM (o usuário precisa definir esse parâmetro), e vários métodos não têm frequências analíticas implementadas no ORCA.</p>
+<p>Neste experimento você usa cálculos de frequências para caracterizar pontos estacionários, gerar espectros de IV e obter grandezas
+termodinâmicas. Veja a base teórica em <a href="theory-freq.html">Frequências e termoquímica</a>.</p>
 
 <h2 id="exercicio-8">Exercício 8: natureza dos pontos estacionários do Exercício 7</h2>
 <p>Com a SEP do <a href="exp4-scan.html#exercicio-7">Exercício 7</a>, vamos agora localizar os mínimos e os estados de transição do equilíbrio
@@ -126,19 +120,8 @@ mas encontra os modos principais (destacados em verde). Lembre-se de que esses c
 <p>Repita com <b>HF/6-31G</b>. O cálculo leva bem mais tempo, mas as intensidades ficam mais próximas das experimentais.</p>
 <figure><img src="img/exp5-ir-hf.webp" alt="Espectro de IV do benzeno em HF/6-31G" loading="lazy"></figure>
 
-<h2 id="termoquimica">Correção de ponto zero e propriedades termodinâmicas</h2>
-<p>A energia interna total de um sistema é dada por:</p>
-<p>\[ U = E_{el} + E_{ZPE} + E_{vib} + E_{rot} + E_{trans} \]</p>
-<ul>
-  <li>\(E_{el}\): energia total obtida no cálculo de estrutura eletrônica, \(E_{el} = E_{kin-el} + E_{nuc-el} + E_{el-el} + E_{nuc-nuc}\).</li>
-  <li>\(E_{ZPE}\): correção da energia vibracional de ponto zero, obtida no cálculo de frequências.</li>
-  <li>\(E_{vib}\), \(E_{rot}\) e \(E_{trans}\): contribuições dos modos vibracionais populados e das energias rotacional e translacional.</li>
-</ul>
-<p>A entalpia é \(H = U + k_B T\), onde \(k_B\) é a constante de Boltzmann e \(T\) a temperatura em kelvin, e a energia livre de Gibbs é
-\(G = H - TS\), onde \(S\) é a entropia. Por padrão esses termos são calculados a 298,15 K e 1 atm; temperatura e pressão podem ser alteradas.</p>
-
 <h2 id="exercicio-10">Exercício 10: energia livre de Gibbs do benzeno</h2>
-<p>Para obter a correção de ponto zero, a entalpia e a entropia é preciso calcular as frequências. Vamos aproveitar o cálculo do benzeno em HF/6-31G.
+<p>Para obter a correção de ponto zero, a entalpia e a entropia (veja as <a href="theory-freq.html#termoquimica">definições</a>) é preciso calcular as frequências. Vamos aproveitar o cálculo do benzeno em HF/6-31G.
 Na saída, o bloco de termoquímica começa assim, listando as aproximações usadas:</p>
 <div class="codeblock"><pre><code>--------------------------
 THERMOCHEMISTRY AT 298.15K

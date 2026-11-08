@@ -76,15 +76,24 @@
     ],
     orca: [
       ["Começando", [
-        ["Introdução", "index.html"],
-        ["Input do ORCA e GABEDIT", "exp1-input.html"],
+        ["Instalação", "index.html"],
+        ["Estrutura do input", "input.html"],
+        ["GABEDIT", "gabedit.html"],
       ]],
-      ["Experimentos", [
-        ["1 · Energia single-point", "exp1-single-point.html"],
-        ["2 · Otimização e energia de ionização", "exp2-otimizacao.html"],
-        ["3 · Busca conformacional", "exp3-conformacional.html"],
-        ["4 · Superfície de energia potencial", "exp4-scan.html"],
-        ["5 · Frequências e termoquímica", "exp5-frequencias.html"],
+      ["Teoria", [
+        ["Orbitais moleculares e SCF", "theory-scf.html"],
+        ["Superfície de energia potencial", "theory-pes.html"],
+        ["Frequências e termoquímica", "theory-freq.html"],
+      ]],
+      ["Prática", [
+        ["Energia single-point", "exp1-single-point.html"],
+        ["Otimização e energia de ionização", "exp2-otimizacao.html"],
+        ["Busca conformacional", "exp3-conformacional.html"],
+        ["Superfície de energia potencial", "exp4-scan.html"],
+        ["Frequências e termoquímica", "exp5-frequencias.html"],
+      ]],
+      ["Referências", [
+        ["Recursos", "ref-resources.html"],
       ]],
     ],
   };
