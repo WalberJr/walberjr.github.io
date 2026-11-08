@@ -1,0 +1,6 @@
+# Os arquivos "Source code" (zip/tar.gz) que o GitHub gera em todo release
+# não podem ser removidos; estas regras os deixam praticamente vazios.
+*.exe        export-ignore
+*.AppImage   export-ignore
+.github      export-ignore
+.gitattributes export-ignore

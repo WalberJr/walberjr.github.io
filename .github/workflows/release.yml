@@ -4,7 +4,7 @@ name: Release do KStudio
 on:
   push:
     branches: [kstudio-builds]
-    paths: ["*.exe", "*.AppImage", "VERSION"]
+    paths: ["*.exe", "*.AppImage", "VERSION", ".gitattributes", ".github/workflows/release.yml"]
   workflow_dispatch:
 
 permissions:
@@ -34,7 +34,6 @@ jobs:
           mkdir dist
           cp "$EXE"      dist/KStudio-Windows-x64.exe
           cp "$APPIMAGE" dist/KStudio-Linux-x86_64.AppImage
-          (cd dist && sha256sum * > SHA256SUMS.txt)
 
           echo "version=$VER" >> "$GITHUB_OUTPUT"
           echo "tag=kstudio-v$VER" >> "$GITHUB_OUTPUT"
@@ -62,10 +61,9 @@ jobs:
           Site: https://walberjr.github.io
           NOTES
 
+          # Se a versão já existe, recria do zero (só com os arquivos atuais)
           if gh release view "$TAG" >/dev/null 2>&1; then
-            gh release upload "$TAG" dist/* --clobber
-            gh release edit "$TAG" --notes-file notes.md --latest
-          else
-            gh release create "$TAG" dist/* --target "$GITHUB_SHA" \
-              --title "KStudio $VER" --notes-file notes.md --latest
+            gh release delete "$TAG" --cleanup-tag --yes
           fi
+          gh release create "$TAG" dist/* --target "$GITHUB_SHA" \
+            --title "KStudio $VER" --notes-file notes.md --latest
