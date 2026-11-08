@@ -1,59 +1,38 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Cálculo de DOS · Tutorial Quantum ESPRESSO</title>
-  <link rel="icon" href="../assets/img/favicon.png">
-  <link rel="stylesheet" href="../assets/css/style.css">
-  <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Cálculo de DOS · Tutorial Quantum ESPRESSO</title>
+<link href="../assets/img/favicon.png" rel="icon"/>
+<link href="../assets/css/style.css" rel="stylesheet"/>
+<link href="../assets/vendor/katex/katex.min.css" rel="stylesheet"/>
 </head>
 <body data-root="../" data-section="espresso">
 <div class="docs">
-  <aside class="sidebar" data-docs="espresso"></aside>
-  <main class="content">
+<aside class="sidebar" data-docs="espresso"></aside>
+<main class="content">
 <h1>Cálculo de DOS</h1>
-<p>Electronic density of states is an important property of a material.</p>
-<p>\(\rho(E)dE\) = number of electronic states in the energy interval \((E, E + dE)\)</p>
-<p>Before we can run the Density of States (DOS) calculation, we need</p>
+<p>A densidade de estados eletrônicos é uma propriedade importante de um material.</p>
+<p>\(\rho(E)dE\) = número de estados eletrônicos no intervalo de energia \((E, E + dE)\)</p>
+<p>Antes de rodar o cálculo da densidade de estados (DOS), precisamos</p>
 <ol>
 <li>
-<p>Perform fixed-ion self consistent filed (scf) calculation. In plane-wave
-based DFT calculations the electronic density is expressed by functions of the
-form \(\exp (i \textbf{k} \cdot \textbf{r})\) with energy given by
-\(E = \hbar^2k^2/2m\).</p>
+<p>Fazer um cálculo autoconsistente (scf) com íons fixos. Em cálculos DFT com ondas planas, a densidade eletrônica é expressa por funções da forma \(\exp (i \textbf{k} \cdot \textbf{r})\), com energia dada por \(E = \hbar^2k^2/2m\).</p>
 </li>
 <li>
-<p>Perform non-self consistent field (nscf) calculation with denser k-point
-grid. A large number of \(k\) points are required DOS calculation, as the accuracy
-of DOS depends on the integration in \(k\) space.</p>
+<p>Fazer um cálculo não autoconsistente (nscf) com uma malha de pontos k mais densa. A DOS exige um grande número de pontos \(k\), pois sua precisão depende da integração no espaço \(k\).</p>
 </li>
 <li>
-<p>Finally, the DOS can be determined by integrating the electron density in \(k\)
-space.</p>
+<p>Por fim, a DOS é obtida integrando a densidade eletrônica no espaço \(k\).</p>
 </li>
 </ol>
-<p>I have created a new input file (<code>pw.scf.silicon_dos.in</code>) which is very much the same as
-our previous scf input file except some parameters are modified. You can find
-all the input files in my <a href="https://github.com/pranabdas/espresso/" rel="noopener" target="_blank">GitHub repository</a>. We used the lattice constant value that
-we obtained from the relaxation calculation. We should not directly use the
-experimental/real lattice constant values. Depending on the method and
-pseudo-potential, it might result stress in the system. We have increased the
-<code>ecutwfc</code> to have better precision. We run the scf calculation:</p>
+<p>Criei um novo arquivo de entrada (<code>pw.scf.silicon_dos.in</code>), praticamente igual ao input scf anterior, com alguns parâmetros modificados. Todos os arquivos de entrada estão no meu <a href="https://github.com/pranabdas/espresso/" rel="noopener" target="_blank">repositório no GitHub</a>. Usamos a constante de rede obtida no cálculo de relaxação. Não devemos usar diretamente a constante de rede experimental/real: dependendo do método e do pseudopotencial, isso pode gerar tensão no sistema. Aumentamos o <code>ecutwfc</code> para ter mais precisão. Rodamos o cálculo scf:</p>
 <div class="codeblock"><pre><code>pw.x &lt; pw.scf.silicon_dos.in &gt; pw.scf.silicon_dos.out</code></pre></div>
-<p>Next, we have prepared the input file for the <code>nscf</code> calculation. Where is have
-added <code>occupations</code> in the <code>&amp;system</code> card as <code>tetrahedra</code> (appropriate for DOS
-calculation). We have increased the number of k-points to 12 × 12 × 12 with
-automatic option. Also specify <code>nosym = .TRUE.</code> to avoid generation of
-additional k-points in low symmetry cases. <code>outdir</code> and <code>prefix</code> must be the
-same as in the <code>scf</code> step, some of the inputs and output are read from previous
-step. Here we can specify a larger number of <code>nbnd</code> to calculate unoccupied
-bands. Number of occupied bands can be found in the <code>scf</code> output as number of
-Kohn-Sham states.</p>
+<p>Em seguida, preparamos o arquivo de entrada do cálculo <code>nscf</code>. Nele adicionamos <code>occupations</code> no card <code>&amp;system</code> como <code>tetrahedra</code> (adequado para cálculo de DOS). Aumentamos o número de pontos k para 12 × 12 × 12, com a opção automatic. Também especificamos <code>nosym = .TRUE.</code> para evitar a geração de pontos k adicionais em casos de baixa simetria. <code>outdir</code> e <code>prefix</code> devem ser os mesmos da etapa <code>scf</code>, pois algumas entradas e saídas são lidas da etapa anterior. Aqui podemos definir um <code>nbnd</code> maior para calcular bandas desocupadas. O número de bandas ocupadas aparece na saída do <code>scf</code> como <em>number of Kohn-Sham states</em>.</p>
 <div class="codeblock"><pre><code>pw.x &lt; pw.nscf.silicon_dos.in &gt; pw.nscf.silicon_dos.out</code></pre></div>
-<p>Now our final step is to calculate the density of states. The DOS input file as
-follows:</p>
-
+<p>A última etapa é calcular a densidade de estados. O arquivo de entrada da DOS é o seguinte:</p>
 <div class="codeblock"><div class="code-title">src/silicon/pp.dos.silicon.in</div><pre><code>&amp;DOS
   prefix='silicon',
   outdir='./tmp/',
@@ -61,10 +40,9 @@ follows:</p>
   emin=-9.0,
   emax=16.0
 /</code></pre></div>
-<p>We run:</p>
+<p>Rodamos:</p>
 <div class="codeblock"><pre><code>dos.x &lt; pp.dos.silicon.in &gt; pp.dos.silicon.out</code></pre></div>
-<p>The DOS data in the <code>si_dos.dat</code> file that we specified in our input file. We
-can plot the DOS:</p>
+<p>Os dados da DOS ficam no arquivo <code>si_dos.dat</code>, definido no input. Podemos fazer o gráfico da DOS:</p>
 <div class="codeblock"><div class="code-title">notebooks/silicon-dos.ipynb</div><pre><code>import matplotlib.pyplot as plt
 from matplotlib import rcParamsDefault
 import numpy as np
@@ -86,25 +64,17 @@ plt.fill_between(energy, 0, dos, where=(energy &lt; 6.642), facecolor='red', alp
 plt.text(6, 1.7, 'Fermi energy', fontsize= med, rotation=90)
 plt.show()</code></pre></div>
 <img alt="silicon-dos" loading="lazy" src="img/silicon-dos.webp"/>
-<div class="admonition"><b>Important</b><p>For a set of calculation, we must keep the <code>prefix</code> same. For example, the
-<strong>nscf</strong> or <strong>bands</strong> calculation uses the wavefunction calculated by the
-<strong>scf</strong> calculation. When performing different calculations, for example you
-change a parameter and want to see the changes, you must use different output
-folder or unique <code>prefix</code> for different calculations so that the outputs do not
-get mixed.</p></div>
-<div class="admonition tip"><b>💡 Dica</b><p>Sometimes it is important to sample the \(\Gamma\) point for DOS calculation
-(e.g., the conducting bands cross the Fermi surface only at \(\Gamma\) point). In
-such cases, we need to use odd k-grid (e.g., 9✕9✕5).</p></div>
-<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/dos" target="_blank" rel="noopener">Density of States calculation</a>,
+<div class="admonition"><b>Important</b><p>Em um conjunto de cálculos, o <code>prefix</code> precisa ser o mesmo. Por exemplo, os cálculos <strong>nscf</strong> e <strong>bands</strong> usam a função de onda calculada pelo <strong>scf</strong>. Ao fazer cálculos diferentes (por exemplo, quando você muda um parâmetro e quer ver o efeito), use uma pasta de saída diferente ou um <code>prefix</code> único para cada cálculo, para que as saídas não se misturem.</p></div>
+<div class="admonition tip"><b>💡 Dica</b><p>Às vezes é importante amostrar o ponto \(\Gamma\) no cálculo de DOS (por exemplo, quando as bandas de condução cruzam a superfície de Fermi apenas em \(\Gamma\)). Nesses casos, use uma malha de pontos k ímpar (por exemplo, 9✕9✕5).</p></div>
+<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/dos" rel="noopener" target="_blank">Density of States calculation</a>,
 do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
-<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY 4.0</a>.
-Alterações: layout, título e navegação traduzidos para o português.</p>
-    <nav class="pager"></nav>
-  </main>
+<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" rel="noopener" target="_blank">CC BY 4.0</a>.
+Alterações: texto traduzido para o português; layout e navegação adaptados.</p>
+<nav class="pager"></nav>
+</main>
 </div>
 <script src="../assets/js/site.js"></script>
-<script defer src="../assets/vendor/katex/katex.min.js"></script>
-<script defer src="../assets/vendor/katex/contrib/auto-render.min.js"
-  onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})"></script>
+<script defer="" src="../assets/vendor/katex/katex.min.js"></script>
+<script defer="" onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})" src="../assets/vendor/katex/contrib/auto-render.min.js"></script>
 </body>
 </html>

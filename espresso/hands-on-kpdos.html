@@ -1,26 +1,24 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>DOS resolvida em k · Tutorial Quantum ESPRESSO</title>
-  <link rel="icon" href="../assets/img/favicon.png">
-  <link rel="stylesheet" href="../assets/css/style.css">
-  <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>DOS resolvida em k · Tutorial Quantum ESPRESSO</title>
+<link href="../assets/img/favicon.png" rel="icon"/>
+<link href="../assets/css/style.css" rel="stylesheet"/>
+<link href="../assets/vendor/katex/katex.min.css" rel="stylesheet"/>
 </head>
 <body data-root="../" data-section="espresso">
 <div class="docs">
-  <aside class="sidebar" data-docs="espresso"></aside>
-  <main class="content">
+<aside class="sidebar" data-docs="espresso"></aside>
+<main class="content">
 <h1>DOS resolvida em k</h1>
-<p>Here we will calculate k-resolved density of states for silicon. First we begin
-with self consistent field calculation. Here is the input:</p>
+<p>Aqui vamos calcular a densidade de estados resolvida em k para o silício. Começamos com o cálculo autoconsistente. Este é o input:</p>
 <div class="codeblock"><pre><code>pw.x -inp si_scf.in &gt; si_scf.out</code></pre></div>
-<p>Followed by the bands calculation. Note that for bands calculation I have
-doubled the number of k-points compared to our previous bands calculation.</p>
+<p>Em seguida, o cálculo de bandas. Note que, no cálculo de bandas, dobrei o número de pontos k em relação ao cálculo de bandas anterior.</p>
 <div class="codeblock"><pre><code>pw.x -inp si_bands.in &gt; si_bands.out</code></pre></div>
-<p>Calculate the orbital projections with k-resolved information:</p>
-
+<p>Calcule as projeções orbitais com a informação resolvida em k:</p>
 <div class="codeblock"><div class="code-title">src/silicon/si_projwfc.in</div><pre><code>&amp;projwfc
     outdir       = './tmp/'
     prefix       = 'silicon'
@@ -31,8 +29,7 @@ doubled the number of k-points compared to our previous bands calculation.</p>
     filpdos      = 'silicon.k'
 /</code></pre></div>
 <div class="codeblock"><pre><code>projwfc.x -inp si_projwfc.in &gt; si_projwfc.out</code></pre></div>
-<p>This will give separate orbital projections, as well as total sum for k-resolved
-DOS. Make plots:</p>
+<p>Isso gera as projeções orbitais separadas e também a soma total da DOS resolvida em k. Faça os gráficos:</p>
 <div class="codeblock"><div class="code-title">notebooks/silicon-kpdos.ipynb</div><pre><code>import matplotlib.pyplot as plt
 from matplotlib import rcParamsDefault
 import numpy as np
@@ -69,23 +66,19 @@ plt.axvline(51, c='yellow', lw=1, alpha=0.5)
 plt.axvline(61, c='yellow', lw=1, alpha=0.5)
 plt.show()</code></pre></div>
 <p><img alt="silicon-kpdos" loading="lazy" src="img/silicon-kpdos.webp"/></p>
-<div class="admonition"><b>ℹ️ Info</b><p>If you are using <code>ibrav=0</code>, you can calculate <code>projwfc</code> with <code>lsym=.false.</code>
-option.</p></div>
-<p>If we have contribution from multiple orbitals, we can sum desired projections
-using <code>sumpdos.x</code> program. For example:</p>
+<div class="admonition"><b>ℹ️ Info</b><p>Se estiver usando <code>ibrav=0</code>, calcule o <code>projwfc</code> com a opção <code>lsym=.false.</code>.</p></div>
+<p>Se houver contribuição de vários orbitais, podemos somar as projeções desejadas com o programa <code>sumpdos.x</code>. Por exemplo:</p>
 <div class="codeblock"><pre><code>sumpdos.x *\(Cl\)*\(p\) &gt; Cl_2p_tot.dat</code></pre></div>
-<p>This way we can plot different orbital projections along with energy and
-k-resolution.</p>
-<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/kpdos" target="_blank" rel="noopener">k-resolved DOS</a>,
+<p>Assim podemos fazer gráficos das diferentes projeções orbitais com resolução em energia e em k.</p>
+<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/kpdos" rel="noopener" target="_blank">k-resolved DOS</a>,
 do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
-<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY 4.0</a>.
-Alterações: layout, título e navegação traduzidos para o português.</p>
-    <nav class="pager"></nav>
-  </main>
+<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" rel="noopener" target="_blank">CC BY 4.0</a>.
+Alterações: texto traduzido para o português; layout e navegação adaptados.</p>
+<nav class="pager"></nav>
+</main>
 </div>
 <script src="../assets/js/site.js"></script>
-<script defer src="../assets/vendor/katex/katex.min.js"></script>
-<script defer src="../assets/vendor/katex/contrib/auto-render.min.js"
-  onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})"></script>
+<script defer="" src="../assets/vendor/katex/katex.min.js"></script>
+<script defer="" onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})" src="../assets/vendor/katex/contrib/auto-render.min.js"></script>
 </body>
 </html>

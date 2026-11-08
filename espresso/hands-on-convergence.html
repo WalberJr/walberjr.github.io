@@ -1,23 +1,21 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Testes de convergência · Tutorial Quantum ESPRESSO</title>
-  <link rel="icon" href="../assets/img/favicon.png">
-  <link rel="stylesheet" href="../assets/css/style.css">
-  <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Testes de convergência · Tutorial Quantum ESPRESSO</title>
+<link href="../assets/img/favicon.png" rel="icon"/>
+<link href="../assets/css/style.css" rel="stylesheet"/>
+<link href="../assets/vendor/katex/katex.min.css" rel="stylesheet"/>
 </head>
 <body data-root="../" data-section="espresso">
 <div class="docs">
-  <aside class="sidebar" data-docs="espresso"></aside>
-  <main class="content">
+<aside class="sidebar" data-docs="espresso"></aside>
+<main class="content">
 <h1>Testes de convergência</h1>
-<h2 id="convergence-with-cutoff-energy-using-pwtk">Convergence with cutoff energy using PWTK</h2>
-<p>We can automate the previous self consistent calculation by varying a certain
-parameter. Say we want to check the total energy of the system for various
-values of <code>ecutwfc</code>. We can do that by using <code>pwtk</code> script.</p>
-
+<h2 id="convergence-with-cutoff-energy-using-pwtk">Convergência com a energia de corte usando o PWTK</h2>
+<p>Podemos automatizar o cálculo autoconsistente anterior variando um parâmetro. Digamos que queremos ver a energia total do sistema para vários valores de <code>ecutwfc</code>. Podemos fazer isso com um script <code>pwtk</code>.</p>
 <div class="codeblock"><div class="code-title">src/silicon/si_scf_ecutoff.pwtk</div><pre><code># load the pw.x input from file
 load_fromPWI pw.scf.silicon.in
 
@@ -42,11 +40,10 @@ foreach ecut { 12 16 20 24 28 32 } {
 }
 
 close $fid</code></pre></div>
-<p>To run the above script:</p>
+<p>Para rodar o script acima:</p>
 <div class="codeblock"><pre><code>pwtk si_scf_ecutoff.pwtk</code></pre></div>
-<p>Now we can plot the total energy with respect to ecutwfc. The data is in
-<code>etot-vs-ecutwfc.dat</code></p>
-<p>We will use matplotlib to make the plots. Here is the python code for plotting:</p>
+<p>Agora podemos fazer o gráfico da energia total em função do ecutwfc. Os dados estão em <code>etot-vs-ecutwfc.dat</code></p>
+<p>Vamos usar o matplotlib para os gráficos. Este é o código Python do gráfico:</p>
 <div class="codeblock"><div class="code-title">notebooks/silicon-scf.ipynb</div><pre><code>import matplotlib.pyplot as plt
 from matplotlib import rcParamsDefault
 import numpy as np
@@ -61,11 +58,8 @@ plt.ylabel('Etot (Ry)')
 plt.legend(frameon=False)
 plt.show()</code></pre></div>
 <img alt="etot-vs-ecutwfc" loading="lazy" src="img/etot-vs-ecutwfc.webp"/>
-<h2 id="convergence-test-using-unix-shell-script">Convergence test using UNIX shell script</h2>
-<p>We can do the convergence test with various parameters. We can calculate the
-total energy of the system by varying various parameters. We will use the shell
-script to automate the process with different cutoff energy values.</p>
-
+<h2 id="convergence-test-using-unix-shell-script">Teste de convergência com script de shell UNIX</h2>
+<p>Podemos fazer testes de convergência com vários parâmetros, calculando a energia total do sistema enquanto variamos cada um. Vamos usar um script de shell para automatizar o processo com diferentes valores de energia de corte.</p>
 <div class="codeblock"><div class="code-title">src/silicon/si_script.sh</div><pre><code>#!/bin/sh
 NAME="ecut"
 
@@ -105,23 +99,16 @@ echo ${NAME}_${CUTOFF}
 grep ! ${NAME}_${CUTOFF}.out
 
 done</code></pre></div>
-<p>Make sure the file has executable permission for the user:</p>
+<p>Garanta que o arquivo tem permissão de execução para o usuário:</p>
 <div class="codeblock"><pre><code>chmod 700 si_script.sh</code></pre></div>
-<p>Run the script file:</p>
+<p>Rode o script:</p>
 <div class="codeblock"><pre><code>./si_script.sh
 # or
 sh si_script.sh</code></pre></div>
-<p>We can plot the energy vs cutoff energy, and choose a reasonable value.</p>
-<div class="admonition warn"><b>⚠️ Cuidado</b><p>Initially, I had problem in running the script in macOS. The problem occurred
-because the script file format was set to DOS. The file format can be checked in
-following way:</p><p>Open the file in <strong>vi</strong> editor. <code>vi si_script.sh</code> Now in <strong>vi</strong> editor command
-mode (ESC key), type <code>:set ff?</code> This would tell you the file format. Now to
-change file format, use the  command <code>:set fileformat=unix</code></p></div>
-<h2 id="convergence-test-against-the-number-of-k-points">Convergence test against the number of k-points</h2>
-<p>We can run similar convergence test against another parameter, and choose the
-best value of that particular parameter. Here we will try to calculate the
-number of k-points in the Monkhorst-Pack mesh.</p>
-
+<p>Podemos fazer o gráfico da energia em função da energia de corte e escolher um valor razoável.</p>
+<div class="admonition warn"><b>⚠️ Cuidado</b><p>No início tive problemas para rodar o script no macOS. Isso aconteceu porque o formato do arquivo estava como DOS. O formato do arquivo pode ser verificado assim:</p><p>Abra o arquivo no editor <strong>vi</strong>: <code>vi si_script.sh</code>. No modo de comando do <strong>vi</strong> (tecla ESC), digite <code>:set ff?</code>; isso mostra o formato do arquivo. Para mudar o formato, use o comando <code>:set fileformat=unix</code></p></div>
+<h2 id="convergence-test-against-the-number-of-k-points">Teste de convergência em relação ao número de pontos k</h2>
+<p>Podemos fazer um teste de convergência semelhante para outro parâmetro e escolher o melhor valor para ele. Aqui vamos variar o número de pontos k na malha de Monkhorst-Pack.</p>
 <div class="codeblock"><div class="code-title">src/silicon/si_scf_kpoints.pwtk</div><pre><code>load_fromPWI pw.scf.silicon.in
 
 set fid [open etot-vs-kpoint.dat w]
@@ -138,7 +125,7 @@ foreach k { 2 4 6 8 } {
 }
 
 close $fid</code></pre></div>
-<p>Run pwtk program:</p>
+<p>Rode o PWTK:</p>
 <div class="codeblock"><pre><code>pwtk si_scf_kpoints.pwtk</code></pre></div>
 <div class="codeblock"><div class="code-title">notebooks/silicon-scf.ipynb</div><pre><code>x, y = np.loadtxt('../src/silicon/etot-vs-kpoint.dat', delimiter=' ', unpack=True)
 plt.plot(x, y, "o-", markersize=5, label='Etot vs kpoints')
@@ -147,9 +134,8 @@ plt.ylabel('Etot (Ry)')
 plt.legend(frameon=False)
 plt.show()</code></pre></div>
 <img alt="etot-vs-kpoints" loading="lazy" src="img/etot-vs-kpoints.webp"/>
-<h2 id="convergence-against-lattice-constant">Convergence against lattice constant</h2>
-<p>Calculating total energy with respect to varying lattice constant.</p>
-
+<h2 id="convergence-against-lattice-constant">Convergência em relação à constante de rede</h2>
+<p>Calculando a energia total em função da constante de rede.</p>
 <div class="codeblock"><div class="code-title">src/silicon/si_scf_alat.pwtk</div><pre><code>load_fromPWI pw.scf.silicon.in
 
 # please uncomment &amp; insert value as determined in the "ecutwfc" exercise
@@ -173,7 +159,7 @@ foreach alat { 9.7 9.8 9.9 10.0 10.1 10.2 10.3 10.4 10.5 10.6 10.7 } {
 }
 
 close $fid</code></pre></div>
-<p>Run the above code:</p>
+<p>Rode o código acima:</p>
 <div class="codeblock"><pre><code>pwtk si_scf_alat.pwtk</code></pre></div>
 <div class="codeblock"><div class="code-title">notebooks/silicon-scf.ipynb</div><pre><code>x, y = np.loadtxt('../src/silicon/etot-vs-alat.dat', delimiter=' ', unpack=True)
 plt.plot(x, y, "o-", markersize=5, label='Etot vs alat')
@@ -182,16 +168,15 @@ plt.ylabel('Etot (Ry)')
 plt.legend(frameon=False)
 plt.show()</code></pre></div>
 <img alt="etot-vs-alat" loading="lazy" src="img/etot-vs-alat.webp"/>
-<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/convergence" target="_blank" rel="noopener">Convergence testing</a>,
+<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/convergence" rel="noopener" target="_blank">Convergence testing</a>,
 do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
-<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY 4.0</a>.
-Alterações: layout, título e navegação traduzidos para o português.</p>
-    <nav class="pager"></nav>
-  </main>
+<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" rel="noopener" target="_blank">CC BY 4.0</a>.
+Alterações: texto traduzido para o português; layout e navegação adaptados.</p>
+<nav class="pager"></nav>
+</main>
 </div>
 <script src="../assets/js/site.js"></script>
-<script defer src="../assets/vendor/katex/katex.min.js"></script>
-<script defer src="../assets/vendor/katex/contrib/auto-render.min.js"
-  onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})"></script>
+<script defer="" src="../assets/vendor/katex/katex.min.js"></script>
+<script defer="" onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})" src="../assets/vendor/katex/contrib/auto-render.min.js"></script>
 </body>
 </html>

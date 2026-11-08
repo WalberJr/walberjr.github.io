@@ -1,22 +1,20 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Estrutura de bandas · Tutorial Quantum ESPRESSO</title>
-  <link rel="icon" href="../assets/img/favicon.png">
-  <link rel="stylesheet" href="../assets/css/style.css">
-  <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Estrutura de bandas · Tutorial Quantum ESPRESSO</title>
+<link href="../assets/img/favicon.png" rel="icon"/>
+<link href="../assets/css/style.css" rel="stylesheet"/>
+<link href="../assets/vendor/katex/katex.min.css" rel="stylesheet"/>
 </head>
 <body data-root="../" data-section="espresso">
 <div class="docs">
-  <aside class="sidebar" data-docs="espresso"></aside>
-  <main class="content">
+<aside class="sidebar" data-docs="espresso"></aside>
+<main class="content">
 <h1>Estrutura de bandas</h1>
-<p>Before we can run <code>bands</code> calculation, we need to perform single-point <a href="hands-on-scf.html">self
-consistent field calculation</a>. We have our input <code>scf</code> file with some new
-parameters:</p>
-
+<p>Antes de rodar o cálculo <code>bands</code>, precisamos fazer um <a href="hands-on-scf.html">cálculo autoconsistente</a> de ponto único. Temos o nosso input <code>scf</code> com alguns parâmetros novos:</p>
 <div class="codeblock"><div class="code-title">src/silicon/pw.scf.silicon_bands.in</div><pre><code>&amp;CONTROL
   calculation = 'scf',
   restart_mode = 'from_scratch',
@@ -53,22 +51,9 @@ ATOMIC_POSITIONS (alat)
 
 K_POINTS (automatic)
   8 8 8 0 0 0</code></pre></div>
-<p>Run the <code>scf</code> calculation:</p>
+<p>Rode o cálculo <code>scf</code>:</p>
 <div class="codeblock"><pre><code>pw.x &lt; pw.scf.silicon_bands.in &gt; pw.scf.silicon_bands.out</code></pre></div>
-<p>Next step is our band calculation (non-self consistent field) calculation. The
-<code>bands</code> calculation is <em>non self-consistent</em> and reads/uses the ground state
-electron density, Hartree, exchange and correlation potentials obtained in the
-previous step (scf calculation). In case of non self-consistent calculation, the
-<strong>pw.x</strong> program determines the Kohn-Sham eigenfunction and eigenvalues without
-updating Kohn-Sham Hamiltonian at every iteration. We need to specify the
-k-points for which we want to calculate the eigenvalues. You may use the
-<a href="https://www.materialscloud.org/work/tools/seekpath" rel="noopener" target="_blank">See-K-path tool by materials cloud</a> to visualize the K-path. We
-can specify <code>nbnd</code>, by default it calculates half the number of valence
-electrons, i.e., only the occupied ground state bands. Usually we are interested
-also in the unoccupied bands above the Fermi energy. Number of occupied bands
-can be found in the <code>scf</code> output as number of Kohn-Sham states. Below is a
-sample input file for the band calculation:</p>
-
+<p>O próximo passo é o cálculo de bandas (não autoconsistente). O cálculo <code>bands</code> é <em>não autoconsistente</em> e lê/usa a densidade eletrônica do estado fundamental e os potenciais de Hartree e de troca e correlação obtidos na etapa anterior (cálculo scf). Num cálculo não autoconsistente, o programa <strong>pw.x</strong> determina as autofunções e os autovalores de Kohn-Sham sem atualizar o hamiltoniano de Kohn-Sham a cada iteração. Precisamos especificar os pontos k em que queremos calcular os autovalores. Você pode usar a <a href="https://www.materialscloud.org/work/tools/seekpath" rel="noopener" target="_blank">ferramenta SeeK-path do Materials Cloud</a> para visualizar o caminho de pontos k. Podemos especificar <code>nbnd</code>; por padrão, o programa calcula metade do número de elétrons de valência, ou seja, só as bandas ocupadas do estado fundamental. Em geral nos interessam também as bandas desocupadas acima da energia de Fermi. O número de bandas ocupadas aparece na saída do <code>scf</code> como <em>number of Kohn-Sham states</em>. Abaixo, um exemplo de input para o cálculo de bandas:</p>
 <div class="codeblock"><div class="code-title">src/silicon/pw.bands.silicon.in</div><pre><code>&amp;control
   calculation = 'bands',
   restart_mode = 'from_scratch',
@@ -107,22 +92,17 @@ K_POINTS {crystal_b}
   -0.500 0.0000 -0.500 10  !X
   -0.375 0.2500 -0.375 30  !U
   0.0000 0.0000 0.0000 20  !G</code></pre></div>
-<p>Run <code>pw.x</code> with <code>bands</code> calculation input file:</p>
+<p>Rode o <code>pw.x</code> com o input do cálculo <code>bands</code>:</p>
 <div class="codeblock"><pre><code>pw.x &lt; pw.bands.silicon.in &gt; pw.bands.silicon.out</code></pre></div>
-<p>After the bands calculation is performed, we need some postprocessing using
-<code>bands.x</code> utility in order to obtain the data in more usable format. Input file
-for <code>bands.x</code> postprocessing:</p>
-
+<p>Feito o cálculo de bandas, precisamos de um pós-processamento com o utilitário <code>bands.x</code> para obter os dados num formato mais prático. Input do pós-processamento com <code>bands.x</code>:</p>
 <div class="codeblock"><div class="code-title">src/silicon/pp.bands.silicon.in</div><pre><code>&amp;BANDS
   prefix = 'silicon'
   outdir = './tmp/'
   filband = 'si_bands.dat'
 /</code></pre></div>
-<p>Run <code>bands.x</code> from post processing (PP) module:</p>
+<p>Rode o <code>bands.x</code> do módulo de pós-processamento (PP):</p>
 <div class="codeblock"><pre><code>bands.x &lt; pp.bands.silicon.in &gt; pp.bands.silicon.out</code></pre></div>
-<p>Finally, we run <code>plotband.x</code> to visualize bandstructure. We can either run it
-interactively (as described below) or provide an input file. In order to run
-interactively, type <code>plotband.x</code> in your terminal.</p>
+<p>Por fim, rodamos o <code>plotband.x</code> para visualizar a estrutura de bandas. Ele pode ser usado de forma interativa (como descrito abaixo) ou com um arquivo de entrada. Para o modo interativo, digite <code>plotband.x</code> no terminal.</p>
 <div class="codeblock"><pre><code>     Input file &gt; si_bands.dat
 Reading    8 bands at     91 k-points
 Range:   -5.8300   16.3420eV  Emin, Emax &gt; -6, 16
@@ -139,9 +119,7 @@ output file (ps) &gt; si_bands.ps
 Efermi &gt; 6.6416
 deltaE, reference E (for tics) 4, 0
 bands in PostScript format written to file si_bands.ps</code></pre></div>
-<p>You will have <code>si_bands.ps</code> with band diagram. Alternatively, you can use your
-favorite plotting program to make the plots. Below is an example of using Python
-matplotlib.</p>
+<p>Você terá o arquivo <code>si_bands.ps</code> com o diagrama de bandas. Alternativamente, use o seu programa de gráficos favorito. Abaixo, um exemplo com o matplotlib do Python.</p>
 <div class="codeblock"><div class="code-title">notebooks/si-bands.ipynb</div><pre><code>import matplotlib.pyplot as plt
 from matplotlib import rcParamsDefault
 import numpy as np
@@ -174,28 +152,16 @@ plt.ylabel("Energy (eV)")
 plt.text(2.3, 5.6, 'Fermi energy', fontsize= small)
 plt.show()</code></pre></div>
 <img alt="silicon-bands" loading="lazy" src="img/silicon-bands.webp"/>
-<div class="admonition"><b>ℹ️ Info</b><p>The <code>k</code> values corresponding to high symmetry points (such as \(\Gamma\), X, U, L)
-which we need to label in our band diagram, can be found in the post-processing
-output file (<code>si_bands_pp.out</code>).</p><p>Bandgap value can be determined from the highest occupied, lowest unoccupied
-level values printed in <code>scf</code> calculation output.</p></div>
-<h2 id="note-on-bandgap">Note on bandgap</h2>
-<p>Usually, band gaps computed using common exchange-correction functionals such as
-LDA or GGA are severely underestimated compared to actual experimental values.
-This discrepancy is mainly due to (1) approximations used in the exchange
-correction functional and (2) a derivative discontinuity term, originating from
-the density functional being discontinuous with the total number of electrons in
-the system. The second contribution is larger contributor to the error. It can
-be partly addressed by a variety of techniques such as the GW approximation.</p>
-<p>Strategies to improve band gap prediction at moderate to low computational cost
-now been developed by several groups, including Chan and Ceder (delta-sol)<sup><a href="#user-content-fn-1" id="user-content-fnref-1">1</a></sup>,
-Heyd et al. (hybrid functionals)<sup><a href="#user-content-fn-2" id="user-content-fnref-2">2</a></sup>, and Setyawan et al. (empirical fits)<sup><a href="#user-content-fn-3" id="user-content-fnref-3">3</a></sup>.</p>
-<h2 id="resources">Resources</h2>
+<div class="admonition"><b>ℹ️ Info</b><p>Os valores de <code>k</code> correspondentes aos pontos de alta simetria (como \(\Gamma\), X, U, L), que precisamos marcar no diagrama de bandas, estão no arquivo de saída do pós-processamento (<code>si_bands_pp.out</code>).</p><p>O gap pode ser obtido dos valores dos níveis mais alto ocupado e mais baixo desocupado, impressos na saída do cálculo <code>scf</code>.</p></div>
+<h2 id="note-on-bandgap">Observação sobre o gap</h2>
+<p>Em geral, gaps calculados com funcionais de troca e correlação comuns, como LDA ou GGA, são fortemente subestimados em relação aos valores experimentais. Essa discrepância se deve principalmente a (1) aproximações no funcional de troca e correlação e (2) um termo de descontinuidade da derivada, que vem do fato de o funcional da densidade ser descontínuo em relação ao número total de elétrons do sistema. A segunda contribuição é a maior fonte de erro. Ela pode ser parcialmente corrigida por várias técnicas, como a aproximação GW.</p>
+<p>Estratégias para melhorar a previsão do gap a custo computacional moderado ou baixo já foram desenvolvidas por vários grupos, incluindo Chan e Ceder (delta-sol)<sup><a href="#user-content-fn-1" id="user-content-fnref-1">1</a></sup>, Heyd et al. (funcionais híbridos)<sup><a href="#user-content-fn-2" id="user-content-fnref-2">2</a></sup> e Setyawan et al. (ajustes empíricos)<sup><a href="#user-content-fn-3" id="user-content-fnref-3">3</a></sup>.</p>
+<h2 id="resources">Recursos</h2>
 <ul>
 <li><a href="https://docs.materialsproject.org/methodology/materials-methodology/electronic-structure#accuracy-of-band-structures" rel="noopener" target="_blank">https://docs.materialsproject.org/methodology/materials-methodology/electronic-structure#accuracy-of-band-structures</a></li>
-<li><a href="https://seekpath.materialscloud.io/" rel="noopener" target="_blank">See K-pat online tool</a></li>
+<li><a href="https://seekpath.materialscloud.io/" rel="noopener" target="_blank">Ferramenta online SeeK-path</a></li>
 </ul>
-
-<section><h2 id="footnote-label">Footnotes</h2>
+<section><h2 id="footnote-label">Notas</h2>
 <ol>
 <li id="user-content-fn-1">
 <p>M. Chan, G. Ceder, Efficient Band Gap Predictions for Solids, Physical
@@ -215,16 +181,15 @@ inorganic scintillator materials., ACS Combinatorial Science. (2011)
 </li>
 </ol>
 </section>
-<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/bands" target="_blank" rel="noopener">Bandstructure Calculation</a>,
+<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/bands" rel="noopener" target="_blank">Bandstructure Calculation</a>,
 do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
-<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY 4.0</a>.
-Alterações: layout, título e navegação traduzidos para o português.</p>
-    <nav class="pager"></nav>
-  </main>
+<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" rel="noopener" target="_blank">CC BY 4.0</a>.
+Alterações: texto traduzido para o português; layout e navegação adaptados.</p>
+<nav class="pager"></nav>
+</main>
 </div>
 <script src="../assets/js/site.js"></script>
-<script defer src="../assets/vendor/katex/katex.min.js"></script>
-<script defer src="../assets/vendor/katex/contrib/auto-render.min.js"
-  onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})"></script>
+<script defer="" src="../assets/vendor/katex/katex.min.js"></script>
+<script defer="" onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})" src="../assets/vendor/katex/contrib/auto-render.min.js"></script>
 </body>
 </html>
