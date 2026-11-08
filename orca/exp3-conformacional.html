@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Experimento 3: busca conformacional · Tutorial ORCA</title>
+  <title>Busca conformacional · Tutorial ORCA</title>
   <link rel="icon" href="../assets/img/favicon.png">
   <link rel="stylesheet" href="../assets/css/style.css">
   <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
@@ -12,14 +12,14 @@
 <div class="docs">
   <aside class="sidebar" data-docs="orca"></aside>
   <main class="content">
-<h1>Experimento 3: busca conformacional</h1>
-<p>Neste experimento você encontra os confôrmeros de menor energia de um sistema simples e calcula suas populações.
+<h1>Busca conformacional</h1>
+<p>Nesta página você encontra os confôrmeros de menor energia de um sistema simples e calcula suas populações.
 Veja a base teórica em <a href="theory-pes.html">Superfície de energia potencial</a>.</p>
 
-<h2 id="exercicio-5">Exercício 5: busca conformacional manual</h2>
+<h2 id="busca-manual">Busca conformacional manual</h2>
 <p>Vamos estudar o equilíbrio ceto-enólico do acetaldeído (<b>I</b>) e de sua forma enólica (<b>II</b>) com DFT. Por ser um caso simples, a busca
 dos confôrmeros pode ser feita manualmente. Calcule os confôrmeros indicados abaixo com o funcional <b>B3LYP</b>, associado à correção empírica
-de dispersão <b>D3BJ</b>, e a função de base <b>6-31G*</b>. Depois, a partir das energias, indique o equilíbrio em porcentagens pela
+de dispersão <b>D3BJ</b>, e a função de base <b>6-31G*</b>. Depois, a partir das energias, o equilíbrio é obtido em porcentagens pela
 distribuição de Boltzmann a 25 °C.</p>
 <figure><img src="img/exp3-ceto-enol.webp" alt="Isômeros e confôrmeros do acetaldeído" loading="lazy"></figure>
 <p>Crie os inputs das geometrias com os passos anteriores. Algumas palavras-chave não estão disponíveis no GABEDIT e precisam ser editadas à mão;
@@ -38,7 +38,6 @@ dE = {k: (v - min(E.values())) * 2625.4996 for k, v in E.items()}  # kJ/mol
 w = {k: np.exp(-v / (R * T)) for k, v in dE.items()}
 for k in E:
     print(f&quot;{k:7s} dE = {dE[k]:7.2f} kJ/mol   p = {100 * w[k] / sum(w.values()):6.2f} %&quot;)</code></pre></div>
-<div class="admonition tip"><b>❓ Questões para o relatório</b><ol><li>Calcule as porcentagens de cada espécie pela distribuição de Boltzmann.</li><li>Explique a conformação preferencial da cetona I e das formas enólicas (efeitos estéreos e eletrônicos).</li></ol></div>
     <nav class="pager"></nav>
   </main>
 </div>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Experimento 5: frequências e termoquímica · Tutorial ORCA</title>
+  <title>Frequências e termoquímica · Tutorial ORCA</title>
   <link rel="icon" href="../assets/img/favicon.png">
   <link rel="stylesheet" href="../assets/css/style.css">
   <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
@@ -12,12 +12,12 @@
 <div class="docs">
   <aside class="sidebar" data-docs="orca"></aside>
   <main class="content">
-<h1>Experimento 5: frequências e termoquímica</h1>
-<p>Neste experimento você usa cálculos de frequências para caracterizar pontos estacionários, gerar espectros de IV e obter grandezas
+<h1>Frequências e termoquímica</h1>
+<p>Nesta página você usa cálculos de frequências para caracterizar pontos estacionários, gerar espectros de IV e obter grandezas
 termodinâmicas. Veja a base teórica em <a href="theory-freq.html">Frequências e termoquímica</a>.</p>
 
-<h2 id="exercicio-8">Exercício 8: natureza dos pontos estacionários do Exercício 7</h2>
-<p>Com a SEP do <a href="exp4-scan.html#exercicio-7">Exercício 7</a>, vamos agora localizar os mínimos e os estados de transição do equilíbrio
+<h2 id="pontos-estacionarios">Caracterizando os pontos estacionários do butano</h2>
+<p>Com a SEP do <a href="exp4-scan.html#scan-diedro">scan do diedro do butano</a>, vamos agora localizar os mínimos e os estados de transição do equilíbrio
 conformacional do butano. A SEP dá uma boa ideia de onde estão esses pontos: eles não estão exatamente localizados, mas estão bem próximos.</p>
 
 <h3 id="minimos">Pontos de mínimo</h3>
@@ -104,7 +104,7 @@ intrínseca desse ponto de sela, que liga as duas conformações alternadas.</p>
 <div class="figrow"><figure><img src="img/exp5-anim-1.webp" alt="Animação 1" loading="lazy"></figure><figure><img src="img/exp5-anim-2.webp" alt="Animação 2" loading="lazy"></figure><figure><img src="img/exp5-anim-3.webp" alt="Animação 3" loading="lazy"></figure><figure><img src="img/exp5-anim-4.webp" alt="Animação 4" loading="lazy"></figure><figure><img src="img/exp5-anim-5.webp" alt="Animação 5" loading="lazy"></figure></div>
 <p class="caption">Sequência de quadros da animação do modo imaginário.</p>
 
-<h2 id="exercicio-9">Exercício 9: modos normais e espectro de IV do benzeno</h2>
+<h2 id="ir-benzeno">Modos normais e espectro de IV do benzeno</h2>
 <p>Vamos otimizar o benzeno e gerar seus espectros de IV em diferentes níveis de teoria.</p>
 <ol>
   <li>Desenhe o benzeno e gere o input do ORCA com <b>AM1</b> e o tipo de cálculo <b>Equilibrium structure search + Frequencies</b>.</li>
@@ -120,7 +120,7 @@ mas encontra os modos principais (destacados em verde). Lembre-se de que esses c
 <p>Repita com <b>HF/6-31G</b>. O cálculo leva bem mais tempo, mas as intensidades ficam mais próximas das experimentais.</p>
 <figure><img src="img/exp5-ir-hf.webp" alt="Espectro de IV do benzeno em HF/6-31G" loading="lazy"></figure>
 
-<h2 id="exercicio-10">Exercício 10: energia livre de Gibbs do benzeno</h2>
+<h2 id="gibbs">Energia livre de Gibbs do benzeno</h2>
 <p>Para obter a correção de ponto zero, a entalpia e a entropia (veja as <a href="theory-freq.html#termoquimica">definições</a>) é preciso calcular as frequências. Vamos aproveitar o cálculo do benzeno em HF/6-31G.
 Na saída, o bloco de termoquímica começa assim, listando as aproximações usadas:</p>
 <div class="codeblock"><pre><code>--------------------------

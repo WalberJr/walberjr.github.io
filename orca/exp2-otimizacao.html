@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Experimento 2: otimização de geometria · Tutorial ORCA</title>
+  <title>Otimização e energia de ionização · Tutorial ORCA</title>
   <link rel="icon" href="../assets/img/favicon.png">
   <link rel="stylesheet" href="../assets/css/style.css">
 </head>
@@ -11,16 +11,18 @@
 <div class="docs">
   <aside class="sidebar" data-docs="orca"></aside>
   <main class="content">
-<h1>Experimento 2: otimização de geometria</h1>
-<h2 id="exercicio-4">Exercício 4: energia de ionização</h2>
-<p>A energia de ionização (EI) é a diferença de energia entre o estado ionizado (F) e o estado fundamental (I) da molécula: EI = F − I.
-Teoricamente, ela pode ser calculada como potencial de ionização <b>vertical</b> (princípio de Franck-Condon) ou <b>adiabático</b>.
-Agora não usaremos as geometrias experimentais das moléculas.</p>
-<div class="admonition"><b>📝 Para o relatório</b> Estude a diferença entre ionização vertical e adiabática.</div>
+<h1>Otimização e energia de ionização</h1>
+<h2 id="ionizacao">Energia de ionização</h2>
+<p>A energia de ionização (EI) é a diferença de energia entre o estado ionizado e o estado fundamental da molécula. Ela pode ser calculada de duas formas:</p>
+<ul>
+  <li><b>Vertical</b> (princípio de Franck-Condon): energia do cátion na geometria otimizada da molécula neutra menos a energia da molécula neutra.</li>
+  <li><b>Adiabática</b>: energia do cátion na sua própria geometria otimizada menos a energia da molécula neutra otimizada.</li>
+</ul>
+<p>Aqui as geometrias são otimizadas no nível de teoria escolhido, e não tiradas de dados experimentais.</p>
 
 <h3 id="otimizacao">Otimização do formaldeído</h3>
 <p>Otimize a geometria do formaldeído no nível <b>HF/6-31G**</b>. A otimização é feita com a palavra-chave <code>Opt</code> e termina quando a
-estrutura converge. Use também <code>Freq</code> para caracterizar o ponto estacionário encontrado (mais detalhes no <a href="exp5-frequencias.html">Experimento 5</a>).</p>
+estrutura converge. Use também <code>Freq</code> para caracterizar o ponto estacionário encontrado (veja <a href="exp5-frequencias.html">Frequências e termoquímica</a>).</p>
 <div class="codeblock"><pre><code>! HF 6-31G** TightSCF Opt Freq</code></pre></div>
 <p>Na saída, a otimização começa com:</p>
 <div class="codeblock"><pre><code>*****************************
@@ -71,19 +73,15 @@ atualizar o gráfico). Note que a energia converge. Para ver a geometria, clique
 FINAL SINGLE POINT ENERGY      -113.869250572037
 -------------------------   --------------------</code></pre></div>
 
-<h3 id="tarefas">Tarefas</h3>
-<ul>
-  <li>Calcule todos os intermediários e o potencial de ionização nos dois casos (vertical e adiabático). Compare com os dados experimentais
-    (EI = 10,88 eV para o formaldeído e 10,51 eV para o eteno). <b>Mostre todas as energias.</b></li>
-  <li>Compare as geometrias dos estados fundamentais com os valores experimentais, completando a tabela:</li>
-</ul>
-<table>
-<tr><th></th><th>formaldeído</th><th>[formaldeído]<sup>+</sup></th><th></th><th>eteno</th><th>[eteno]<sup>+</sup></th></tr>
-<tr><td><i>r</i><sub>CH</sub></td><td></td><td></td><td><i>r</i><sub>CH</sub></td><td></td><td></td></tr>
-<tr><td><i>r</i><sub>CO</sub></td><td></td><td></td><td><i>r</i><sub>CC</sub></td><td></td><td></td></tr>
-<tr><td>∠HCH</td><td></td><td></td><td>∠HCH</td><td></td><td></td></tr>
-</table>
-<div class="admonition tip"><b>❓ Questões para o relatório</b><ol><li>Compare brevemente as geometrias nas ionizações adiabáticas.</li><li>Analise a densidade de spin dada pelas diferentes análises populacionais e faça os gráficos. A partir delas, discuta de qual orbital molecular o elétron é removido na ionização e a diferença entre as energias de ionização nos dois casos.</li><li>Repita os cálculos com HF/STO-3G (base mínima), HF/6-311++G** e B3LYP/6-311++G** e compare as geometrias do estado fundamental e as EI com os resultados anteriores, discutindo a qualidade de cada nível de teoria.</li></ol></div>
+<h3 id="calculando-ei">Calculando a energia de ionização</h3>
+<ol>
+  <li>Otimize a molécula neutra (feito acima) e anote a energia final.</li>
+  <li>Faça um cálculo <i>single point</i> do cátion na geometria otimizada da molécula neutra. A diferença de energia é a <b>EI vertical</b>.</li>
+  <li>Otimize o cátion. A diferença entre a energia final do cátion e a da molécula neutra otimizada é a <b>EI adiabática</b>.</li>
+  <li>Converta de hartree para eV (1 Eh = 27,2114 eV) e compare com os valores experimentais: 10,88 eV para o formaldeído e 10,51 eV para o eteno.</li>
+</ol>
+<p>Repetir os cálculos em outros níveis de teoria (por exemplo, HF/STO-3G, HF/6-311++G** e B3LYP/6-311++G**) mostra como a base e o método
+afetam as geometrias e as energias de ionização.</p>
 <div class="admonition warn"><b>⚠️ Íons</b> Para o cátion, use carga +1 e multiplicidade 2 (dubleto), com cálculo não restrito (<code>UHF</code> ou <code>UKS</code>).</div>
     <nav class="pager"></nav>
   </main>

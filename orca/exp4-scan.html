@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Experimento 4: superfície de energia potencial · Tutorial ORCA</title>
+  <title>Superfície de energia potencial · Tutorial ORCA</title>
   <link rel="icon" href="../assets/img/favicon.png">
   <link rel="stylesheet" href="../assets/css/style.css">
 </head>
@@ -11,8 +11,8 @@
 <div class="docs">
   <aside class="sidebar" data-docs="orca"></aside>
   <main class="content">
-<h1>Experimento 4: superfície de energia potencial</h1>
-<h2 id="exercicio-6">Exercício 6: superfície de energia potencial a partir do scan de uma ligação</h2>
+<h1>Superfície de energia potencial</h1>
+<h2 id="scan-ligacao">Scan de uma ligação: H₂</h2>
 <p>Vamos construir uma superfície de energia potencial (SEP) variando o comprimento da ligação H–H do hidrogênio.</p>
 <ol>
   <li>Desenhe o H₂ e ajuste a estrutura com mecânica molecular (MM).</li>
@@ -30,7 +30,7 @@ end
 *</code></pre></div>
 <p>O novo bloco <code>%geom Scan</code> … <code>end end</code> define o scan: o comprimento de ligação (símbolo <code>B</code>) entre os átomos 0 (H) e 1 (H)
 varia de 0,3 Å a 3,0 Å em 30 etapas. No ORCA, os átomos são numerados a partir de 0: 0, 1, 2, …, n para a primeira, segunda, terceira, …, (n+1)-ésima linha.
-Note também a palavra <code>UKS</code>, que indica DFT não restrito. <b>Por quê?</b></p>
+Note também a palavra <code>UKS</code>, que indica DFT não restrito: ao esticar a ligação, a molécula tende a dois átomos de H com um elétron desemparelhado cada, e só um cálculo não restrito descreve essa região da curva.</p>
 <p>Os resultados estão no fim da saída: na primeira coluna, o valor da coordenada; na segunda, a energia (hartree).</p>
 <div class="codeblock"><pre><code>RELAXED SURFACE SCAN RESULTS
 ----------------------------
@@ -72,7 +72,7 @@ The Calculated Surface using the &#x27;Actual Energy&#x27;
 <p>O ORCA salva a geometria de cada etapa nos arquivos <code>[nome do arquivo].001.xyz</code>, <code>[nome do arquivo].002.xyz</code>, …,
 <code>[nome do arquivo].030.xyz</code>. Para abri-los no GABEDIT, use o ícone de desenho &gt; <b>M</b> &gt; <b>Read</b> &gt; <b>XYZ file</b>.</p>
 
-<h2 id="exercicio-7">Exercício 7: superfície de energia potencial a partir do scan de um diedro</h2>
+<h2 id="scan-diedro">Scan de um diedro: butano</h2>
 <p>Com a mesma ideia, podemos construir uma SEP variando um diedro. Agora você vai construir a SEP do diedro em torno da ligação C–C central do butano,
 usando um método semiempírico. Depois de desenhar o butano, ajuste o diedro C–C–C–C para 0°. O scan relaxado varia o diedro (símbolo <code>D</code>)
 entre os átomos 0 (C), 1 (C), 5 (C) e 9 (C), de 0° a 360° em 36 etapas. A geometria inicial está abaixo.</p>
@@ -102,7 +102,6 @@ end
 *</code></pre></div>
 <p>Os dados devem gerar um gráfico como este (energia em função do diedro, em graus):</p>
 <figure><img src="img/exp4-butano-curva.webp" alt="Energia em função do diedro do butano" loading="lazy" style="max-width:480px"></figure>
-<div class="admonition tip"><b>❓ Questões para o relatório</b><ol><li>Discuta os pontos de mínimo e de máximo da curva acima em termos de energia.</li></ol></div>
     <nav class="pager"></nav>
   </main>
 </div>
