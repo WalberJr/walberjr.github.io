@@ -13,6 +13,7 @@
     ["Programas", "index.html#programas", "programas"],
     ["Quantum ESPRESSO", "espresso/index.html", "espresso"],
     ["ORCA", "orca/index.html", "orca"],
+    ["YouTube", "https://www.youtube.com/@WalberGGJr", "youtube"],
     ["Contato", "index.html#contato", "contato"],
   ];
 
@@ -24,7 +25,9 @@
       <button class="menu-btn" aria-label="Abrir menu">☰</button>
       <nav class="nav">
         ${NAV.map(([t, h, k]) =>
-          `<a href="${root}${h}" class="${k === section ? "active" : ""}">${t}</a>`).join("")}
+          (h.startsWith("http")
+            ? `<a href="${h}" target="_blank" rel="noopener">${t}</a>`
+            : `<a href="${root}${h}" class="${k === section ? "active" : ""}">${t}</a>`)).join("")}
       </nav>
     </div>`;
   document.body.prepend(header);
