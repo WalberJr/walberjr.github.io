@@ -1,24 +1,21 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Estrutura cristalina · Tutorial Quantum ESPRESSO</title>
-  <link rel="icon" href="../assets/img/favicon.png">
-  <link rel="stylesheet" href="../assets/css/style.css">
-  <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Estrutura cristalina · Tutorial Quantum ESPRESSO</title>
+<link href="../assets/img/favicon.png" rel="icon"/>
+<link href="../assets/css/style.css" rel="stylesheet"/>
+<link href="../assets/vendor/katex/katex.min.css" rel="stylesheet"/>
 </head>
 <body data-root="../" data-section="espresso">
 <div class="docs">
-  <aside class="sidebar" data-docs="espresso"></aside>
-  <main class="content">
+<aside class="sidebar" data-docs="espresso"></aside>
+<main class="content">
 <h1>Estrutura cristalina</h1>
-<h2 id="structure-databases">Structure databases</h2>
-<p>Density functional theory (DFT) calculations are <em>ab-initio</em> meaning the
-calculation is done from the scratch based on given input parameters. We need to
-provide the crystal structure in order to calculate DFT. Crystal structures are
-widely available in Crystallographic Information File (<code>.CIF</code>) format. There are
-several databases where you can look for crystal structures.</p>
+<h2 id="structure-databases">Bancos de dados de estruturas</h2>
+<p>Cálculos de teoria do funcional da densidade (DFT) são <em>ab initio</em>, ou seja, feitos do zero a partir dos parâmetros de entrada. Para fazer um cálculo DFT precisamos fornecer a estrutura cristalina. Estruturas cristalinas estão amplamente disponíveis no formato Crystallographic Information File (<code>.CIF</code>). Há vários bancos de dados onde você pode procurar estruturas cristalinas.</p>
 <ul>
 <li><a href="http://crystallography.net/cod/" rel="noopener" target="_blank">http://crystallography.net/cod/</a></li>
 <li><a href="https://materialsproject.org" rel="noopener" target="_blank">https://materialsproject.org</a></li>
@@ -27,65 +24,47 @@ several databases where you can look for crystal structures.</p>
 <li><a href="http://aflowlib.org/CrystalDatabase/" rel="noopener" target="_blank">http://aflowlib.org/CrystalDatabase/</a></li>
 <li><a href="http://crystdb.nims.go.jp/crystdb/search-materials" rel="noopener" target="_blank">http://crystdb.nims.go.jp/crystdb/search-materials</a></li>
 </ul>
-<p>In Quantum Espresso, the structure information is provided by <code>ibrav</code> number,
-and corresponding <code>celldm</code> values or lattice constants and cosines of angle
-between the axes. It is also possible to set <code>ibrav=0</code> and provide lattice
-vectors in <code>CELL_PARAMETERS</code>.</p>
-<div class="admonition warn"><b>⛔ Perigo</b><p>When set <code>ibrav=0</code>, the lattice vectors must be provided with sufficiently large
-number of decimal accuracy, otherwise symmetry detection may fail and strange
-problems may arrise.</p></div>
-<p><code>ibrav</code> numbers for different lattice types:</p>
-<table><thead><tr><th><code>ibrav</code><th>Lattice type<tbody><tr><td>1<td>Simple cubic<tr><td>2<td>Face centered cubic<tr><td>3,-3<td>Body centered cubic<tr><td>4<td>Hexagonal<tr><td>5<td>Trigonal with c as 3-fold axis<tr><td>-5<td>Trigonal with &lt;111&gt; as 3-fold axis<tr><td>6<td>Simple tetragonal<tr><td>7<td>Centered tetragonal<tr><td>8<td>Simple orthorhombic<tr><td>9,-9,91<td>One-face centered orthorhombic<tr><td>10<td>Face centered orthorhombic<tr><td>11<td>Body centered orthorhombic<tr><td>12<td>Simple monoclinic, c unique<tr><td>-12<td>Simple monoclinic, b unique<tr><td>13<td>One base centered monoclinic, c unique<tr><td>-13<td>One base centered monoclinic, b unique<tr><td>14<td>Triclinic</td></td></tr></td></td></tr></td></td></tr></td></td></tr></td></td></tr></td></td></tr></td></td></tr></td></td></tr></td></td></tr></td></td></tr></td></td></tr></td></td></tr></td></td></tr></td></td></tr></td></td></tr></td></td></tr></td></td></tr></tbody></th></th></tr></thead></table>
-<h2 id="useful-tools">Useful tools:</h2>
-<p><strong>Vesta</strong> - <a href="https://jp-minerals.org/vesta/en/" rel="noopener" target="_blank">https://jp-minerals.org/vesta/en/</a>. It helps you visualize crystal structure,
-create and modify supercells, crystal structures, and many other useful
-functionalities.</p>
-<p>We can prepare our Quantum Espresso input file using <strong>cif2cell</strong> utility. If
-you do not have <strong>cif2cell</strong> installed, you can use <strong>pip</strong> to install:</p>
+<p>No Quantum ESPRESSO, a estrutura é informada pelo número <code>ibrav</code> e pelos valores de <code>celldm</code> correspondentes, ou pelas constantes de rede e os cossenos dos ângulos entre os eixos. Também é possível usar <code>ibrav=0</code> e fornecer os vetores da rede em <code>CELL_PARAMETERS</code>.</p>
+<div class="admonition warn"><b>⛔ Perigo</b><p>Com <code>ibrav=0</code>, os vetores da rede precisam ser informados com um número suficientemente grande de casas decimais; caso contrário, a detecção de simetria pode falhar e surgir problemas estranhos.</p></div>
+<p>Números <code>ibrav</code> para os diferentes tipos de rede:</p>
+<table><thead><tr><th><code>ibrav</code></th><th>Tipo de rede</th></tr></thead><tbody><tr><td>1</td><td>Cúbica simples</td></tr><tr><td>2</td><td>Cúbica de face centrada</td></tr><tr><td>3,-3</td><td>Cúbica de corpo centrado</td></tr><tr><td>4</td><td>Hexagonal</td></tr><tr><td>5</td><td>Trigonal com c como eixo de ordem 3</td></tr><tr><td>-5</td><td>Trigonal com &lt;111&gt; como eixo de ordem 3</td></tr><tr><td>6</td><td>Tetragonal simples</td></tr><tr><td>7</td><td>Tetragonal centrada</td></tr><tr><td>8</td><td>Ortorrômbica simples</td></tr><tr><td>9,-9,91</td><td>Ortorrômbica de base centrada</td></tr><tr><td>10</td><td>Ortorrômbica de face centrada</td></tr><tr><td>11</td><td>Ortorrômbica de corpo centrado</td></tr><tr><td>12</td><td>Monoclínica simples, c único</td></tr><tr><td>-12</td><td>Monoclínica simples, b único</td></tr><tr><td>13</td><td>Monoclínica de base centrada, c único</td></tr><tr><td>-13</td><td>Monoclínica de base centrada, b único</td></tr><tr><td>14</td><td>Triclínica</td></tr></tbody></table>
+<h2 id="useful-tools">Ferramentas úteis:</h2>
+<p><strong>Vesta</strong> - <a href="https://jp-minerals.org/vesta/en/" rel="noopener" target="_blank">https://jp-minerals.org/vesta/en/</a>. Ajuda a visualizar estruturas cristalinas, criar e modificar supercélulas e estruturas, entre muitas outras funções úteis.</p>
+<p>Podemos preparar o arquivo de entrada do Quantum ESPRESSO com o utilitário <strong>cif2cell</strong>. Se não tiver o <strong>cif2cell</strong> instalado, use o <strong>pip</strong> para instalar:</p>
 <div class="codeblock"><pre><code>sudo pip3 install cif2cell</code></pre></div>
-<p>You may need to add it to the path in your <code>.bashrc</code> manually:</p>
+<p>Talvez seja preciso adicioná-lo manualmente ao caminho no seu <code>.bashrc</code>:</p>
 <div class="codeblock"><pre><code>export PATH="/home/pranab/.local/lib/python3.8/site-packages/:$PATH"</code></pre></div>
-<p>Running cif2cell command:</p>
+<p>Rodando o comando cif2cell:</p>
 <div class="codeblock"><pre><code>cif2cell file.cif -p quantum-espresso -o inputfile.in</code></pre></div>
-<h3 id="xcrysdens">Xcrysdens</h3>
-<p>You can explore the crystal structure, find out k-path and many more using
-<strong>Xcrysdens</strong> application - <a href="http://www.xcrysden.org" rel="noopener" target="_blank">http://www.xcrysden.org</a></p>
-<p>For certain functionality, Xcrysdens requires basic calculator program. On
-Ubuntu/<wbr/>Debian:</p>
+<h3 id="xcrysdens">XCrySDen</h3>
+<p>Você pode explorar a estrutura cristalina, encontrar o caminho de pontos k e muito mais com o aplicativo <strong>XCrySDen</strong> - <a href="http://www.xcrysden.org" rel="noopener" target="_blank">http://www.xcrysden.org</a></p>
+<p>Para algumas funções, o XCrySDen precisa da calculadora bc. No Ubuntu/<wbr/>Debian:</p>
 <div class="codeblock"><pre><code>sudo apt update
 sudo apt install bc xcrysden</code></pre></div>
-<p>Manual installation:</p>
-<div class="codeblock"><pre><code># install dependencies
+<p>Instalação manual:</p>
+<div class="codeblock"><pre><code># instala as dependências
 sudo apt install --no-install-recommends bc tk libglu1-mesa libtogl2 \
       libfftw3-3 libxmu6 imagemagick openbabel libgfortran5
 
-# download the latest version of xcrysden and extract
+# baixa e descompacta a versão mais recente do XCrySDen
 wget http://www.xcrysden.org/download/xcrysden-1.6.2-linux_x86_64-shared.tar.gz
 tar -zxvf xcrysden-1.6.2-linux_x86_64-shared.tar.gz
 
-# launch (provided you extracted under your home directory)
+# inicia o programa (supondo que foi descompactado na sua pasta pessoal)
 ~/xcrysden-1.6.2-bin-shared/xcrysden</code></pre></div>
-<p>If you are on WSL, you need to install X-server (X-ming for Windows) on the host
-and set <code>export DISPLAY=:0</code> in your WSL instance.</p>
-<h3 id="qe-input-generator">QE Input generator</h3>
-<p>You can generate <strong>PWscf</strong> input files using tools in this website as well
-<a href="https://www.materialscloud.org/work/tools/qeinputgenerator" rel="noopener" target="_blank">https://www.materialscloud.org/work/tools/qeinputgenerator</a></p>
-<p>The same website also has a tool for k-path visualization and generation
-<a href="https://www.materialscloud.org/work/tools/seekpath" rel="noopener" target="_blank">https://www.materialscloud.org/work/tools/seekpath</a></p>
-<h2 id="resources">Resources</h2>
+<p>Se estiver no WSL, instale um servidor X (Xming, no Windows) no sistema hospedeiro e defina <code>export DISPLAY=:0</code> na sua instância do WSL.</p>
+<h3 id="qe-input-generator">Gerador de inputs do QE</h3>
+<p>Você também pode gerar arquivos de entrada do <strong>PWscf</strong> com as ferramentas deste site: <a href="https://www.materialscloud.org/work/tools/qeinputgenerator" rel="noopener" target="_blank">https://www.materialscloud.org/work/tools/qeinputgenerator</a></p>
+<p>O mesmo site tem uma ferramenta para visualizar e gerar caminhos de pontos k: <a href="https://www.materialscloud.org/work/tools/seekpath" rel="noopener" target="_blank">https://www.materialscloud.org/work/tools/seekpath</a></p>
+<h2 id="resources">Recursos</h2>
 <ul>
-<li><a href="https://www.youtube.com/watch?v=Jk0QUB1fkMU" rel="noopener" target="_blank">Supercell construction using Vesta</a></li>
+<li><a href="https://www.youtube.com/watch?v=Jk0QUB1fkMU" rel="noopener" target="_blank">Construção de supercélulas com o Vesta</a></li>
 </ul>
-<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/setup/crystal-structure" target="_blank" rel="noopener">Crystal structure</a>,
-do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
-<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY 4.0</a>.
-Alterações: layout, título e navegação traduzidos para o português.</p>
-    <nav class="pager"></nav>
-  </main>
+<nav class="pager"></nav>
+</main>
 </div>
 <script src="../assets/js/site.js"></script>
-<script defer src="../assets/vendor/katex/katex.min.js"></script>
-<script defer src="../assets/vendor/katex/contrib/auto-render.min.js"
-  onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})"></script>
+<script defer="" src="../assets/vendor/katex/katex.min.js"></script>
+<script defer="" onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})" src="../assets/vendor/katex/contrib/auto-render.min.js"></script>
 </body>
 </html>

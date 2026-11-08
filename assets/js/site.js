@@ -31,69 +31,70 @@
   header.querySelector(".menu-btn").onclick = () =>
     header.querySelector(".nav").classList.toggle("open");
 
-  // ---- Barra lateral do tutorial de Quantum ESPRESSO ----
-  const QE = [
-    ["Guia rápido (português)", [
-      ["Introdução", "index.html"],
-      ["Instalação rápida", "instalacao.html"],
-      ["Estrutura do input", "input.html"],
-      ["Primeiro cálculo SCF", "scf.html"],
-      ["Testes de convergência", "convergencia.html"],
-      ["Otimização de estrutura", "relax.html"],
-      ["Estrutura de bandas", "bandas.html"],
-      ["DOS e PDOS", "dos.html"],
-      ["Links úteis", "referencias.html"],
-    ]],
-    ["Tutorial completo", [
-      ["Boas-vindas", "ref-welcome.html"],
-    ]],
-    ["Configuração", [
-      ["Instalação", "setup-install.html"],
-      ["Computação de alto desempenho", "setup-hpc.html"],
-      ["Jupyter notebooks", "setup-jupyter.html"],
-      ["Estrutura cristalina", "setup-crystal-structure.html"],
-      ["Pseudopotenciais", "setup-pseudo-potential.html"],
-    ]],
-    ["Teoria", [
-      ["O problema de muitos corpos", "theory-problem-statement.html"],
-      ["Hartree-Fock", "theory-hartree-fock.html"],
-      ["Visão geral da DFT", "theory-dft.html"],
-      ["Base de Wannier", "theory-wannier.html"],
-      ["Complexidade computacional", "theory-complexity.html"],
-    ]],
-    ["Prática", [
-      ["Cálculo SCF", "hands-on-scf.html"],
-      ["Testes de convergência", "hands-on-convergence.html"],
-      ["Otimização de estrutura", "hands-on-structure-optimization.html"],
-      ["Cálculo de DOS", "hands-on-dos.html"],
-      ["Estrutura de bandas", "hands-on-bands.html"],
-      ["Al (metal)", "hands-on-aluminum.html"],
-      ["PDOS", "hands-on-pdos.html"],
-      ["DOS resolvida em k", "hands-on-kpdos.html"],
-      ["Grafeno", "hands-on-graphene.html"],
-      ["GaAs", "hands-on-gaas.html"],
-      ["Fe (magnético)", "hands-on-fe.html"],
-      ["Ni (bandas com spin)", "hands-on-ni.html"],
-      ["Cálculo DFT+U", "hands-on-dft-u.html"],
-      ["Acoplamento spin-órbita", "hands-on-soc.html"],
-      ["Bi₂Se₃ (isolante topológico)", "hands-on-bi2se3.html"],
-      ["Constante dielétrica", "hands-on-epsilon.html"],
-      ["Superfície de Fermi", "hands-on-fermi-surface.html"],
-      ["Dispersão de fônons", "hands-on-phonon.html"],
-      ["Método de Wannier", "hands-on-wannier.html"],
-      ["Dinâmica molecular (PW)", "hands-on-md.html"],
-    ]],
-    ["Referências", [
-      ["Recursos", "ref-resources.html"],
-      ["Licença", "ref-license.html"],
-    ]],
-  ];
+  // ---- Barras laterais dos tutoriais (Quantum ESPRESSO e ORCA) ----
+  const DOCS = {
+    espresso: [
+      ["Começando", [
+        ["Introdução", "index.html"],
+        ["Instalação", "setup-install.html"],
+        ["Estrutura cristalina", "setup-crystal-structure.html"],
+        ["Pseudopotenciais", "setup-pseudo-potential.html"],
+      ]],
+      ["Teoria", [
+        ["O problema de muitos corpos", "theory-problem-statement.html"],
+        ["Hartree-Fock", "theory-hartree-fock.html"],
+        ["Visão geral da DFT", "theory-dft.html"],
+        ["Base de Wannier", "theory-wannier.html"],
+        ["Complexidade computacional", "theory-complexity.html"],
+      ]],
+      ["Prática", [
+        ["Cálculo SCF", "hands-on-scf.html"],
+        ["Testes de convergência", "hands-on-convergence.html"],
+        ["Otimização de estrutura", "hands-on-structure-optimization.html"],
+        ["Cálculo de DOS", "hands-on-dos.html"],
+        ["Estrutura de bandas", "hands-on-bands.html"],
+        ["Al (metal)", "hands-on-aluminum.html"],
+        ["PDOS", "hands-on-pdos.html"],
+        ["DOS resolvida em k", "hands-on-kpdos.html"],
+        ["Grafeno", "hands-on-graphene.html"],
+        ["GaAs", "hands-on-gaas.html"],
+        ["Fe (magnético)", "hands-on-fe.html"],
+        ["Ni (bandas com spin)", "hands-on-ni.html"],
+        ["Cálculo DFT+U", "hands-on-dft-u.html"],
+        ["Acoplamento spin-órbita", "hands-on-soc.html"],
+        ["Bi₂Se₃ (isolante topológico)", "hands-on-bi2se3.html"],
+        ["Constante dielétrica", "hands-on-epsilon.html"],
+        ["Superfície de Fermi", "hands-on-fermi-surface.html"],
+        ["Dispersão de fônons", "hands-on-phonon.html"],
+        ["Método de Wannier", "hands-on-wannier.html"],
+        ["Dinâmica molecular (PW)", "hands-on-md.html"],
+      ]],
+      ["Referências", [
+        ["Recursos", "ref-resources.html"],
+        ["Créditos e licença", "ref-license.html"],
+      ]],
+    ],
+    orca: [
+      ["Começando", [
+        ["Introdução", "index.html"],
+        ["Input do ORCA e GABEDIT", "exp1-input.html"],
+      ]],
+      ["Experimentos", [
+        ["1 · Energia single-point", "exp1-single-point.html"],
+        ["2 · Otimização e energia de ionização", "exp2-otimizacao.html"],
+        ["3 · Busca conformacional", "exp3-conformacional.html"],
+        ["4 · Superfície de energia potencial", "exp4-scan.html"],
+        ["5 · Frequências e termoquímica", "exp5-frequencias.html"],
+      ]],
+    ],
+  };
 
-  const sidebar = document.querySelector(".sidebar[data-docs='espresso']");
-  if (sidebar) {
+  const sidebar = document.querySelector(".sidebar[data-docs]");
+  if (sidebar && DOCS[sidebar.dataset.docs]) {
+    const MENU = DOCS[sidebar.dataset.docs];
     const here = location.pathname.split("/").pop() || "index.html";
-    const flat = QE.flatMap(([, items]) => items);
-    sidebar.innerHTML = QE.map(([group, items]) =>
+    const flat = MENU.flatMap(([, items]) => items);
+    sidebar.innerHTML = MENU.map(([group, items]) =>
       `<h4>${group}</h4>` + items.map(([t, h]) =>
         `<a href="${h}" class="${h === here ? "active" : ""}">${t}</a>`).join("")).join("");
 

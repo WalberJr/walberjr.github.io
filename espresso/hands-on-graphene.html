@@ -1,34 +1,33 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Grafeno · Tutorial Quantum ESPRESSO</title>
-  <link rel="icon" href="../assets/img/favicon.png">
-  <link rel="stylesheet" href="../assets/css/style.css">
-  <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Grafeno · Tutorial Quantum ESPRESSO</title>
+<link href="../assets/img/favicon.png" rel="icon"/>
+<link href="../assets/css/style.css" rel="stylesheet"/>
+<link href="../assets/vendor/katex/katex.min.css" rel="stylesheet"/>
 </head>
 <body data-root="../" data-section="espresso">
 <div class="docs">
-  <aside class="sidebar" data-docs="espresso"></aside>
-  <main class="content">
+<aside class="sidebar" data-docs="espresso"></aside>
+<main class="content">
 <h1>Grafeno</h1>
-<p>I am following this example from the <a href="https://gitlab.com/QEF/materials-for-max-qe2021-online-school" rel="noopener" target="_blank">ICTP online school 2021</a>.</p>
-<p>Graphene is single layer of carbon atoms. First perform the self consistent
-field calculation to obtain the Kohn-Sham orbitals. Please check the input files
-in <a href="https://github.com/pranabdas/espresso/" rel="noopener" target="_blank">GitHub</a> repository. Run <code>pw.x</code>:</p>
+<p>Este exemplo segue a <a href="https://gitlab.com/QEF/materials-for-max-qe2021-online-school" rel="noopener" target="_blank">escola online do ICTP 2021</a>.</p>
+<p>O grafeno é uma única camada de átomos de carbono. Primeiro faça o cálculo autoconsistente para obter os orbitais de Kohn-Sham. Veja os arquivos de entrada no repositório do <a href="https://github.com/pranabdas/espresso/" rel="noopener" target="_blank">GitHub</a>. Rode o <code>pw.x</code>:</p>
 <div class="codeblock"><pre><code>pw.x -i graphene_scf.in &gt; graphene_scf.out</code></pre></div>
-<p>Next increase the k-grid, and perform the non-self-consistent field calculation.</p>
+<p>Em seguida, aumente a malha de pontos k e faça o cálculo não autoconsistente.</p>
 <div class="codeblock"><pre><code>pw.x -i graphene_nscf.in &gt; graphene_nscf.out</code></pre></div>
-<h2 id="dos-calculation">DOS calculation</h2>
+<h2 id="dos-calculation">Cálculo da DOS</h2>
 <div class="codeblock"><pre><code>dos.x -i graphene_dos.in &gt; graphene_dos.out</code></pre></div>
 <img alt="graphene-dos" loading="lazy" src="img/graphene-dos.webp"/>
-<h2 id="bandstructure-calculation">Bandstructure calculation</h2>
-<p>First run the bands calculation for given k-path:</p>
+<h2 id="bandstructure-calculation">Cálculo da estrutura de bandas</h2>
+<p>Primeiro rode o cálculo de bandas para o caminho de pontos k escolhido:</p>
 <div class="codeblock"><pre><code>pw.x -i graphene_bands.in &gt; graphene_bands.out</code></pre></div>
-<p>Followed by the postprocessing to collect the bands:</p>
+<p>Em seguida, o pós-processamento para reunir as bandas:</p>
 <div class="codeblock"><pre><code>bands.x -i graphene_bands_pp.in &gt; graphene_bands_pp.out</code></pre></div>
-<p>Make plots:</p>
+<p>Faça os gráficos:</p>
 <div class="codeblock"><div class="code-title">notebooks/graphene.ipynb</div><pre><code>import numpy as np
 import matplotlib.pyplot as plt
 
@@ -41,26 +40,21 @@ for band in range(len(bands)):
     plt.plot(k, bands[band, :], linewidth=1, alpha=0.5, color='k')
 plt.xlim(min(k), max(k))
 
-# Fermi energy
+# energia de Fermi
 plt.axhline(0.921, linestyle=(0, (8, 10)), linewidth=0.75, color='k', alpha=0.5)
-# High symmetry k-points (check bands_pp.out)
+# pontos k de alta simetria (veja bands_pp.out)
 plt.axvline(0.6667, linewidth=0.75, color='k', alpha=0.5)
 plt.axvline(1, linewidth=0.75, color='k', alpha=0.5)
-# text labels
+# rótulos de texto
 plt.xticks(ticks= [0, 0.6667, 1, 1.5774], labels=['$\Gamma$', 'K', 'M', '$\Gamma$'])
 plt.ylabel("Energy (eV)")
 plt.show()</code></pre></div>
 <img alt="graphene-bands" loading="lazy" src="img/graphene-bands.webp"/>
-<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/graphene" target="_blank" rel="noopener">DOS and Bandstructure of Graphene</a>,
-do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
-<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY 4.0</a>.
-Alterações: layout, título e navegação traduzidos para o português.</p>
-    <nav class="pager"></nav>
-  </main>
+<nav class="pager"></nav>
+</main>
 </div>
 <script src="../assets/js/site.js"></script>
-<script defer src="../assets/vendor/katex/katex.min.js"></script>
-<script defer src="../assets/vendor/katex/contrib/auto-render.min.js"
-  onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})"></script>
+<script defer="" src="../assets/vendor/katex/katex.min.js"></script>
+<script defer="" onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})" src="../assets/vendor/katex/contrib/auto-render.min.js"></script>
 </body>
 </html>

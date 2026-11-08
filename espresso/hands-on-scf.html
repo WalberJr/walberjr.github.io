@@ -1,80 +1,54 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Cálculo SCF · Tutorial Quantum ESPRESSO</title>
-  <link rel="icon" href="../assets/img/favicon.png">
-  <link rel="stylesheet" href="../assets/css/style.css">
-  <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Cálculo SCF · Tutorial Quantum ESPRESSO</title>
+<link href="../assets/img/favicon.png" rel="icon"/>
+<link href="../assets/css/style.css" rel="stylesheet"/>
+<link href="../assets/vendor/katex/katex.min.css" rel="stylesheet"/>
 </head>
 <body data-root="../" data-section="espresso">
 <div class="docs">
-  <aside class="sidebar" data-docs="espresso"></aside>
-  <main class="content">
+<aside class="sidebar" data-docs="espresso"></aside>
+<main class="content">
 <h1>Cálculo SCF</h1>
-<p>We need to provide various important parameters for the self consistent
-calculation (solves the Kohn-Sham equation self-consistently) via an input file.
-In QE input files, there are <code>NAMELISTS</code> and <code>INPUT_CARDS</code>. <code>NAMELISTS</code>
-variables have default values, and new values can be provided as required for a
-specific calculation. The variables can be declared in any specific order. On
-the other hand, the variables in the <code>INPUT_CARDS</code> has always to be specified
-and in specific order. Logically independent <code>INPUT_CARDS</code> may be organized in
-any order.</p>
-<p>There are three mandatory <code>NAMELISTS</code> in <code>PWscf</code>: (1) <code>&amp;CONTROL</code>: specifies the
-flux of computation, (2) <code>&amp;SYSTEM</code>: specifies the system, and (3) <code>&amp;ELECTRONS</code>:
-specifies the algorithms used to solve the Kohn-Sham equation. There are two
-other <code>NAMELISTS</code>: <code>&amp;IONS</code> and <code>&amp;CELLS</code>, which need to be specified depending on
-the calculation.</p>
-<p>Three <code>INPUT_CARDS</code>: <code>ATOMIC_SPECIES</code>, <code>ATOMIC_POSITIONS</code>, and <code>K_POINTS</code> in
-<code>PWscf</code> are mandatory. There are few others that must be provided in certain
-calculations.</p>
-<p>Below is our input file <a href="https://github.com/pranabdas/espresso/tree/main/src/silicon" rel="noopener" target="_blank">pw.scf.silicon.in</a> for silicon in
-standard diamond (FCC) structure. Note that Quantum ESPRESSO uses primitive unit
-cell when <code>CELL_PARAMETERS</code> are not provided. One can use any other type of cell
-e.g., conventional unit cell or supercell by specifying corresponding
-<code>CELL_PARAMETERS</code> and <code>ATOMIC_POSITIONS</code>.The input files are typically named
-with <code>.in</code> prefix, while output files are named with <code>.out</code> prefix for their
-easier identification. The input parameters are organized in <code>&amp;namelists</code>
-followed by their fields or cards. The <code>&amp;control</code>, <code>&amp;system</code>, and <code>&amp;electrons</code>
-namelists are required. There are also optional <code>&amp;cell</code> and <code>&amp;ions</code>, you must
-provide them if your calculation require them. Most parameters in the
-<code>namelists</code> have default values (which may or may not suit your needs), however
-some variables you must always provide. Comment lines can be added with lines
-starting with a <code>!</code> like in FORTRAN. Also, parameter names are not
-case-sensitive as in FORTRAN, i.e., <code>&amp;control</code> and <code>&amp;CONTROL</code> are the same.</p>
-
+<p>Os parâmetros importantes do cálculo autoconsistente (que resolve a equação de Kohn-Sham de forma autoconsistente) são fornecidos por um arquivo de entrada. Nos inputs do QE há <code>NAMELISTS</code> e <code>INPUT_CARDS</code>. As variáveis das <code>NAMELISTS</code> têm valores padrão, e novos valores podem ser dados conforme a necessidade de cada cálculo. Elas podem ser declaradas em qualquer ordem. Já as variáveis dos <code>INPUT_CARDS</code> precisam sempre ser especificadas, e numa ordem definida. <code>INPUT_CARDS</code> logicamente independentes podem vir em qualquer ordem.</p>
+<p>Há três <code>NAMELISTS</code> obrigatórias no <code>PWscf</code>: (1) <code>&amp;CONTROL</code>: define o fluxo do cálculo; (2) <code>&amp;SYSTEM</code>: define o sistema; e (3) <code>&amp;ELECTRONS</code>: define os algoritmos usados para resolver a equação de Kohn-Sham. Há outras duas <code>NAMELISTS</code>, <code>&amp;IONS</code> e <code>&amp;CELLS</code>, que precisam ser especificadas conforme o tipo de cálculo.</p>
+<p>Três <code>INPUT_CARDS</code> são obrigatórios no <code>PWscf</code>: <code>ATOMIC_SPECIES</code>, <code>ATOMIC_POSITIONS</code> e <code>K_POINTS</code>. Há alguns outros que precisam ser fornecidos em certos cálculos.</p>
+<p>Abaixo está o arquivo de entrada <a href="https://github.com/pranabdas/espresso/tree/main/src/silicon" rel="noopener" target="_blank">pw.scf.silicon.in</a> para o silício na estrutura padrão do diamante (FCC). Note que o Quantum ESPRESSO usa a célula unitária primitiva quando <code>CELL_PARAMETERS</code> não é informado. É possível usar qualquer outro tipo de célula, como a célula convencional ou uma supercélula, especificando os <code>CELL_PARAMETERS</code> e as <code>ATOMIC_POSITIONS</code> correspondentes. Os arquivos de entrada costumam ter a extensão <code>.in</code> e os de saída a extensão <code>.out</code>, para facilitar a identificação. Os parâmetros de entrada são organizados em <code>&amp;namelists</code> seguidas de seus campos ou cards. As namelists <code>&amp;control</code>, <code>&amp;system</code> e <code>&amp;electrons</code> são obrigatórias. Há também as opcionais <code>&amp;cell</code> e <code>&amp;ions</code>, que devem ser fornecidas quando o cálculo exigir. A maioria dos parâmetros das <code>namelists</code> tem valores padrão (que podem ou não servir para você), mas algumas variáveis precisam sempre ser informadas. Linhas de comentário começam com <code>!</code>, como no FORTRAN. Também como no FORTRAN, os nomes dos parâmetros não diferenciam maiúsculas de minúsculas, isto é, <code>&amp;control</code> e <code>&amp;CONTROL</code> são iguais.</p>
 <div class="codeblock"><div class="code-title">src/silicon/pw.scf.silicon.in</div><pre><code>&amp;CONTROL
-! we want to perform self consistent field calculation
+! queremos um cálculo autoconsistente
   calculation = 'scf',
 
-! prefix is reference to the output files
+! prefix é o nome de referência dos arquivos de saída
   prefix = 'silicon',
 
-! output directory. Note that it is deprecated.
+! diretório de saída (note que está obsoleto)
   outdir = './tmp/'
 
-! directory for the pseudo potential directory
+! diretório dos pseudopotenciais
   pseudo_dir = '../pseudos/'
 
-! verbosity high will give more details on the output file
+! verbosity high dá mais detalhes no arquivo de saída
   verbosity = 'high'
 /
 
 &amp;SYSTEM
-! Bravais lattice index, which is 2 for FCC structure
+! índice da rede de Bravais: 2 para a estrutura FCC
   ibrav = 2,
 
-! Lattice constant in BOHR
+! constante de rede em bohr
   celldm(1) = 10.26,
 
-! number of atoms in an unit cell
+! número de átomos na célula unitária
   nat = 2,
 
-! number of different types of atom in the cell
+! número de tipos diferentes de átomos na célula
   ntyp = 1,
 
-! kinetic energy cutoff for wavefunction in Ry
+! energia de corte cinética da função de onda, em Ry
   ecutwfc = 30
 
 ! number of bands to calculate
@@ -82,7 +56,7 @@ case-sensitive as in FORTRAN, i.e., <code>&amp;control</code> and <code>&amp;CON
 /
 
 &amp;ELECTRONS
-! Mixing factor used in the self-consistent method
+! fator de mistura usado no método autoconsistente
   mixing_beta = 0.6
 /
 
@@ -95,22 +69,16 @@ ATOMIC_POSITIONS (alat)
 
 K_POINTS (automatic)
   6 6 6 0 0 0</code></pre></div>
-<p>I am using the pseudo potential file (<code>Si.pz-vbc.UPF</code>) downloaded from <a href="https://www.quantum-espresso.org/pseudopotentials" rel="noopener" target="_blank">Quantum
-Espresso Website</a>.</p>
-<p>You must read the <strong>PWscf user manual</strong> for in-depth understanding. Check the
-<code>qe-x.x/PW/Doc/</code> folder under your installation directory. Also see
-<code>INPUT_PW.html</code> describing various input parameters. PW stands for plane waves.</p>
-<p>Run <code>pw.x</code> in self consistent mode for silicon.</p>
+<p>O exemplo usa o arquivo de pseudopotencial (<code>Si.pz-vbc.UPF</code>) baixado do <a href="https://www.quantum-espresso.org/pseudopotentials" rel="noopener" target="_blank">site do Quantum ESPRESSO</a>.</p>
+<p>Leia o <strong>manual do usuário do PWscf</strong> para um entendimento aprofundado. Veja a pasta <code>qe-x.x/PW/Doc/</code> no diretório de instalação. Veja também o <code>INPUT_PW.html</code>, que descreve os parâmetros de entrada. PW significa <em>plane waves</em> (ondas planas).</p>
+<p>Rode o <code>pw.x</code> no modo autoconsistente para o silício.</p>
 <div class="codeblock"><pre><code>pw.x &lt; pw.scf.silicon.in &gt; pw.scf.silicon.out
-# For parallel execution
+# para execução em paralelo
 mpirun -np 4 pw.x -inp pw.scf.silicon.in &gt; pw.scf.silicon.out</code></pre></div>
-<div class="admonition"><b>📝 Nota</b><p>I have added the Quantum ESPRESSO executable directory to the <code>PATH</code> environment
-variable in bash/zsh profile, otherwise we have to type the full path of <code>pw.x</code>
-executable location.</p></div>
-<p>Now let's look at the output file <code>pw.scf.silicon.out</code> and see how the
-convergence is reached:</p>
+<div class="admonition"><b>📝 Nota</b><p>O comando acima supõe que o diretório dos executáveis do Quantum ESPRESSO está na variável de ambiente <code>PATH</code> (no perfil do bash/zsh); caso contrário, é preciso digitar o caminho completo do executável <code>pw.x</code>.</p></div>
+<p>Agora vamos olhar o arquivo de saída <code>pw.scf.silicon.out</code> e ver como a convergência é atingida:</p>
 <div class="codeblock"><pre><code>grep -e 'total energy' -e estimate pw.scf.silicon.out</code></pre></div>
-<p>and you should see something like this:</p>
+<p>e você deve ver algo assim:</p>
 <div class="codeblock"><pre><code>     total energy              =     -15.85014573 Ry
      Harris-Foulkes estimate   =     -15.86899637 Ry
      estimated scf accuracy    &lt;       0.06093037 Ry
@@ -124,71 +92,49 @@ convergence is reached:</p>
      Harris-Foulkes estimate   =     -15.85219831 Ry
      estimated scf accuracy    &lt;       0.00000099 Ry
      The total energy is the sum of the following terms:</code></pre></div>
-<p>It is important to note that the absolute value of DFT total energy is not with
-respect to the vacuum reference, and depends on the chosen pseudopotential. The
-meaningful measure is the difference in total energy, where various offsets
-cancel out.</p>
-<div class="admonition"><b>📝 Nota</b><p>In the above calculation, if you check the output file <code>pw.scf.silicon.out</code>, you
-will find: highest occupied, lowest unoccupied level (eV): 6.2117 6.8442.
-Therefore, the bandgap is 0.6325 eV, which is an underestimation of actual
-bandgap (1.12 eV).</p></div>
-<div class="admonition tip"><b>Tips on convergence</b><ol>
+<p>É importante notar que o valor absoluto da energia total do DFT não tem o vácuo como referência e depende do pseudopotencial escolhido. A medida com significado é a diferença de energia total, em que os diversos deslocamentos se cancelam.</p>
+<div class="admonition"><b>📝 Nota</b><p>No cálculo acima, no arquivo de saída <code>pw.scf.silicon.out</code>, você encontrará: <em>highest occupied, lowest unoccupied level (eV): 6.2117 6.8442</em>. Portanto, o gap é de 0,6325 eV, uma subestimativa do gap real (1,12 eV).</p></div>
+<div class="admonition tip"><b>💡 Dicas de convergência</b><ol>
 <li>
-<p>Reduce <code>mixing_beta</code> value, especially if there is an oscillation around the
-convergence energy.</p>
+<p>Reduza o valor de <code>mixing_beta</code>, principalmente se houver oscilação em torno da energia de convergência.</p>
 </li>
 <li>
-<p>If it is a metallic system, use smearing and degauss. In this case, the SCF
-accuracy gradually goes down then suddenly increases (due to slight change in
-Fermi energy highest occupied/<wbr/>lowest unoccupied levels change).</p>
+<p>Se o sistema for metálico, use <em>smearing</em> e degauss. Nesse caso, a precisão do SCF cai gradualmente e de repente aumenta (devido a pequenas mudanças na energia de Fermi, que alteram os níveis mais alto ocupado/<wbr/>mais baixo desocupado).</p>
 </li>
 <li>
-<p>Increase energy and charge density cutoffs (make sure they are sufficient).</p>
+<p>Aumente os cortes de energia e de densidade de carga (garanta que sejam suficientes).</p>
 </li>
 <li>
-<p>Certain pseudo potential files have issues, you may try with pseudo
-potentials from different libraries.</p>
+<p>Alguns arquivos de pseudopotencial têm problemas; experimente pseudopotenciais de outras bibliotecas.</p>
 </li>
 <li>
-<p>Suggested values for the <code>conv_thr</code>: for energy and eigenvalues (scf
-calculation) 1.0d-7, for forces (relax calculation) 1.0d-8, for stress (vc-relax
-calculation) 1.0d-9 Ry. For certain calculation convergence might be very slow
-for the first iteration, one can start the calculation with a higher threshold,
-after few iterations reduce it and restart the calculation.</p>
+<p>Valores sugeridos para o <code>conv_thr</code>: para energia e autovalores (cálculo scf), 1.0d-7; para forças (cálculo relax), 1.0d-8; para tensão (cálculo vc-relax), 1.0d-9 Ry. Em alguns cálculos a convergência pode ser muito lenta na primeira iteração; dá para começar com um limiar maior e, após algumas iterações, reduzi-lo e reiniciar o cálculo.</p>
 </li>
 </ol></div>
-<p>There are several other important information is printed on the output file.
-Exchange correlation used in the calculation:</p>
+<p>Várias outras informações importantes aparecem no arquivo de saída. O funcional de troca e correlação usado no cálculo:</p>
 <div class="codeblock"><pre><code>Exchange-correlation= SLA  PZ   NOGX NOGC</code></pre></div>
-<p>Where <code>SLA</code> → Slater exchange; <code>PZ</code> → Perdew-Zunger parametrization of the LDA;
-<code>NOGX</code> and <code>NOGC</code> indicates that density gradients are not taken into account.</p>
-<p>We can see the total number of plane waves (1067) uses in our calculation:</p>
+<p>Onde <code>SLA</code> → troca de Slater; <code>PZ</code> → parametrização de Perdew-Zunger da LDA; <code>NOGX</code> e <code>NOGC</code> indicam que os gradientes da densidade não são levados em conta.</p>
+<p>Podemos ver o número total de ondas planas (1067) usadas no cálculo:</p>
 <div class="codeblock"><pre><code>Parallelization info
 --------------------
 sticks:   dense  smooth     PW     G-vecs:    dense   smooth      PW
 Min         108     108     34                 1489     1489     266
 Max         109     109     35                 1492     1492     267
 Sum         433     433    139                 5961     5961    1067</code></pre></div>
-<p>Number of Kohn-Sham states:</p>
+<p>Número de estados de Kohn-Sham:</p>
 <div class="codeblock"><pre><code>number of electrons       =         8.00
 number of Kohn-Sham states=            8</code></pre></div>
-<p>In our calculation we have specified the number of bands = 8. Otherwise, there
-would be 4 bands for 8 electrons in case of non spin-polarized systems.</p>
-<h2 id="resources">Resources</h2>
+<p>Neste cálculo definimos o número de bandas = 8. Caso contrário, haveria 4 bandas para 8 elétrons, num sistema sem polarização de spin.</p>
+<h2 id="resources">Recursos</h2>
 <ul>
 <li><a href="https://www.quantum-espresso.org/Doc/pw_user_guide/" rel="noopener" target="_blank">https://www.quantum-espresso.org/Doc/pw_user_guide/</a></li>
-<li><a href="https://www.materialscloud.org/work/tools/qeinputgenerator" rel="noopener" target="_blank">Quantum Espresso Input Generator</a> (can help creating QE input files)</li>
+<li><a href="https://www.materialscloud.org/work/tools/qeinputgenerator" rel="noopener" target="_blank">Gerador de inputs do Quantum ESPRESSO</a> (ajuda a criar arquivos de entrada do QE)</li>
 </ul>
-<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/scf" target="_blank" rel="noopener">Self consistent field calculation for silicon</a>,
-do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
-<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY 4.0</a>.
-Alterações: layout, título e navegação traduzidos para o português.</p>
-    <nav class="pager"></nav>
-  </main>
+<nav class="pager"></nav>
+</main>
 </div>
 <script src="../assets/js/site.js"></script>
-<script defer src="../assets/vendor/katex/katex.min.js"></script>
-<script defer src="../assets/vendor/katex/contrib/auto-render.min.js"
-  onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})"></script>
+<script defer="" src="../assets/vendor/katex/katex.min.js"></script>
+<script defer="" onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})" src="../assets/vendor/katex/contrib/auto-render.min.js"></script>
 </body>
 </html>

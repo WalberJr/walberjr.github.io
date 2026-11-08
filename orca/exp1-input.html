@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Input do ORCA e GABEDIT · Tutorial ORCA</title>
+  <link rel="icon" href="../assets/img/favicon.png">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body data-root="../" data-section="orca">
+<div class="docs">
+  <aside class="sidebar" data-docs="orca"></aside>
+  <main class="content">
+<h1>Input do ORCA e GABEDIT</h1>
+<h2 id="input">Input do ORCA: palavras-chave e geometria</h2>
+<p>Todo programa de cálculo teórico precisa de um arquivo inicial, chamado <i>input</i>. Nele devem constar as
+informações mínimas sobre o cálculo que você deseja fazer. No ORCA, no mínimo: <i>método</i>, <i>geometria</i>,
+<i>multiplicidade</i> e <i>carga</i> total da molécula, e <i>tipo de cálculo</i> (otimização, <i>single point</i>, propriedades etc.).</p>
+<p>Essas são as informações mínimas, mas o programa tem parâmetros para o algoritmo de cada etapa, a memória,
+o número de processadores e muitas outras variáveis. Quando você as omite, são usadas as opções padrão (<i>default</i>).</p>
+<p>Cada programa tem sua própria sintaxe; o ORCA fica num meio-termo de complexidade. Você não precisa conhecê-la
+a fundo, pois o GABEDIT faz o trabalho pesado, mas alguns ajustes que ele não faz são necessários. Por isso vale aprender
+os conceitos básicos. Há dois tipos de sintaxe no input do ORCA: a <b>simples</b> e a por <b>blocos</b>.
+Veja o input mínimo para a otimização de geometria da molécula de hidrogênio:</p>
+<div class="codeblock"><div class="code-title">h2.inp</div><pre><code># Título
+! HF Opt 3-21G
+* xyz 0 1
+H 0.0 0.0 0.0
+H 1.0 0.0 0.0
+*</code></pre></div>
+<ul>
+  <li><b>Comentários:</b> tudo o que vem depois do símbolo <code>#</code>, em qualquer parte do arquivo, é ignorado.</li>
+  <li><b>Palavras-chave</b> (<i>keywords</i>): aqui, <code>HF</code>, <code>Opt</code> e <code>3-21G</code> são, respectivamente, o método
+    (Hartree-Fock), o tipo de cálculo (otimização de geometria) e a função de base (3-21G). Elas podem vir em qualquer ordem
+    e são precedidas pelo símbolo <code>!</code>.</li>
+  <li><b>Geometria:</b> em coordenadas cartesianas (xyz), em ångström. O bloco começa com <code>*</code>, seguido da palavra
+    <code>xyz</code>, da carga e da multiplicidade. Depois vem uma linha por átomo, no formato
+    <code>Símbolo  X  Y  Z</code>, e o bloco termina com outro <code>*</code>.</li>
+</ul>
+<p>A ordem dos átomos na lista é a numeração que os programas de visualização vão mostrar. Neste exemplo, a distância H–H é de 1 Å.
+Para opções avançadas, usa-se a sintaxe por blocos, que aparece em alguns exercícios.</p>
+
+<h2 id="exercicio-1">Exercício 1: desenhando moléculas</h2>
+<p>Para criar as coordenadas cartesianas usamos programas gráficos como o GABEDIT. Tudo é feito com o mouse.
+Nesta etapa vamos desenhar algumas estruturas apenas para pegar o jeito.</p>
+<p>Abra o GABEDIT e identifique as regiões da barra de ferramentas abaixo. Por enquanto, use o ícone
+<b>Desenho e visualização de geometria</b>.</p>
+<figure><img src="img/exp1-gabedit-barra.webp" alt="Barra de ferramentas do GABEDIT" loading="lazy"></figure>
+<p>Ao clicar nele, abre-se a janela de desenho:</p>
+<figure><img src="img/exp1-gabedit-janela-desenho.webp" alt="Janela de desenho do GABEDIT" loading="lazy" style="max-width:300px"></figure>
+<ul>
+  <li><b>Fundo branco:</b> clique no botão <b>M</b> &gt; <b>Render</b> &gt; <b>Background Color</b> &gt; <b>Other</b>, digite <code>#FFFFFF</code> no campo <b>Color name</b> e clique em <b>OK</b>.</li>
+  <li><b>Desenhar:</b> clique no ícone do lápis e verifique se o ícone <b>H</b> (adicionar hidrogênios automaticamente) está selecionado.
+    Dê um clique em qualquer área da janela: aparece a molécula de metano. Se a perspectiva estiver estranha, clique duas vezes no ícone <b>O</b> (orientação padrão).</li>
+</ul>
+<div class="figrow"><figure><img src="img/exp1-metano.webp" alt="Metano" loading="lazy"><figcaption>Metano</figcaption></figure><figure><img src="img/exp1-agua.webp" alt="Água" loading="lazy"><figcaption>Água</figcaption></figure></div>
+<ul>
+  <li><b>Apagar:</b> use o ícone da borracha e clique no(s) átomo(s). Para desfazer, use <kbd>Ctrl+Z</kbd>. Para apagar tudo: <b>M</b> &gt; <b>Edit</b> &gt; <b>Delete molecule</b>.</li>
+  <li><b>Trocar o elemento:</b> clique no ícone da tabela periódica e escolha o átomo (o lápis precisa estar selecionado). Faça isso com o oxigênio e clique na janela: você terá a molécula da água.</li>
+  <li><b>Representação:</b> o ícone de bola e vareta muda para a representação <i>Ball &amp; Stick</i>; o ícone de vareta volta à anterior.</li>
+  <li><b>Etano:</b> selecione o carbono, clique na janela, mantenha pressionado e arraste. Se a ligação C–C ficar muito longa, use
+    <b>M</b> &gt; <b>Molecular Mechanics</b> &gt; <b>Optimization</b> &gt; <b>OK</b>. A estrutura é otimizada por mecânica molecular (MM)
+    e rapidamente fica melhor do que a desenhada. Use sempre esse recurso para "corrigir" geometrias desenhadas.</li>
+</ul>
+<div class="figrow"><figure><img src="img/exp1-etano-antes.webp" alt="Etano antes" loading="lazy"><figcaption>Antes da otimização por MM</figcaption></figure><figure><img src="img/exp1-etano-depois.webp" alt="Etano depois" loading="lazy"><figcaption>Depois</figcaption></figure></div>
+<ul>
+  <li><b>Adicionar um carbono:</b> leve o cursor até um hidrogênio até ele ficar destacado e clique: o hidrogênio é substituído por uma metila.
+    Para outro elemento, escolha-o antes na tabela periódica.</li>
+</ul>
+<figure><img src="img/exp1-etano-metila.webp" alt="Substituição de um hidrogênio por metila" loading="lazy" style="max-width:260px"></figure>
+<ul>
+  <li><b>Mover, girar e ampliar:</b> use as ferramentas de translação, rotação e zoom; basta clicar, arrastar e soltar.</li>
+  <li><b>Fragmentos:</b> o ícone de fragmentos abre uma lista de grupos e moléculas prontas para inserir. Veja o manual do GABEDIT para detalhes.</li>
+  <li><b>Moléculas cíclicas</b> que não estão na lista, por exemplo o biciclo[2.2.1]heptano:
+    <ol>
+      <li>Selecione fragmentos &gt; <b>RINGS</b> &gt; <b>Cyclohexane</b>.</li>
+      <li>Com o lápis, clique num hidrogênio do anel (estrutura <b>A</b>). Leve o cursor até o carbono dessa metila (confira se está destacado),
+        clique e arraste até o outro carbono cabeça de ponte, soltando só quando ele ficar verde (às vezes é preciso mudar a perspectiva).
+        Você terá algo parecido com a estrutura <b>B</b>; os hidrogênios em excesso são removidos automaticamente.</li>
+      <li>Otimize com <b>M</b> &gt; <b>Molecular Mechanics</b> &gt; <b>Optimization</b> &gt; <b>OK</b>. A estrutura <b>C</b> ainda precisa de ajuste,
+        pois o hidrogênio da cabeça de ponte fica muito distorcido. Com a ferramenta de mover átomos, coloque-o manualmente numa posição mais
+        realista e otimize de novo, obtendo a estrutura <b>D</b>.</li>
+    </ol></li>
+</ul>
+<figure><img src="img/exp1-biciclo-abcd.webp" alt="Etapas A a D do desenho do biciclo[2.2.1]heptano" loading="lazy"></figure>
+<ul>
+  <li><b>Parâmetros geométricos:</b> com a ferramenta de medidas, selecione dois átomos para uma ligação; uma janela lateral permite digitar
+    o novo comprimento em ångström. Para ângulos e diedros, selecione os átomos em sequência. Depois, clique de novo nos átomos para tirar a seleção.</li>
+  <li><b>Dupla ligação:</b> desenhe o etano, remova um hidrogênio de cada carbono e otimize por MM: você terá o eteno.</li>
+</ul>
+
+<h2 id="exercicio-2">Exercício 2: criando um input</h2>
+<p>Depois de desenhar a molécula, <b>feche</b> a janela de desenho; a geometria fica guardada no programa (clique de novo em
+<b>Desenho e visualização de geometria</b> para conferir). Os 11 primeiros ícones da barra de ferramentas são atalhos para gerar inputs
+de 11 programas diferentes:</p>
+<figure><img src="img/exp1-gabedit-programas.webp" alt="Programas suportados pelo GABEDIT" loading="lazy"></figure>
+<p>Clique no ícone do ORCA. Abre-se uma janela para escolher carga, multiplicidade de spin, tipo de cálculo, método, função de base etc.
+O GABEDIT oferece só algumas das muitas opções do ORCA; as demais devem ser consultadas no manual do ORCA e editadas diretamente no input.</p>
+<figure><img src="img/exp1-gabedit-orca-input.webp" alt="Janela de geração de input do ORCA no GABEDIT" loading="lazy" style="max-width:420px"></figure>
+<ul>
+  <li><b>Charge:</b> carga total do sistema. O padrão é a molécula neutra (carga zero); altere para moléculas carregadas.</li>
+  <li><b>Spin multiplicity:</b> ao adicionar ou remover elétrons, você muda a multiplicidade do sistema, dada por 2<i>S</i>+1, onde <i>S</i> é o spin total da molécula.</li>
+  <li><b>Job Type:</b>
+    <ul>
+      <li><b>Single Point Energy:</b> cálculo <i>single point</i>.</li>
+      <li><b>Equilibrium structure search:</b> busca de um ponto de mínimo.</li>
+      <li><b>Frequencies:</b> cálculo de frequências e parâmetros termoquímicos.</li>
+      <li><b>Transition state:</b> busca de um estado de transição.</li>
+      <li><b>Equilibrium structure search + Frequencies</b> e <b>Transition state + Frequencies:</b> a busca seguida do cálculo de frequências.</li>
+    </ul></li>
+  <li><b>SCF Type:</b> restrito (<b>restricted</b>) ou não restrito (<b>unrestricted</b>).</li>
+  <li><b>SCF Convergence:</b> critério de convergência da estrutura eletrônica. Use <b>TightSCF</b>.</li>
+  <li><b>Type of method</b> e <b>Method:</b> o método do cálculo.</li>
+  <li><b>Excited states:</b> alguns métodos permitem calcular estados excitados. Use <b>Nothing</b> para o estado fundamental.</li>
+  <li><b>Type</b> e <b>Basis:</b> algumas das funções de base disponíveis no ORCA; outras podem ser escritas direto no input.</li>
+  <li><b>Initial Guess:</b> o "chute inicial" dos orbitais moleculares. Deixe em <b>Default</b>.</li>
+</ul>
+<p>Escolhidos os parâmetros, clique em <b>OK</b>: o input foi criado. Aparece uma aba <b>NoName</b> com o input gerado (no exemplo, com
+todos os parâmetros padrão para o metano). Para salvar o arquivo, clique no ícone de salvar.</p>
+<figure><img src="img/exp1-gabedit-input-gerado.webp" alt="Input gerado pelo GABEDIT" loading="lazy" style="max-width:520px"></figure>
+    <nav class="pager"></nav>
+  </main>
+</div>
+<script src="../assets/js/site.js"></script>
+</body>
+</html>

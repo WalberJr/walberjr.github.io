@@ -11,21 +11,14 @@
 <div class="docs">
   <aside class="sidebar" data-docs="espresso"></aside>
   <main class="content">
-<h1>Introdução</h1>
-<p>Bem-vindo ao tutorial de <b>Quantum ESPRESSO</b> (QE) em português! Aqui você vai aprender,
-passo a passo, a fazer cálculos de estrutura eletrônica baseados na Teoria do Funcional da
-Densidade (DFT) usando ondas planas e pseudopotenciais.</p>
+<h1>Tutorial de Quantum ESPRESSO</h1>
+<p>Tutorial em português de cálculos de estrutura eletrônica com o <b>Quantum ESPRESSO</b> (QE),
+baseados na Teoria do Funcional da Densidade (DFT) com ondas planas e pseudopotenciais.</p>
 
-<div class="admonition"><b>📚 Duas trilhas</b>
-O <b>Guia rápido</b> (estas primeiras páginas, em português) leva do zero ao cálculo de bandas e DOS.
-O <a href="ref-welcome.html">Tutorial completo</a> cobre teoria, configuração e mais de 20 exemplos práticos:
-metais, magnetismo, DFT+U, spin-órbita, fônons, Wannier, dinâmica molecular e outros.
-Ele foi adaptado do <i>Quantum Espresso Tutorial</i> de Pranab Das (CC BY 4.0).</div>
-
-<h2>O que é o Quantum ESPRESSO?</h2>
+<h2 id="o-que-e">O que é o Quantum ESPRESSO?</h2>
 <p>É um pacote de código aberto (licença GPL) para simulações de materiais em escala atômica.
 O nome vem de <i>opEn-Source Package for Research in Electronic Structure, Simulation, and Optimization</i>.
-Ele reúne vários programas; os principais que usaremos são:</p>
+Ele reúne vários programas; os principais usados aqui são:</p>
 <table>
 <tr><th>Programa</th><th>Para que serve</th></tr>
 <tr><td><code>pw.x</code></td><td>Cálculos SCF, NSCF, bandas, otimização de estrutura e dinâmica molecular</td></tr>
@@ -33,25 +26,28 @@ Ele reúne vários programas; os principais que usaremos são:</p>
 <tr><td><code>dos.x</code></td><td>Densidade de estados (DOS) total</td></tr>
 <tr><td><code>projwfc.x</code></td><td>DOS projetada (PDOS) em orbitais atômicos</td></tr>
 <tr><td><code>pp.x</code></td><td>Pós-processamento: densidade de carga, potencial etc.</td></tr>
-<tr><td><code>ph.x</code></td><td>Fônons via teoria de perturbação do funcional da densidade (DFPT)</td></tr>
+<tr><td><code>ph.x</code></td><td>Fônons pela teoria de perturbação do funcional da densidade (DFPT)</td></tr>
+<tr><td><code>hp.x</code></td><td>Cálculo do parâmetro de Hubbard U por resposta linear</td></tr>
+<tr><td><code>epsilon.x</code></td><td>Função dielétrica e propriedades ópticas</td></tr>
 </table>
 
-<h2>Fluxo de trabalho típico</h2>
+<h2 id="fluxo">Fluxo de trabalho típico</h2>
 <ol>
-  <li><b>SCF</b> — resolver as equações de Kohn-Sham até a autoconsistência.</li>
-  <li><b>Convergência</b> — escolher energia de corte e malha de pontos k.</li>
-  <li><b>Otimização</b> — relaxar posições atômicas e/ou a célula.</li>
-  <li><b>NSCF / bandas</b> — calcular autovalores em mais pontos k a partir da densidade do SCF.</li>
-  <li><b>Pós-processamento</b> — bandas, DOS, PDOS, densidade de carga…</li>
+  <li><b>SCF</b>: resolver as equações de Kohn-Sham até a autoconsistência.</li>
+  <li><b>Convergência</b>: escolher a energia de corte e a malha de pontos k.</li>
+  <li><b>Otimização</b>: relaxar as posições atômicas e/ou a célula.</li>
+  <li><b>NSCF / bandas</b>: calcular autovalores em mais pontos k a partir da densidade do SCF.</li>
+  <li><b>Pós-processamento</b>: bandas, DOS, PDOS, densidade de carga etc.</li>
 </ol>
 
-<div class="admonition tip"><b>💡 Dica</b>
-Todos os exemplos usam o <b>silício</b> (estrutura do diamante), um sistema pequeno que roda em
-segundos num notebook. Depois de entender o fluxo, basta trocar a estrutura pelo seu material.</div>
+<h2 id="organizacao">Como o tutorial está organizado</h2>
+<div class="grid">
+  <a class="card" href="setup-install.html"><h3>Começando</h3><p>Instalação, estrutura cristalina e escolha de pseudopotenciais.</p></a>
+  <a class="card" href="theory-problem-statement.html"><h3>Teoria</h3><p>Problema de muitos corpos, Hartree-Fock, DFT, base de Wannier e custo computacional.</p></a>
+  <a class="card" href="hands-on-scf.html"><h3>Prática</h3><p>20 exemplos: SCF, convergência, bandas, DOS, metais, magnetismo, DFT+U, spin-órbita, fônons e mais.</p></a>
+</div>
 
-<h2>Convenção de nomes e unidades</h2>
-<p>Sugestão de padrão para os arquivos: <code>{programa}.{cálculo}.{sistema}.{in,out}</code>,
-por exemplo <code>pw.bands.si.in</code>.</p>
+<h2 id="unidades">Conversão de unidades</h2>
 <table>
 <tr><th>Unidade</th><th>Conversão</th></tr>
 <tr><td>1 bohr</td><td>0,529177 Å</td></tr>
@@ -60,9 +56,16 @@ por exemplo <code>pw.bands.si.in</code>.</p>
 <tr><td>1 Ha</td><td>2 Ry = 27,211386 eV</td></tr>
 </table>
 
+<h2 id="nomes">Convenção de nomes de arquivos</h2>
+<p>Os exemplos seguem, sempre que possível, o padrão <code>{programa}.{cálculo}.{sistema}.{in,out}</code>.
+Por exemplo, <code>pw.bands.silicon.in</code> é o arquivo de entrada do cálculo de bandas do silício com o <code>pw.x</code>.
+Os arquivos de entrada completos dos exemplos estão no repositório
+<a href="https://github.com/pranabdas/espresso" target="_blank" rel="noopener">pranabdas/espresso</a>.</p>
+
 <div class="admonition"><b>📊 Analise com o KStudio</b>
-Os arquivos de saída deste tutorial podem ser abertos no <a href="../index.html#programas">KStudio</a>
+Os arquivos de saída podem ser abertos no <a href="../index.html#programas">KStudio</a>
 para visualizar convergência, bandas, DOS e PDOS sem escrever scripts.</div>
+
     <nav class="pager"></nav>
   </main>
 </div>

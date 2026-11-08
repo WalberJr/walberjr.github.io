@@ -1,23 +1,22 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Dispersão de fônons · Tutorial Quantum ESPRESSO</title>
-  <link rel="icon" href="../assets/img/favicon.png">
-  <link rel="stylesheet" href="../assets/css/style.css">
-  <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Dispersão de fônons · Tutorial Quantum ESPRESSO</title>
+<link href="../assets/img/favicon.png" rel="icon"/>
+<link href="../assets/css/style.css" rel="stylesheet"/>
+<link href="../assets/vendor/katex/katex.min.css" rel="stylesheet"/>
 </head>
 <body data-root="../" data-section="espresso">
 <div class="docs">
-  <aside class="sidebar" data-docs="espresso"></aside>
-  <main class="content">
+<aside class="sidebar" data-docs="espresso"></aside>
+<main class="content">
 <h1>Dispersão de fônons</h1>
-<p>In Quantum Espresso, phonon dispersion is calculated using <code>ph.x</code> program, which
-is implementation of <a href="https://doi.org/10.1103/RevModPhys.73.515" rel="noopener" target="_blank">density functional perturbation theory (DFPT)</a>.</p>
-<p>Here are the steps for calculating phonon dispersion:</p>
-<p>(1) perform SCF calculation using <code>pw.x</code></p>
-
+<p>No Quantum ESPRESSO, a dispersão de fônons é calculada com o programa <code>ph.x</code>, uma implementação da <a href="https://doi.org/10.1103/RevModPhys.73.515" rel="noopener" target="_blank">teoria de perturbação do funcional da densidade (DFPT)</a>.</p>
+<p>Estes são os passos para calcular a dispersão de fônons:</p>
+<p>(1) fazer o cálculo SCF com o <code>pw.x</code></p>
 <div class="codeblock"><div class="code-title">src/GaAs-phonon/pw.scf.GaAs.in</div><pre><code>&amp;control
   calculation = 'scf'
   prefix = 'GaAs'
@@ -52,21 +51,17 @@ ATOMIC_POSITIONS
 
 K_POINTS {automatic}
   8 8 8 0 0 0</code></pre></div>
-<p>We perform the SCF calculation:</p>
+<p>Fazemos o cálculo SCF:</p>
 <div class="codeblock"><pre><code>mpirun -np 4 pw.x -i pw.scf.GaAs.in &gt; pw.scf.GaAs.out</code></pre></div>
 <div class="admonition"><b>ℹ️ Info</b><ol>
 <li>
-<p>Usually higher energy cutoff values are used for phonon calculation to get
-better accuracy.</p>
+<p>Em geral usam-se cortes de energia maiores no cálculo de fônons, para obter mais precisão.</p>
 </li>
 <li>
-<p>In case of two dimensional systems, use <code>assume_isolated = '2D'</code> in the
-<code>SYSTEM</code> namelist to avoid negative or imaginary acoustic frequencies near
-\(\Gamma\) point. Read more <a href="https://doi.org/10.1103/PhysRevB.96.075448" rel="noopener" target="_blank">here</a>.</p>
+<p>Em sistemas bidimensionais, use <code>assume_isolated = '2D'</code> na namelist <code>SYSTEM</code> para evitar frequências acústicas negativas ou imaginárias perto do ponto \(\Gamma\). Leia mais <a href="https://doi.org/10.1103/PhysRevB.96.075448" rel="noopener" target="_blank">aqui</a>.</p>
 </li>
 </ol></div>
-<p>(2) calculate the dynamical matrix on a uniform mesh of q-points using <code>ph.x</code></p>
-
+<p>(2) calcular a matriz dinâmica numa malha uniforme de pontos q com o <code>ph.x</code></p>
 <div class="codeblock"><div class="code-title">src/GaAs-phonon/ph.GaAs.in</div><pre><code>&amp;INPUTPH
   outdir = './tmp/'
   prefix = 'GaAs'
@@ -78,25 +73,18 @@ better accuracy.</p>
   nq3 = 6
   fildyn = 'GaAs.dyn'
 /</code></pre></div>
-<p>Run the calculation:</p>
+<p>Rode o cálculo:</p>
 <div class="codeblock"><pre><code>mpirun -np 4 ph.x -i ph.GaAs.in &gt; ph.GaAs.out</code></pre></div>
-<p>The above calculation is computationally demanding. Our example calculation took
-about a whole day on a 2.6 GHz quad core processor.</p>
-<div class="admonition"><b>ℹ️ Info</b><p>You can restart an interrupted <code>ph.x</code> calculation with <code>recover = .true.</code> in the
-<code>INPUTPH</code> namelist. You can cleanly exit an ongoing calculation by creating an
-empty file with name <code>{prefix}.EXIT</code>.</p></div>
-<p>(3) perform inverse Fourier transform of the dynamical matrix to obtain inverse
-Fourier components in real space using <code>q2r.x</code>. Below is our input file:</p>
-
+<p>O cálculo acima é computacionalmente exigente. Este exemplo levou cerca de um dia inteiro num processador de quatro núcleos de 2,6 GHz.</p>
+<div class="admonition"><b>ℹ️ Info</b><p>Você pode retomar um cálculo <code>ph.x</code> interrompido com <code>recover = .true.</code> na namelist <code>INPUTPH</code>. Para encerrar de forma limpa um cálculo em andamento, crie um arquivo vazio com o nome <code>{prefix}.EXIT</code>.</p></div>
+<p>(3) fazer a transformada de Fourier inversa da matriz dinâmica para obter as componentes no espaço real, com o <code>q2r.x</code>. Este é o arquivo de entrada:</p>
 <div class="codeblock"><div class="code-title">src/GaAs-phonon/q2r.GaAs.in</div><pre><code>&amp;INPUT
   fildyn = 'GaAs.dyn'
   zasr = 'crystal'
   flfrc = 'GaAs.fc'
 /</code></pre></div>
 <div class="codeblock"><pre><code>mpirun -np 4 q2r.x -i q2r.GaAs.in &gt; q2r.GaAs.out</code></pre></div>
-<p>(4) Finally, perform Fourier transformation of the real space components to get
-the dynamical matrix at any q by using <code>matdyn.x</code>.</p>
-
+<p>(4) Por fim, fazer a transformada de Fourier das componentes no espaço real para obter a matriz dinâmica em qualquer q, com o <code>matdyn.x</code>.</p>
 <div class="codeblock"><div class="code-title">src/GaAs-phonon/matdyn.GaAs.in</div><pre><code>&amp;INPUT
   asr = 'crystal'
   flfrc = 'GaAs.fc'
@@ -113,7 +101,7 @@ the dynamical matrix at any q by using <code>matdyn.x</code>.</p>
 0.375 0.375 0.750   20 ! K
 0.000 0.000 0.000    1 ! G</code></pre></div>
 <div class="codeblock"><pre><code>mpirun -np 4 matdyn.x -i matdyn.GaAs.in &gt; matdyn.GaAs.out</code></pre></div>
-<p>We can now plot the phonon dispersion of GaAs:</p>
+<p>Agora podemos fazer o gráfico da dispersão de fônons do GaAs:</p>
 <div class="codeblock"><div class="code-title">notebooks/GaAs-phonon.ipynb</div><pre><code>import numpy as np
 import matplotlib.pyplot as plt
 
@@ -122,7 +110,7 @@ data = np.loadtxt("../src/GaAs-phonon/GaAs.freq.gp")
 nbands = data.shape[1] - 1
 for band in range(nbands):
     plt.plot(data[:, 0], data[:, band + 1], linewidth=1, alpha=0.5, color='k')
-# High symmetry k-points (check matdyn.GaAs.in)
+# pontos k de alta simetria (veja matdyn.GaAs.in)
 plt.axvline(x=data[0, 0], linewidth=0.5, color='k', alpha=0.5)
 plt.axvline(x=data[20, 0], linewidth=0.5, color='k', alpha=0.5)
 plt.axvline(x=data[40, 0], linewidth=0.5, color='k', alpha=0.5)
@@ -134,11 +122,9 @@ plt.xlim(data[0, 0], data[-1, 0])
 plt.ylim(0, )
 plt.show()</code></pre></div>
 <img alt="GaAs-phonon" loading="lazy" src="img/GaAs-phonon.webp"/>
-<div class="admonition tip"><b>💡 Dica</b><p>We may need to lower the value of <code>conv_thr</code> in <code>scf</code> calculation for more
-accurate result.</p></div>
-<h3 id="phonon-density-of-states">Phonon Density of States</h3>
-<p>Input file for phonon DOS calculation:</p>
-
+<div class="admonition tip"><b>💡 Dica</b><p>Talvez seja preciso diminuir o valor de <code>conv_thr</code> no cálculo <code>scf</code> para um resultado mais preciso.</p></div>
+<h3 id="phonon-density-of-states">Densidade de estados de fônons</h3>
+<p>Arquivo de entrada para o cálculo da DOS de fônons:</p>
 <div class="codeblock"><div class="code-title">src/GaAs-phonon/matdyn.dos.GaAs.in</div><pre><code>&amp;INPUT
   asr   = 'crystal'
   flfrc = 'GaAs.fc'
@@ -150,7 +136,7 @@ accurate result.</p></div>
   nk2   = 25
   nk3   = 25
 /</code></pre></div>
-<p>Plot phonon DOS:</p>
+<p>Gráfico da DOS de fônons:</p>
 <div class="codeblock"><div class="code-title">notebooks/GaAs-phonon.ipynb</div><pre><code>freq, dos, pdos_Ga, pdos_As = np.loadtxt("../src/GaAs-phonon/GaAs.dos", unpack=True)
 
 plt.plot(freq, dos, c='k', lw=0.5, label='Total')
@@ -162,21 +148,16 @@ plt.legend(frameon=False, loc='upper left')
 plt.xlim(freq[0], freq[-1])
 plt.show()</code></pre></div>
 <img alt="GaAs-phonon-dos" loading="lazy" src="img/GaAs-phonon-dos.webp"/>
-<h2 id="resources">Resources</h2>
+<h2 id="resources">Recursos</h2>
 <ul>
-<li><a href="https://indico.ictp.it/event/8301/other-view?view=ictptimetable" rel="noopener" target="_blank">School on Electron-Phonon Physics from First Principles (2018)</a> (<a href="https://www.youtube.com/playlist?list=PLYc-eBoIpXTIboem6dKTYD1-1m0sMYnYz" rel="noopener" target="_blank">Video lectures on YouTube</a>)</li>
+<li><a href="https://indico.ictp.it/event/8301/other-view?view=ictptimetable" rel="noopener" target="_blank">Escola de Física Elétron-Fônon por Primeiros Princípios (2018)</a> (<a href="https://www.youtube.com/playlist?list=PLYc-eBoIpXTIboem6dKTYD1-1m0sMYnYz" rel="noopener" target="_blank">aulas em vídeo no YouTube</a>)</li>
 <li><a href="https://github.com/nguyen-group/QE-SSP" rel="noopener" target="_blank">https://github.com/nguyen-group/QE-SSP</a></li>
 </ul>
-<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/phonon" target="_blank" rel="noopener">Phonon dispersion</a>,
-do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
-<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY 4.0</a>.
-Alterações: layout, título e navegação traduzidos para o português.</p>
-    <nav class="pager"></nav>
-  </main>
+<nav class="pager"></nav>
+</main>
 </div>
 <script src="../assets/js/site.js"></script>
-<script defer src="../assets/vendor/katex/katex.min.js"></script>
-<script defer src="../assets/vendor/katex/contrib/auto-render.min.js"
-  onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})"></script>
+<script defer="" src="../assets/vendor/katex/katex.min.js"></script>
+<script defer="" onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})" src="../assets/vendor/katex/contrib/auto-render.min.js"></script>
 </body>
 </html>

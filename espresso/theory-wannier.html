@@ -1,33 +1,30 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Base de Wannier · Tutorial Quantum ESPRESSO</title>
-  <link rel="icon" href="../assets/img/favicon.png">
-  <link rel="stylesheet" href="../assets/css/style.css">
-  <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Base de Wannier · Tutorial Quantum ESPRESSO</title>
+<link href="../assets/img/favicon.png" rel="icon"/>
+<link href="../assets/css/style.css" rel="stylesheet"/>
+<link href="../assets/vendor/katex/katex.min.css" rel="stylesheet"/>
 </head>
 <body data-root="../" data-section="espresso">
 <div class="docs">
-  <aside class="sidebar" data-docs="espresso"></aside>
-  <main class="content">
+<aside class="sidebar" data-docs="espresso"></aside>
+<main class="content">
 <h1>Base de Wannier</h1>
-<h2 id="introduction">Introduction</h2>
-<p>Wannier functions are an alternative representation of Bloch states in terms of
-a localized basis set. Suppose we have \(N\) atoms each separated by lattice
-constant \(a\) in one dimension. Bloch states are indexed by the wave vector \(k\).</p>
+<h2 id="introduction">Introdução</h2>
+<p>Funções de Wannier são uma representação alternativa dos estados de Bloch em termos de uma base localizada. Suponha \(N\) átomos separados pela constante de rede \(a\) em uma dimensão. Os estados de Bloch são indexados pelo vetor de onda \(k\).</p>
 \[\mathcal{H}\ket{k} = \epsilon_k \ket{k}\]
 \[\braket{x | k} = \psi_k(x)\]
-<p>From the Bloch theorem, we have</p>
+<p>Pelo teorema de Bloch, temos</p>
 \[\psi_k(x + a) = e^{ika}\psi_k(x)\]
-<p>Now, we want to find an alternative representation in terms of Wannier basis
-\(\ket{n}\), where the states are labeled using site index (n = 1, 2, ..., N)
-instead of quantum number \(k\). Wannier basis set is complete and orthonormal.</p>
+<p>Agora queremos uma representação alternativa na base de Wannier \(\ket{n}\), em que os estados são rotulados pelo índice do sítio (n = 1, 2, ..., N) em vez do número quântico \(k\). A base de Wannier é completa e ortonormal.</p>
 \[\ket{k} = \sum_{n=1}^N a_{nk} \ket{n}\]
 \[\braket{x | k} = \sum_n a_{nk} \braket{x | n}\]
 \[\Rightarrow \psi_k(x) = \sum_n a_{nk} w(x - na)\]
-<p>where \(w\) represents Wannier function. Apply translation operator on both sides:</p>
+<p>onde \(w\) representa a função de Wannier. Aplicando o operador de translação nos dois lados:</p>
 \[\begin{aligned}
 &amp;T_a \psi_k(x) = \sum_n a_{nk} T_a w(x - na) \\
 
@@ -46,7 +43,7 @@ instead of quantum number \(k\). Wannier basis set is complete and orthonormal.<
 &amp;\qquad\cdots \\
 &amp;= a_{0 k}e^{i(n+1)ka}
 \end{aligned}\]
-<p>Since Bloch states are orthonormal:</p>
+<p>Como os estados de Bloch são ortonormais:</p>
 \[\begin{aligned}
 \braket{k | k} &amp;= \braket{k | \sum_n a_{nk} | n} \\
 &amp;= \sum_{mn} \braket{m | a_{mk}^* a_{nk} | n} \\
@@ -56,40 +53,28 @@ instead of quantum number \(k\). Wannier basis set is complete and orthonormal.<
 \end{aligned}\]
 \[\Rightarrow a_{0k} = \frac{1}{\sqrt{N}} \qquad\text{(up to a phase factor)}\]
 \[\ket{k} = \frac{1}{\sqrt{N}} \sum_n e^{ikna} \ket{n}\]
-<p>While Bloch states represent the eigenstates of the single-particle Hamiltonian,
-WF (in general) cannot be assigned a single eigen-value, instead WFs are
-obtained as liner combination of Bloch states corresponding to different
-energies.</p>
-<p>The Hamiltonian can now be written as:</p>
+<p>Enquanto os estados de Bloch são autoestados do hamiltoniano de partícula única, às funções de Wannier (em geral) não se pode atribuir um único autovalor; elas são obtidas como combinações lineares de estados de Bloch de energias diferentes.</p>
+<p>O hamiltoniano pode então ser escrito como:</p>
 \[\begin{aligned}
 \mathcal{H} &amp;= \sum_m \sum_n \ket{m} \braket{m | \mathcal{H} | n} \bra{n} \\
 &amp;= \sum_n \epsilon_n \ket{n} \bra{n} + \sum_{m\neq n} (-t_{mn}) \ket{m} \bra{n}
 \end{aligned}\]
-<p>where \(\epsilon_n\) is onsite or diagonal term and \(t_{mn}\) (&gt; 0) is hopping or
-off-diagonal term.</p>
-<h2 id="maximally-localized-wannier-function">Maximally Localized Wannier Function</h2>
-<p>The choice of Wannier function is not unique. One such option could be the set
-that maximizes localization. Two different sets of Wannier basis are connected
-via unitary transformation. MLWFs can be considered as a generalization of
-localized molecular orbitals (LMOs) to periodic systems.</p>
-<h2 id="resources">Resources</h2>
+<p>onde \(\epsilon_n\) é o termo local (diagonal) e \(t_{mn}\) (&gt; 0) é o termo de salto (<em>hopping</em>, fora da diagonal).</p>
+<h2 id="maximally-localized-wannier-function">Funções de Wannier maximamente localizadas</h2>
+<p>A escolha das funções de Wannier não é única. Uma opção é o conjunto que maximiza a localização. Dois conjuntos diferentes de bases de Wannier estão ligados por uma transformação unitária. As MLWFs podem ser vistas como uma generalização dos orbitais moleculares localizados (LMOs) para sistemas periódicos.</p>
+<h2 id="resources">Recursos</h2>
 <ul>
-<li><a href="https://youtu.be/_XWIwoE7Pc4" rel="noopener" target="_blank">Introduction to Wannier Basis lecture by Vijay A. Singh</a></li>
-<li><a href="https://doi.org/10.1103/PhysRevB.56.12847" rel="noopener" target="_blank"><em>Maximally localized generalized Wannier functions for composite energy bands</em>, Marzari and Vanderbilt, Phys. Rev. B <strong>56</strong>, 12847 (1997)</a></li>
-<li><a href="https://doi.org/10.1103/PhysRevB.65.035109" rel="noopener" target="_blank"><em>Maximally localized Wannier functions for entangled energy bands</em>, Souza, Marzari and Vanderbilt, Phys. Rev. B <strong>65</strong>, 035109 (2001)</a></li>
-<li><a href="https://doi.org/10.1103/RevModPhys.84.1419" rel="noopener" target="_blank"><em>Maximally localized Wannier functions: Theory and applications</em>, Marzari <em>et. al.</em>, Rev. Mod. Phys. <strong>84</strong>, 1419 (2012)</a></li>
-<li><a href="https://doi.org/10.1002/9781119148739.ch6" rel="noopener" target="_blank"><em>Introduction to Maximally Localized Wannier Functions</em>, Ambrosetti and Silvestrelli, Reviews in Computational Chemistry, Ch. 6, pp. 327 (2016)</a></li>
+<li><a href="https://youtu.be/_XWIwoE7Pc4" rel="noopener" target="_blank">Aula de introdução à base de Wannier, por Vijay A. Singh</a></li>
+<li><a href="https://doi.org/10.1103/PhysRevB.56.12847" rel="noopener" target="_blank"><em>Maximally localized generalized Wannier functions for composite energy bands</em>, Marzari e Vanderbilt, Phys. Rev. B <strong>56</strong>, 12847 (1997)</a></li>
+<li><a href="https://doi.org/10.1103/PhysRevB.65.035109" rel="noopener" target="_blank"><em>Maximally localized Wannier functions for entangled energy bands</em>, Souza, Marzari e Vanderbilt, Phys. Rev. B <strong>65</strong>, 035109 (2001)</a></li>
+<li><a href="https://doi.org/10.1103/RevModPhys.84.1419" rel="noopener" target="_blank"><em>Maximally localized Wannier functions: Theory and applications</em>, Marzari <em>et al.</em>, Rev. Mod. Phys. <strong>84</strong>, 1419 (2012)</a></li>
+<li><a href="https://doi.org/10.1002/9781119148739.ch6" rel="noopener" target="_blank"><em>Introduction to Maximally Localized Wannier Functions</em>, Ambrosetti e Silvestrelli, Reviews in Computational Chemistry, cap. 6, p. 327 (2016)</a></li>
 </ul>
-<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/theory/wannier" target="_blank" rel="noopener">Wannier basis</a>,
-do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
-<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY 4.0</a>.
-Alterações: layout, título e navegação traduzidos para o português.</p>
-    <nav class="pager"></nav>
-  </main>
+<nav class="pager"></nav>
+</main>
 </div>
 <script src="../assets/js/site.js"></script>
-<script defer src="../assets/vendor/katex/katex.min.js"></script>
-<script defer src="../assets/vendor/katex/contrib/auto-render.min.js"
-  onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})"></script>
+<script defer="" src="../assets/vendor/katex/katex.min.js"></script>
+<script defer="" onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})" src="../assets/vendor/katex/contrib/auto-render.min.js"></script>
 </body>
 </html>

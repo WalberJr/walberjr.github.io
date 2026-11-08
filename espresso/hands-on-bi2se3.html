@@ -1,39 +1,33 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Bi₂Se₃ (isolante topológico) · Tutorial Quantum ESPRESSO</title>
-  <link rel="icon" href="../assets/img/favicon.png">
-  <link rel="stylesheet" href="../assets/css/style.css">
-  <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Bi₂Se₃ (isolante topológico) · Tutorial Quantum ESPRESSO</title>
+<link href="../assets/img/favicon.png" rel="icon"/>
+<link href="../assets/css/style.css" rel="stylesheet"/>
+<link href="../assets/vendor/katex/katex.min.css" rel="stylesheet"/>
 </head>
 <body data-root="../" data-section="espresso">
 <div class="docs">
-  <aside class="sidebar" data-docs="espresso"></aside>
-  <main class="content">
+<aside class="sidebar" data-docs="espresso"></aside>
+<main class="content">
 <h1>Bi₂Se₃ (isolante topológico)</h1>
-<p>Topological insulators are a special class of material that is insulating in the
-bulk, however exhibit conducting states in the surface.
-Bi<sub>2</sub>Se<sub>3</sub> is such a material. Spin orbit coupling and
-breaking of the inversion symmetry at the surface of the crystal is crucial to
-the existence of the Dirac surface state. Here we will calculate the
-bandstructure step by step: first for the bulk, next including SOC, and finally
-for the slab. Please check the respective <a href="https://github.com/pranabdas/espresso/tree/master/src/Bi2Se3" rel="noopener" target="_blank">input files</a>. I followed the
-following steps:</p>
-<div class="codeblock"><pre><code># SCF calculation for bulk
+<p>Isolantes topológicos são uma classe especial de materiais que são isolantes no volume (<em>bulk</em>), mas apresentam estados condutores na superfície. O Bi<sub>2</sub>Se<sub>3</sub> é um desses materiais. O acoplamento spin-órbita e a quebra da simetria de inversão na superfície do cristal são essenciais para a existência do estado de superfície de Dirac. Aqui vamos calcular a estrutura de bandas passo a passo: primeiro para o <em>bulk</em>, depois incluindo SOC e, por fim, para o <em>slab</em>. Veja os <a href="https://github.com/pranabdas/espresso/tree/master/src/Bi2Se3" rel="noopener" target="_blank">arquivos de entrada</a> correspondentes. Os passos são os seguintes:</p>
+<div class="codeblock"><pre><code># cálculo SCF do bulk
 mpirun -np 24 pw.x -i pw.scf.bi2se3_01.in &gt; pw.scf.bi2se3_01.out
-# bands calculation for bulk
+# cálculo de bandas do bulk
 mpirun -np 24 pw.x -i pw.bands.bi2se3_01.in &gt; pw.bands.bi2se3_01.out
-# post processing for bulk bands
+# pós-processamento das bandas do bulk
 mpirun -np 24 bands.x -i pp.bands.bi2se3_01.in &gt; pp.bands.bi2se3_01.out
 
-# for bulk with SOC
+# bulk com SOC
 mpirun -np 24 pw.x -i pw.scf.bi2se3_02.in &gt; pw.scf.bi2se3_02.out
 mpirun -np 24 pw.x -i pw.bands.bi2se3_02.in &gt; pw.bands.bi2se3_02.out
 mpirun -np 24 bands.x -i pp.bands.bi2se3_02.in &gt; pp.bands.bi2se3_02.out
 
-# slab calculation
+# cálculo do slab
 mpirun -np 24 pw.x -i pw.scf.bi2se3_03.in &gt; pw.scf.bi2se3_03.out
 mpirun -np 24 pw.x -i pw.bands.bi2se3_03.in &gt; pw.bands.bi2se3_03.out
 mpirun -np 24 bands.x -i pp.bands.bi2se3_03.in &gt; pp.bands.bi2se3_03.out
@@ -41,36 +35,20 @@ mpirun -np 24 bands.x -i pp.bands.bi2se3_03.in &gt; pp.bands.bi2se3_03.out
 # DOS
 mpirun -np 24 pw.x -i pw.nscf.bi2se3_04.in &gt; pw.nscf.bi2se3_04.out
 mpirun -np 24 dos.x -i pp.dos.bi2se3_04.in &gt; pp.dos.bi2se3_04.out</code></pre></div>
-<p>For the slab calculation the periodicity of the lattice was broken along the
-c-axis to artificially add 10 Å vacuum. In above calculation electronic spin
-was not considered (meaning the states are degenerate with spin up and down).
-If <code>starting_magnetization</code> is set to zero (or not given) the code makes a
-spin-orbit calculation without spin magnetization. It assumes that time reversal
-symmetry holds and it does not calculate the magnetization. The states are
-still two-component spinors but the total magnetization is zero.</p>
+<p>No cálculo do <em>slab</em>, a periodicidade da rede foi quebrada ao longo do eixo c, adicionando artificialmente 10 Å de vácuo. No cálculo acima, o spin eletrônico não foi considerado (ou seja, os estados são degenerados em spin up e down). Se <code>starting_magnetization</code> for zero (ou não for informado), o código faz um cálculo spin-órbita sem magnetização de spin: supõe que a simetria de reversão temporal vale e não calcula a magnetização. Os estados continuam sendo spinores de duas componentes, mas a magnetização total é zero.</p>
 <img alt="Bi2Se3-bands" loading="lazy" src="img/Bi2Se3-bands.webp"/>
-<p>Notice that for the Dirac surface states the gap did not completely close at the
-Fermi energy. This is possibly due to finite size effect. We could repeat the
-calculation with larger vacuum, and see what happens. Also the Fermi energy
-estimation seems incorrect.</p>
-<p>In order to sample the \(\Gamma\) point for our DOS calculation, an odd k-grid
-mesh (25✕25✕5) was used. The signature of Dirac cone is evident from the DOS
-figure.</p>
+<p>Note que, para os estados de superfície de Dirac, o gap não fechou completamente na energia de Fermi. Isso provavelmente é um efeito de tamanho finito. Poderíamos repetir o cálculo com mais vácuo e ver o que acontece. A estimativa da energia de Fermi também parece incorreta.</p>
+<p>Para amostrar o ponto \(\Gamma\) no cálculo de DOS, foi usada uma malha de pontos k ímpar (25✕25✕5). A assinatura do cone de Dirac é evidente na figura da DOS.</p>
 <img alt="Bi2Se3-dos" loading="lazy" src="img/Bi2Se3-dos.webp"/>
-<h2 id="resources">Resources</h2>
+<h2 id="resources">Recursos</h2>
 <ul>
 <li><a href="https://docs.quantumatk.com/tutorials/topological_insulator_bi2se3/topological_insulator_bi2se3.html" rel="noopener" target="_blank">https://docs.quantumatk.com/tutorials/topological_insulator_bi2se3/</a></li>
 </ul>
-<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/Bi2Se3" target="_blank" rel="noopener">Bandstructure of topological insulating Bi2Se3</a>,
-do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
-<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY 4.0</a>.
-Alterações: layout, título e navegação traduzidos para o português.</p>
-    <nav class="pager"></nav>
-  </main>
+<nav class="pager"></nav>
+</main>
 </div>
 <script src="../assets/js/site.js"></script>
-<script defer src="../assets/vendor/katex/katex.min.js"></script>
-<script defer src="../assets/vendor/katex/contrib/auto-render.min.js"
-  onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})"></script>
+<script defer="" src="../assets/vendor/katex/katex.min.js"></script>
+<script defer="" onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})" src="../assets/vendor/katex/contrib/auto-render.min.js"></script>
 </body>
 </html>

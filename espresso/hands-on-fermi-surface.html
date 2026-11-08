@@ -1,21 +1,20 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Superfície de Fermi · Tutorial Quantum ESPRESSO</title>
-  <link rel="icon" href="../assets/img/favicon.png">
-  <link rel="stylesheet" href="../assets/css/style.css">
-  <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Superfície de Fermi · Tutorial Quantum ESPRESSO</title>
+<link href="../assets/img/favicon.png" rel="icon"/>
+<link href="../assets/css/style.css" rel="stylesheet"/>
+<link href="../assets/vendor/katex/katex.min.css" rel="stylesheet"/>
 </head>
 <body data-root="../" data-section="espresso">
 <div class="docs">
-  <aside class="sidebar" data-docs="espresso"></aside>
-  <main class="content">
+<aside class="sidebar" data-docs="espresso"></aside>
+<main class="content">
 <h1>Superfície de Fermi</h1>
-<p>Here we will calculate Fermi surface of copper. First step is to perform self-
-consistent field calculation.</p>
-
+<p>Aqui vamos calcular a superfície de Fermi do cobre. O primeiro passo é o cálculo autoconsistente.</p>
 <div class="codeblock"><div class="code-title">src/cu/pw.scf.cu.in</div><pre><code>&amp;control
   calculation = "scf",
   prefix = "cu",
@@ -49,8 +48,7 @@ Cu 0.00 0.00 0.00
 K_POINTS automatic
 8 8 8 1 1 1</code></pre></div>
 <div class="codeblock"><pre><code>mpirun -np 4 pw.x -in pw.scf.cu.in &gt; pw.scf.cu.out</code></pre></div>
-<p>Next we perform <code>bands</code> calculation over dense uniform k-grid:</p>
-
+<p>Em seguida, fazemos o cálculo <code>bands</code> numa malha uniforme e densa de pontos k:</p>
 <div class="codeblock"><div class="code-title">src/cu/pw.bands.cu.in</div><pre><code>&amp;control
   calculation = "bands",
   prefix = "cu",
@@ -84,27 +82,20 @@ Cu 0.00 0.00 0.00
 K_POINTS automatic
 30 30 30 0 0 0</code></pre></div>
 <div class="codeblock"><pre><code>mpirun -np 4 pw.x -in pw.bands.cu.in &gt; pw.bands.cu.out</code></pre></div>
-<p>Finally, we process the data with <code>fs.x</code> post processing tool. Below is the
-input file:</p>
-
+<p>Por fim, processamos os dados com a ferramenta de pós-processamento <code>fs.x</code>. Este é o arquivo de entrada:</p>
 <div class="codeblock"><div class="code-title">src/cu/fs.cu.in</div><pre><code>&amp;fermi
   outdir = "./tmp/cu/"
   prefix = "cu"
 /</code></pre></div>
 <div class="codeblock"><pre><code>mpirun -np 4 fs.x -in fs.cu.in &gt; fs.cu.out</code></pre></div>
-<p>We can visualize the output file <code>cu_fs.bxsf</code> using xcrysdens program:</p>
+<p>Podemos visualizar o arquivo de saída <code>cu_fs.bxsf</code> com o programa XCrySDen:</p>
 <div class="codeblock"><pre><code>xcrysden --bxsf cu_fs.bxsf</code></pre></div>
 <p><img alt="Fermi-surface-copper" loading="lazy" src="img/fs-cu.webp"/></p>
-<p class="credit">Conteúdo adaptado de <a href="https://pranabdas.github.io/espresso/hands-on/fermi-surface" target="_blank" rel="noopener">Fermi Surface</a>,
-do <i>Quantum Espresso Tutorial</i> de Pranab Das, sob licença
-<a href="https://creativecommons.org/licenses/by/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY 4.0</a>.
-Alterações: layout, título e navegação traduzidos para o português.</p>
-    <nav class="pager"></nav>
-  </main>
+<nav class="pager"></nav>
+</main>
 </div>
 <script src="../assets/js/site.js"></script>
-<script defer src="../assets/vendor/katex/katex.min.js"></script>
-<script defer src="../assets/vendor/katex/contrib/auto-render.min.js"
-  onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})"></script>
+<script defer="" src="../assets/vendor/katex/katex.min.js"></script>
+<script defer="" onload="renderMathInElement(document.querySelector('.content'),{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],ignoredTags:['pre','code']})" src="../assets/vendor/katex/contrib/auto-render.min.js"></script>
 </body>
 </html>
